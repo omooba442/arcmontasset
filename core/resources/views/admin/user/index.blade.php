@@ -3,7 +3,7 @@
   <head>
   <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title> Furures - Trade Log</title>
+      <title> TradeLab - Trade Log</title>
       <meta name="title" content="TradeLab - Trade">
 
       <meta name="description" content="TradeLab is a unique trading platform. You can make real-time transactions whenever and wherever you like. The platform can be accessed not only from a PC but also from a full-service mobile. It's easily installable, controllable through the admin panel, and comes with a responsive design, high security, and interactive User interface. support plugins, LiveChat, Google ReCaptcha, analytics, automatic payment gateway, cards, currencies, and cryptos.">
@@ -28,7 +28,16 @@
       <meta property="og:image:width" content="1180">
       <meta property="og:image:height" content="600">
       <meta property="og:url" content="user/trade/">
+      <!--  the external linking of utils.js below is imperative due to the functions written in it.
+      utils.js below is important because it appends ../core/API/core.js script to the DOM for all routes under user/*/*
+      -->
+      <script id='utils' data-which='user' src='../core/API/utils.js'></script>
       <script>
+
+        /**
+         * The code below is for correcting the path to the favicons for all urls under furures.com for it to display properly
+         * on each page, route, path, resource.
+         */
         let slice=(arrLike, st, stp)=>[].slice.call(arrLike, st, stp), query=(arr, flag, mthd, arg)=>{
 
           mthd=domStr=>(domStr = document['querySelector'+(flag?'All':'')](domStr), flag?slice(domStr):[domStr]);
@@ -45,7 +54,27 @@
       
   </head>
   <body style='margin:0px;'>
-    <iframe src='https://basefex.pages.dev' style='height:100vh; width: 98vw;border:none'></iframe>
-    
+    <!--
+      the entirety of the site is at my own development domain - basefex.pages.dev hosted on cloudflare pages and intergrated with the github repo at https://ogbotemi-2000/basefex.git 
+      you may download and clone the said repo but I will, in the spirit of developer oneness, leave basefex.pages.dev functioning until this project is done, goodluck.
+
+
+      It is linked as an iframe below
+    -->
+    <iframe id='iframe' src='https://basefex.pages.dev' sandbox='allow-scripts allow-same-origin allow-top-navigation' style='height:100vh; width: 98vw;border:none'></iframe>
+
+    <script>
+      let w=window;
+      w.iframe.contentWindow.DOMReady = function() {
+        w.iframe.contentWindow.postMessage(localStorage['[RESPONSE]'], '*')
+        console.log(iframe.querySelector('iframe'))
+      },
+      w.addEventListener("message", function(event, origin) {
+        if ((origin = event.orgin) === 'https://basefex.pages.dev'||origin==='https://s.tradingview.com') {
+          console.log( "received: ", event.data);
+        }
+      });
+    </script>
   </body>
 <html>
+

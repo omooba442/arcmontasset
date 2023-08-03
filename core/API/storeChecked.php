@@ -1,9 +1,10 @@
 <?php
-$fileName = 'checked.txt';
-$fh       = fopen($fileName, 'w+') or die('Cannot open file');
-$checked  = false;
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-if($requestMethod == 'POST') {
+
+$fileName      = 'checked.txt'; 
+$checked       = false;
+$fh = fopen($fileName, 'w+') or die('Cannot open file');
+
+if($_SERVER['REQUEST_METHOD'] =='POST') {
   $checked = $_POST['checked'];
   fwrite($fh, $checked);
 }

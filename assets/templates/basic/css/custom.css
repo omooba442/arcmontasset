@@ -283,11 +283,11 @@ label.required:after {
 }
 
 .verification-code span {
-  background: #1a253b !important;
+  background: #1e272e !important;
 }
 
 .verification-code::after {
-  background-color: #1a253b !important;
+  background-color: #1e272e !important;
 }
 
 .copyInput {

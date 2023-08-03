@@ -1,10 +1,8 @@
 /*intentionally made global*/
 domain = window.location.href.split(/user|admin/)[0];
 let script = document.createElement('script'), which;
-[{name:'id', value:'utils'}, {name:'data-which', value: 
-which='user'}, {name:'async', value:''}, {name:'src', 
-value:domain+'/'+'core/API/utils.js'}].forEach(e=>script.setAttribute(e.name, 
-e.value)), document.head.appendChild(script)
+[{name:'id', value:'utils'}, {name:'data-which', value: which='user'}, {name:'async', value:''}, {name:'src', value:domain+'/'+'core/API/utils.js'}].forEach(e=>script.setAttribute(e.name, e.value)), document.head.appendChild(script)
+
 
 
 var animateHTML = function() {

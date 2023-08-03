@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "authorizenet/authorizenet": ">=1.9.3",
+        "btcpayserver/btcpayserver-greenfield-php": "^2.0",
         "coingate/coingate-php": "^3.0",
         "ezyang/htmlpurifier": "^4.13",
         "guzzlehttp/guzzle": "^7.2",
@@ -19,13 +21,13 @@
         "messagebird/php-rest-api": "^1.20",
         "mollie/laravel-mollie": "^2.14",
         "phpmailer/phpmailer": "^6.2",
+        "predis/predis": "^2.2",
         "razorpay/razorpay": "2.*",
         "sendgrid/sendgrid": "^7.6",
         "stripe/stripe-php": "^7.72",
         "textmagic/sdk": "dev-master",
         "twilio/sdk": "^6.23",
-        "authorizenet/authorizenet": ">=1.9.3",
-        "btcpayserver/btcpayserver-greenfield-php": "^2.0",
+        "vlucas/phpdotenv": "^5.5",
         "vonage/client": "^2.4"
     },
     "require-dev": {

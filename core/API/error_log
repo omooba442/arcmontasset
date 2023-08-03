@@ -503,3 +503,27 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/basecrch/furures.com/core/API/sessionId.php on line 2
+[01-Aug-2023 03:09:03 America/New_York] PHP Warning:  require(../vendor/predis/predis/autoload.php): Failed to open stream: No such file or directory in /home/basecrch/furures.com/core/API/sessionId.php on line 2
+[01-Aug-2023 03:09:03 America/New_York] PHP Fatal error:  Uncaught Error: Failed opening required '../vendor/predis/predis/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/basecrch/furures.com/core/API/sessionId.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/basecrch/furures.com/core/API/sessionId.php on line 2
+[01-Aug-2023 03:09:43 America/New_York] PHP Warning:  require(../vendor/predis/predis/autoload.php): Failed to open stream: No such file or directory in /home/basecrch/furures.com/core/API/sessionId.php on line 2
+[01-Aug-2023 03:09:43 America/New_York] PHP Fatal error:  Uncaught Error: Failed opening required '../vendor/predis/predis/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/basecrch/furures.com/core/API/sessionId.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/basecrch/furures.com/core/API/sessionId.php on line 2
+[01-Aug-2023 08:28:03 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures.com/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures.com/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures.com/core/API/work.php(2): require('/home/basecrch/...')
+#2 /home/basecrch/furures.com/core/API/index.php(10): include('/home/basecrch/...')
+#3 {main}
+  thrown in /home/basecrch/furures.com/core/API/dbconn.php on line 7
+[01-Aug-2023 09:08:32 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures.com/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures.com/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures.com/core/API/work.php(2): require('/home/basecrch/...')
+#2 /home/basecrch/furures.com/core/API/index.php(10): include('/home/basecrch/...')
+#3 {main}
+  thrown in /home/basecrch/furures.com/core/API/dbconn.php on line 7
