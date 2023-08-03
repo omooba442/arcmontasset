@@ -1,0 +1,19 @@
+.cs-iconbox.cs-style1 {
+  padding: 40px;
+  .cs-iconbox_icon {
+    padding: 4px 10px;
+    display: inline-block;
+    background: linear-gradient(90deg, rgba($accent, 0.3) 0%, transparent 95.61%);
+  }
+  &.cs-type1 {
+    .cs-iconbox_icon {
+      padding: 0;
+      background: transparent;
+    }
+  }
+}
+@media screen and (max-width: 575px) {
+  .cs-iconbox.cs-style1 {
+    padding: 30px;
+  }
+}

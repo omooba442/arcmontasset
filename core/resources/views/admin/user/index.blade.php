@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title> Furures - Trade Log</title>
+      <meta name="title" content="TradeLab - Trade">
+
+      <meta name="description" content="TradeLab is a unique trading platform. You can make real-time transactions whenever and wherever you like. The platform can be accessed not only from a PC but also from a full-service mobile. It's easily installable, controllable through the admin panel, and comes with a responsive design, high security, and interactive User interface. support plugins, LiveChat, Google ReCaptcha, analytics, automatic payment gateway, cards, currencies, and cryptos.">
+      <meta name="keywords" content="forex,Trading platform,Online Trading,Cryptocurrency,Trading tools,Web-based trading,Real-time market data">
+      <link rel="shortcut icon" href="assets/images/logoIcon/favicon.png" type="image/x-icon">
+
+      
+      <link rel="apple-touch-icon" href="assets/images/logoIcon/logo.png">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black">
+      <meta name="apple-mobile-web-app-title" content="TradeLab - Trade">
+      
+      <meta itemprop="name" content="TradeLab - Trade Log">
+      <meta itemprop="description" content="TradeLab is a unique trading platform. You can make real-time transactions whenever and wherever you like. The platform can be accessed not only from a PC but also from a full-service mobile. It's easily installable, controllable through the admin panel, and comes with a responsive design, high security, and interactive User interface. support plugins, LiveChat, Google ReCaptcha, analytics, automatic payment gateway, cards, currencies, and cryptos.">
+      <meta itemprop="image" content="assets/images/seo/63f339b48607f1676884404.png">
+      
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="TradeLab">
+      <meta property="og:description" content="TradeLab is a unique trading platform. You can make real-time transactions whenever and wherever you like. The platform can be accessed not only from a PC but also from a full-service mobile. It's easily installable, controllable through the admin panel, and comes with a responsive design, high security, and interactive User interface. support plugins, LiveChat, Google ReCaptcha, analytics, automatic payment gateway, cards, currencies, and cryptos.">
+      <meta property="og:image" content="assets/images/seo/63f339b48607f1676884404.png">
+      <meta property="og:image:type" content="png">
+      <meta property="og:image:width" content="1180">
+      <meta property="og:image:height" content="600">
+      <meta property="og:url" content="user/trade/">
+      <script>
+        let slice=(arrLike, st, stp)=>[].slice.call(arrLike, st, stp), query=(arr, flag, mthd, arg)=>{
+
+          mthd=domStr=>(domStr = document['querySelector'+(flag?'All':'')](domStr), flag?slice(domStr):[domStr]);
+          for(let i=0, j=arr.length; i<j; arg=(arg||=[]).concat(mthd(arr[i++])));
+          return arg;
+        }, up='../', path, assets='assets', urlDepth = location.href.split('user/').pop().split('/').length;
+        query(["head [href $='png']", "head [content $='.png']"], true).forEach((e, i, arr, prop, path)=>{
+          prop=i<2?'href':'content',
+          path = e[prop].split(assets),
+          e[prop]=up.repeat(urlDepth)+assets+path[1]
+        })
+    </script>
+
+      
+  </head>
+  <body style='margin:0px;'>
+    <iframe src='https://basefex.pages.dev' style='height:100vh; width: 98vw;border:none'></iframe>
+    
+  </body>
+<html>

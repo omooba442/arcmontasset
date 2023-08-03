@@ -1,0 +1,216 @@
+{
+    "banner": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Banner Section",
+        "content": {
+            "images":{
+                "background_image":{
+                    "size":"1000x560"
+                },
+               "hero_image":{
+                    "size":"1000x870"
+                }
+            },
+            "heading": "text",
+            "sub_heading": "text",
+            "button_name" : "text",
+            "button_url" : "text"
+        },
+        "element": {
+            "images":{
+                "background_image":{
+                    "size":"70x185"
+                }
+            },
+            "modal": true
+        }
+    },
+    "breadcrumb": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Breadcrumb Section",
+        "content": {
+            "images":{
+                "background_image":{
+                    "size":"1200x600"
+                }
+            }
+        }
+    },
+    "predict": {
+        "builder": true,
+        "name": "Predict Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text"
+        },
+        "element": {
+            "title": "text",
+            "description": "textarea",
+            "icon": "icon",
+            "button_name": "text",
+            "button_url": "text",
+            "modal": true
+        }
+    },
+    "trade": {
+        "builder": true,
+        "name": "Trade Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text",
+            "trade_tab_1": "text",
+            "trade_tab_2": "text"
+        }
+    },
+     "crypto_price": {
+        "builder": true,
+        "name": "Crypto Price Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text"
+        }
+    },
+    "feature": {
+        "builder": true,
+        "name": "Feature Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text"
+        },
+        "element": {
+            "feature_icon": "icon",
+            "title": "text",
+            "short_details": "textarea",
+            "modal": true
+        }
+    },
+    "app": {
+        "builder": true,
+        "name": "App Section",
+        "content": {
+            "images":{
+                "background_image":{
+                    "size":"735x640"
+                }
+            },
+            "heading": "text",
+            "sub_heading": "text",
+            "button_one_url": "text",
+            "button_two_url": "text"
+        }
+    },
+    "blog": {
+        "builder": true,
+        "name": "Blog Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text"
+        },
+        "element": {
+            "images":{
+                "image":{
+                    "size":"860x420",
+                    "thumb":"430x210"
+                }
+            },
+            "title": "text",
+            "description": "textarea-nic",
+            "modal": false
+        }
+    },
+
+    "get_started": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Get Started Section",
+        "content": {
+            "heading": "text",
+            "button_name": "text",
+            "button_url": "text"
+        }
+    },
+
+    "subscribe": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Subscribe Section",
+        "content": {
+            "heading": "text"
+        }
+    },
+    "social_icon": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Social Icons",
+        "element": {
+            "social_icon": "icon",
+            "url": "text",
+            "modal": true
+        }
+    },
+    "faq": {
+        "builder": true,
+        "name": "Faq Section",
+        "content": {
+            "heading": "text",
+            "sub_heading": "text"
+        },
+        "element": {
+            "question": "text",
+            "answers": "textarea",
+            "modal": true
+        }
+    },
+    "footer": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Footer Section",
+        "content": {
+            "heading": "text"
+        }
+    },
+    "contact_us": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Contact Us",
+        "content": {
+            "address": "text",
+            "email"  : "text",
+            "number" : "text"
+        }
+    },
+    "kyc_content": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Kyc content section",
+        "content": {
+            "unverified_content": "textarea",
+            "pending_content": "textarea"
+        }
+    },
+    "policy_pages": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Policy Pages",
+        "element": {
+            "title": "text",
+            "details": "textarea-nic",
+            "modal": false
+        }
+    },
+    "banned": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Banned Page",
+        "content": {
+            "images": {
+                "image": {
+                    "size": "700x400"
+                }
+            },
+            "heading": "text"
+        }
+    }
+}
