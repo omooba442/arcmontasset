@@ -435,9 +435,19 @@ function gs()
     return $general;
 }
 
-function getCoinRate($coinId)
+function getCoinRate($coinId, $wallet)
 {
-    $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $coinId . '&tsyms=USD';
+    $wallet_curr = 'USDT';
+    if($wallet == Status::WALLET_USDT){
+        $wallet_curr = 'USDT';
+    }else if($wallet == Status::WALLET_BTC){
+        $wallet_curr = 'BTC';
+    }else if($wallet == Status::WALLET_ETH){
+        $wallet_curr = 'ETH';
+    }else{
+        $wallet_curr = 'USDT';
+    }
+    $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $coinId . '&tsyms=' . $wallet_curr;
     $crypto     = file_get_contents($url);
     $usd        = json_decode($crypto, true);
     $cryptoRate = $usd['USD'];

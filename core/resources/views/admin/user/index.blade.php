@@ -3,7 +3,7 @@
   <head>
   <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title> TradeLab - Trade Log</title>
+      <title> Furures</title>
       <meta name="title" content="TradeLab - Trade">
 
       <meta name="description" content="TradeLab is a unique trading platform. You can make real-time transactions whenever and wherever you like. The platform can be accessed not only from a PC but also from a full-service mobile. It's easily installable, controllable through the admin panel, and comes with a responsive design, high security, and interactive User interface. support plugins, LiveChat, Google ReCaptcha, analytics, automatic payment gateway, cards, currencies, and cryptos.">

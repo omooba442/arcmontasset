@@ -96,15 +96,17 @@ Route::middleware('auth')->name('user.')->group(function () {
             });
             
             Route::controller("TradeController")->name('trade.')->prefix('trade')->group(function () {
-                Route::view('/', 'admin.user.index')->name('index');
-                Route::view('log', 'admin.user.index'/*'tradeLog'*/)->name('log');
-                Route::view('wining/log', 'admin.user.index'/*'winingTradeLog'*/)->name('wining.log');
-                Route::view('losing/log', 'admin.user.index'/*'losingTradeLog'*/)->name('losing.log');
-                Route::view('draw/log', 'admin.user.index'/*'drawTradeLog'*/)->name('draw.log');
+                //Route::view('/', 'admin.user.index')->name('index');
+                //Route::view('log', 'admin.user.index'/*'tradeLog'*/)->name('log');
+                //Route::view('wining/log', 'admin.user.index'/*'winingTradeLog'*/)->name('wining.log');
+                //Route::view('losing/log', 'admin.user.index'/*'losingTradeLog'*/)->name('losing.log');
+                //Route::view('draw/log', 'admin.user.index'/*'drawTradeLog'*/)->name('draw.log');
                 
+                Route::get('/', 'index')->name('index');
+
                 Route::post('store', 'store')->name('store');
                 Route::post('result', 'tradeResult')->name('result');
-                Route::view('with/{name}', 'admin.user.index'/*'tradeNow'*/)->name('now');
+                // Route::view('with/{name}', 'admin.user.index'/*'tradeNow'*/)->name('now');
 
             });
 

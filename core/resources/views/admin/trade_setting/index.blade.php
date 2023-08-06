@@ -11,6 +11,7 @@
                                 <th>@lang('S.N.')</th>
                                 <th>@lang('Time')</th>
                                 <th>@lang('Unit')</th>
+                                <th>@lang('Profit (%)')</th>
                                 <th>@lang('Action')</th>
                             </tr>
                         </thead>
@@ -20,6 +21,7 @@
                                 <td>{{$loop->index+$games->firstItem()}}</td>
                                 <td>{{$game->time}}</td>
                                 <td>{{ucfirst($game->unit)}}</td>
+                                <td>{{$game->profit}}</td>
                                 <td>
                                     <button type="button"  class="btn btn-sm btn-outline--primary editBtn" data-game='@json($game)'>
                                         <i class="la la-pencil"></i>@lang('Edit')
@@ -72,7 +74,12 @@
                             <option value="seconds">@lang('Seconds')</option>
                             <option value="minutes">@lang('Minutes')</option>
                             <option value="hours">@lang('Hours')</option>
+                            <option value="days">@lang('Days')</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('Profit')</label>
+                        <input type="number" class="form-control" name="profit" required>
                     </div>
                     <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
                 </div>
@@ -109,6 +116,7 @@
             let data   = $(this).data('game');
             modal.find('form').prop('action', action.replace(':id', data.id))
             modal.find("input[name=time]").val(data.time);
+            modal.find("input[name=profit]").val(data.profit);
             modal.find("select[name=unit]").val(data.unit);
             modal.find('.modal-title').text(`@lang('Update Trade Setting')`);
             $(modal).modal('show');

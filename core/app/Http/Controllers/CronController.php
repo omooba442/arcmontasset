@@ -17,55 +17,66 @@ class CronController extends Controller
         $gnl       = gs();
 
         foreach ($tradeLogs as $tradeLog) {
-            $cryptoRate = getCoinRate($tradeLog->crypto->symbol);
+            $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
             $user       = $tradeLog->user;
+            $balances = json_decode($user->balance, true);
+            $wallet_map = [
+                1 => 'USDT',
+                2 => 'BTC',
+                3 => 'ETH',
+            ];
             if (!$cryptoRate || !$user) {
                 continue;
             }
 
+            
             if ($tradeLog->high_low == Status::TRADE_HIGH) {
                 if ($tradeLog->price_was < $cryptoRate) {
-                    $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $gnl->profit);
-                    $user->balance += $tradeAmountWithProfit;
+                    $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
+                    $user->balance = json_encode($balances);
                     $user->save();
 
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
-                    $this->transactions($user, $tradeAmountWithProfit, $details);
+                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]]);
                     $tradeLog->result = Status::TRADE_WIN;
                 } else if ($tradeLog->price_was > $cryptoRate) {
                     $tradeLog->result = Status::TRADE_LOSE;
                 } else {
-                    $user->balance += $tradeLog->amount;
+                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                    $user->balance = json_encode($balances);
                     $user->save();
 
                     $tradeLogAmount = $tradeLog->amount;
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
-                    $this->transactions($user, $tradeLogAmount, $details);
+                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }
             } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
                 if ($tradeLog->price_was > $cryptoRate) {
-                    $tradeAmountWithProfit  = $tradeLog->amount + (($tradeLog->amount / 100) * $gnl->profit);
-                    $user->balance         += $tradeAmountWithProfit;
+                    $tradeAmountWithProfit  = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
+                    $user->balance = json_encode($balances);
                     $user->save();
-
                     $details = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
-                    $this->transactions($user, $tradeAmountWithProfit, $details);
+                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]]);
                     $tradeLog->result = Status::TRADE_WIN;
 
                 } else if ($tradeLog->price_was < $cryptoRate) {
                     $tradeLog->result = Status::TRADE_LOSE;
                 } else {
-                    $user->balance += $tradeLog->amount;
-                    $user->save();
+                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                    $user->balance = json_encode($balances);
+                    $user->save();;
 
                     $tradeLogAmount = $tradeLog->amount;
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
-                    $this->transactions($user, $tradeLogAmount, $details);
+                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }
             }
             $tradeLog->status = Status::TRADE_COMPLETED;
+            $tradeLog->price_is = $cryptoRate;
             $tradeLog->save();
         }
         $gnl->last_cron_run = Carbon::now();
@@ -73,12 +84,12 @@ class CronController extends Controller
         echo "EXECUTED";
     }
 
-    public function transactions($user, $gameLogAmount, $details)
+    public function transactions($user, $gameLogAmount, $details, $balance)
     {
         $transaction               = new Transaction();
         $transaction->user_id      = $user->id;
         $transaction->amount       = $gameLogAmount;
-        $transaction->post_balance = $user->balance;
+        $transaction->post_balance = $balance;
         $transaction->trx_type     = "+";
         $transaction->details      = $details;
         $transaction->trx          = getTrx();
@@ -142,48 +153,48 @@ class CronController extends Controller
 
     public function practiceCron()
     {
-        $tradeLogs = PracticeLog::where('result', Status::TRADE_PENDING)->where('in_time', '<', Carbon::now())->where('status', Status::TRADE_RUNNING)->get();
-        $gnl       = gs();
+        // $tradeLogs = PracticeLog::where('result', Status::TRADE_PENDING)->where('in_time', '<', Carbon::now())->where('status', Status::TRADE_RUNNING)->get();
+        // $gnl       = gs();
 
-        foreach ($tradeLogs as $tradeLog) {
-            $cryptoRate = getCoinRate($tradeLog->crypto->symbol);
-            $user       = $tradeLog->user;
+        // foreach ($tradeLogs as $tradeLog) {
+        //     $cryptoRate = getCoinRate($tradeLog->crypto->symbol, 1);
+        //     $user       = $tradeLog->user;
 
-            if (!$cryptoRate || !$user) {
-                continue;
-            }
-            if ($tradeLog->high_low == Status::TRADE_HIGH) {
-                if ($tradeLog->price_was < $cryptoRate) {
-                    $user->demo_balance += $tradeLog->amount + (($tradeLog->amount / 100) * $gnl->profit);
-                    $user->save();
-                    $tradeLog->result = Status::TRADE_WIN;
-                } else if ($tradeLog->price_was > $cryptoRate) {
-                    $tradeLog->result = Status::TRADE_LOSE;
-                } else {
-                    $user->demo_balance += $tradeLog->amount;
-                    $user->save();
+        //     if (!$cryptoRate || !$user) {
+        //         continue;
+        //     }
+        //     if ($tradeLog->high_low == Status::TRADE_HIGH) {
+        //         if ($tradeLog->price_was < $cryptoRate) {
+        //             $user->demo_balance += $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+        //             $user->save();
+        //             $tradeLog->result = Status::TRADE_WIN;
+        //         } else if ($tradeLog->price_was > $cryptoRate) {
+        //             $tradeLog->result = Status::TRADE_LOSE;
+        //         } else {
+        //             $user->demo_balance += $tradeLog->amount;
+        //             $user->save();
 
-                    $tradeLog->result = Status::TRADE_DRAW;
-                }
-            } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
-                if ($tradeLog->price_was > $cryptoRate) {
-                    $user->demo_balance += $tradeLog->amount + (($tradeLog->amount / 100) * $gnl->profit);
-                    $user->save();
-                    $tradeLog->result = Status::TRADE_WIN;
-                } else if ($tradeLog->price_was < $cryptoRate) {
-                    $tradeLog->result = Status::TRADE_LOSE;
-                } else {
-                    $user->demo_balance += $tradeLog->amount;
-                    $user->save();
+        //             $tradeLog->result = Status::TRADE_DRAW;
+        //         }
+        //     } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
+        //         if ($tradeLog->price_was > $cryptoRate) {
+        //             $user->demo_balance += $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+        //             $user->save();
+        //             $tradeLog->result = Status::TRADE_WIN;
+        //         } else if ($tradeLog->price_was < $cryptoRate) {
+        //             $tradeLog->result = Status::TRADE_LOSE;
+        //         } else {
+        //             $user->demo_balance += $tradeLog->amount;
+        //             $user->save();
 
-                    $tradeLog->result = Status::TRADE_DRAW;
-                }
-            }
-            $tradeLog->status = Status::TRADE_COMPLETED;
-            $tradeLog->save();
-        }
-        $gnl->last_cron_run = Carbon::now();
-        $gnl->save();
+        //             $tradeLog->result = Status::TRADE_DRAW;
+        //         }
+        //     }
+        //     $tradeLog->status = Status::TRADE_COMPLETED;
+        //     $tradeLog->save();
+        // }
+        // $gnl->last_cron_run = Carbon::now();
+        // $gnl->save();
         echo "EXECUTED";
     }
 }

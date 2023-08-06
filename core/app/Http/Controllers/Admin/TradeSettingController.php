@@ -11,7 +11,7 @@ class TradeSettingController extends Controller
     public function index()
     {
         $pageTitle = "Trade Setting";
-        $games     = TradeSetting::latest('id')->paginate(getPaginate());
+        $games     = TradeSetting::oldest('id')->paginate(getPaginate());
         return view('admin.trade_setting.index', compact('games', 'pageTitle'));
     }
 
@@ -19,7 +19,8 @@ class TradeSettingController extends Controller
     {
         $request->validate([
             'time' => 'required|integer',
-            'unit' => 'required|in:seconds,minutes,hours'
+            'profit' => 'required|integer',
+            'unit' => 'required|in:seconds,minutes,hours,days'
         ]);
         if ($id) {
             $tradeSetting = TradeSetting::findOrFail($id);
@@ -30,6 +31,7 @@ class TradeSettingController extends Controller
         }
 
         $tradeSetting->time = $request->time;
+        $tradeSetting->profit = $request->profit;
         $tradeSetting->unit = $request->unit;
         $tradeSetting->save();
 

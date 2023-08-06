@@ -13,16 +13,20 @@ class TradeController extends Controller
 {
     public function index()
     {
-        $pageTitle = "Trade Now";
-        $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC')->get();
-        return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos'));
+        $pageTitle = "Future Trades";
+        $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC');
+        $balances  = json_decode(auth()->user()->balance, true);
+        $durations = TradeSetting::oldest()->get();
+        $log           = $this->tradeData();
+        return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log'));
     }
     public function tradeNow($name)
     {
         $currency      = CryptoCurrency::active()->where('name', $name)->firstOrFail();
         $tradeSettings = TradeSetting::latest()->get();
+        $log           = $this->tradeData();
         $pageTitle     = "Trade With " . $currency->name;
-        return view($this->activeTemplate. 'user.trade.trade_with', compact('pageTitle','currency', 'tradeSettings'));
+        return view($this->activeTemplate. 'user.trade.trade_with', compact('pageTitle','currency', 'tradeSettings', 'log'));
     }
     public function store(Request $request)
     {

@@ -45,4 +45,8 @@ class Status
 
     const TRADE_HIGH = 1;
     const TRADE_LOW  = 2;
+
+    const WALLET_USDT = 1;
+    const WALLET_BTC  = 2;
+    const WALLET_ETH  = 3;
 }
