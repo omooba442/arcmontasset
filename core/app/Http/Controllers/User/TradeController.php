@@ -18,7 +18,8 @@ class TradeController extends Controller
         $balances  = json_decode(auth()->user()->balance, true);
         $durations = TradeSetting::oldest()->get();
         $log           = $this->tradeData();
-        return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log'));
+        $log2           = $this->tradeData();
+        return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log', 'log2'));
     }
     public function tradeNow($name)
     {
@@ -75,6 +76,7 @@ class TradeController extends Controller
         } else {
             $tradeLogs = TradeLog::where('user_id', auth()->id());
         }
-        return $tradeLogs->with("crypto")->latest('id')->paginate(getPaginate());
+        // return $tradeLogs->with("crypto")->latest('id')->paginate(getPaginate());
+        return $tradeLogs->with("crypto")->latest('id');
     }
 }

@@ -16,6 +16,52 @@
         2 => 'BTC',
         3 => 'ETH',
     ];
+    function getProfitLoss($trade, $hl, $rate, $was, $is)
+    {
+        if ($hl) {
+            if ($is > $was) {
+                $result = 'win';
+                $outcome = $trade * ($rate / 100);
+            } elseif ($was == $is) {
+                $result = 'draw';
+                $outcome = 0.0;
+            } else {
+                $result = 'loss';
+                $outcome = $trade;
+            }
+        } else {
+            if ($was > $is) {
+                $result = 'win';
+                $outcome = $trade * ($rate / 100);
+            } elseif ($was == $is) {
+                $result = 'draw';
+                $outcome = 0.0;
+            } else {
+                $result = 'loss';
+                $outcome = $trade;
+            }
+        }
+        return compact('outcome', 'result');
+    }
+    function formatTimeToShortString($timeValue)
+    {
+        [$hours, $minutes, $seconds] = explode(':', $timeValue);
+        $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
+    
+        if ($totalSeconds >= 86400) {
+            $days = floor($totalSeconds / 86400);
+            return $days . 'd';
+        } elseif ($totalSeconds >= 3600) {
+            $hours = floor($totalSeconds / 3600);
+            return $hours . 'h';
+        } elseif ($totalSeconds >= 60) {
+            $minutes = floor($totalSeconds / 60);
+            return $minutes . 'm';
+        } else {
+            return $totalSeconds . 's';
+        }
+    }
+    
 @endphp
 @extends($activeTemplate . 'layouts.sage')
 @section('content')
@@ -51,27 +97,98 @@
                     </div>
                 </div>
                 <div class="card mt-2 trading-view">
-                    <div class="table-responsive">
-                        <table class="table">
+                    <ul class="nav nav-tabs px-2 py-2" id="trx_tabs_" role="tablist"
+                        style="display: flex;column-gap: 10px;">
+                        <li class="nav-item">
+                            <a class="trx_tab_link active" id="transactions-tab" data-toggle="tab" href="#transactions"
+                                role="tab" aria-controls="transactions" aria-selected="true">Transactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="trx_tab_link" id="closed-tab" data-toggle="tab" href="#closed" role="tab"
+                                aria-controls="closed" aria-selected="false">Closed</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="trx_tabs_Content">
+                        <div class="tab-pane fade show active" id="transactions" role="tabpanel"
+                            aria-labelledby="transactions-tab">
                             <table class="table table-borderless">
-                                <thead class="table-striped">
+                                <thead>
                                     <tr>
-                                        <th scope="col" colspan="2">Pair</th>
+                                        <th scope="col">Pair</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">Purchase price</th>
-                                        <th scope="col">Profit/Loss</th>
+                                        <th scope="col">Purchase Price</th>
+                                        <th scope="col">Transaction Price</th>
+                                        <th scope="col">Profit / Loss</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td colspan="2">1</td>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
+                                    @if ($log->where('status', 0)->count() < 1)
+                                        <tr>
+                                            <td colspan="5">No data, yet.</td>
+                                        </tr>
+                                    @endif
+                                    @foreach ($log->where('status', 0)->get()->toBase() as $trade)
+                                        @php
+                                            $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }} {{formatTimeToShortString($trade->duration)}}</td>
+                                            <td>{{ number_format($trade->amount, 6) }}</td>
+                                            <td>{{ number_format($trade->price_was, 6) }}</td>
+                                            <td>{{ number_format($trade->price_is, 6) }}</td>
+                                            <td
+                                                class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
+                                                @if ($res['result'] == 'loss')
+                                                    -
+                                                @else
+                                                    +
+                                                @endif{{ $res['outcome'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
-                        </table>
+                        </div>
+                        <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Pair</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Purchase Price</th>
+                                        <th scope="col">Transaction Price</th>
+                                        <th scope="col">Profit / Loss</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($log2->where('status', 1)->count() < 1)
+                                        <tr>
+                                            <td colspan="5">No data, yet.</td>
+                                        </tr>
+                                    @endif
+                                    @foreach ($log2->where('status', 1)->get()->toBase() as $trade)
+                                        @php
+                                            $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }} {{formatTimeToShortString($trade->duration)}}</td>
+                                            <td>{{ number_format($trade->amount, 6) }}</td>
+                                            <td>{{ number_format($trade->price_was, 6) }}</td>
+                                            <td>{{ number_format($trade->price_is, 6) }}</td>
+                                            <td
+                                                class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
+                                                @if ($res['result'] == 'loss')
+                                                    -
+                                                @else
+                                                    +
+                                                @endif{{ $res['outcome'] }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,7 +240,8 @@
                                 <tbody>
                                     <tr>
                                         <td style="color: white !important;">Balance</td>
-                                        <td style="color: white !important;" id="wallt_balance_tx_r2">{{ number_format($balances['USDT'], 8) }} USDT</td>
+                                        <td style="color: white !important;" id="wallt_balance_tx_r2">
+                                            {{ number_format($balances['USDT'], 8) }} USDT</td>
                                     </tr>
                                     <tr>
                                         <td style="color: white !important;">Minimum Opening Quantity</td>
@@ -134,8 +252,8 @@
                         </div>
                     </div>
                     <div class="px-5 mt-2 buy_trx_ctn">
-                        <button onclick="{{ $formSubmit }}(1)" class="buy_trx mb-1 mt-2" style="background-color: green;"
-                            type="button">Buy up</button>
+                        <button onclick="{{ $formSubmit }}(1)" class="buy_trx mb-1 mt-2"
+                            style="background-color: green;" type="button">Buy up</button>
                         <button onclick="{{ $formSubmit }}(2)" class="buy_trx mb-2" style="background-color: red;"
                             type="button">Buy down</button>
                     </div>
@@ -146,8 +264,9 @@
 @endsection
 
 @push('script')
-    <script src="https://basefex.dtest/assets/templates/basic/js/sfx-widget.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://basefex.dtest/assets/templates/basic/js/tv.js"></script>
+    <script src="https://basefex.dtest/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         var {{ $currentPCoin }} = 'BTC';
         var {{ $currentPWallet }} = 1;
@@ -179,8 +298,9 @@
             @endforeach
         };
 
-        function setOpqty(){
-            document.getElementById('opqty_r2').innerText = minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} - 1]] + ' ' + wallets[{{ $currentPWallet }} - 1];
+        function setOpqty() {
+            document.getElementById('opqty_r2').innerText = minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} -
+                1]] + ' ' + wallets[{{ $currentPWallet }} - 1];
         }
 
         function {{ $formSubmit }}(highlow) {

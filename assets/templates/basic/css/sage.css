@@ -474,7 +474,7 @@ p {
 	column-gap: 5px;
 	row-gap: 10px;
 }
-.opentimes div.card{
+.opentimes div.card {
 	cursor: pointer;
 }
 
@@ -490,22 +490,48 @@ p {
 	}
 }
 
-.buy_trx_ctn{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.buy_trx_ctn {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
-.buy_trx{
+.buy_trx {
 	border-radius: 20px;
-    border: 0px;
-    font-size: 14px;
-    color: white;
-    padding: 5px 10px;
+	border: 0px;
+	font-size: 14px;
+	color: white;
+	padding: 5px 10px;
 }
 
+.trx_tab_link {
+	color: white;
+	padding: 7px 0px;
+	font-size: 14px;
+	text-decoration: none;
+}
 
+.trx_tab_link.active,
+.trx_tab_link:hover {
+	color: #97a2c0;
+	border-bottom: 1px solid #97a2c0;
+}
 
+.nav-tabs {
+	border-bottom: none;
+}
+
+thead{
+	border-bottom: 1px solid #97a2c070;
+}
+
+.closed_tab_win{
+	color: green;
+}
+
+.closed_tab_loss{
+	color: red;
+}
 
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
