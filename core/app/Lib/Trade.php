@@ -30,7 +30,7 @@ class Trade
     {
         $validator = Validator::make($request->all(), [
             'amount'        => 'required|numeric|gt:0',
-            'coin_id'       => 'required|integer',
+            'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
             'high_low_type' => 'required|in:1,2',
             'wallet'        => 'required|in:1,2,3',
             'duration'      => 'required|exists:trade_settings,time',
@@ -45,10 +45,17 @@ class Trade
             return $this->errorResponse(['Invalid wallet.']);
         }
 
-        $crypto = CryptoCurrency::active()->find($request->coin_id);
+        $crypto = CryptoCurrency::active()->where('symbol', $request->coin_id)->first();
         if (!$crypto) {
             return $this->errorResponse(['Crypto currency not found']);
         }
+        $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        if(!is_null($tradeSetting)){
+            $profit = $tradeSetting->profit;
+        } else {
+            return $this->errorResponse(['Invalid open time.']);
+        }
+        
         $user      = auth()->user();
         $columName = $this->columnName;
         $wallet_map = [
@@ -56,8 +63,15 @@ class Trade
             2 => 'BTC',
             3 => 'ETH',
         ];
+        if ($crypto->symbol == $wallet_map[$request->wallet]) {
+            return $this->errorResponse(['You can\'t trade a coin against itself.']);
+        }
         $balances = json_decode($user->$columName, true);
         $balance = $balances[$wallet_map[$request->wallet]] ?? 0;
+        
+        if($request->amount < json_decode($tradeSetting->minimum, true)[$wallet_map[$request->wallet]]){
+            return $this->errorResponse(['You can\'t trade less than '.json_decode($tradeSetting->minimum, true)[$wallet_map[$request->wallet]].' '.$wallet_map[$request->wallet].' for this time setting.']);
+        }
 
         if ($request->amount > $balance) {
             if ($this->isPracticeTrade) {
@@ -69,22 +83,20 @@ class Trade
         }
 
         $unit = "add" . ucfirst($request->unit);
-        $time = Carbon::now()->$unit($request->duration);
-
-        $coinRate = getCoinRate($crypto->symbol, $request->wallet);
-        $profit = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
-        if(!is_null($profit)){
-            $profit = $profit->profit;
-        }
+        $now = Carbon::now();
+        $then = Carbon::parse($now->toString());
+        $time = $now->$unit($request->duration);
+        
+        $coinRate = getCoinRate($crypto->symbol, intval($request->wallet));
 
         $tradeLog                     = new $this->modelName();
         $tradeLog->user_id            = $user->id;
-        $tradeLog->crypto_currency_id = $request->coin_id;
+        $tradeLog->crypto_currency_id = $crypto->id;
         $tradeLog->amount             = $request->amount;
         $tradeLog->in_time            = $time;
         $tradeLog->high_low           = $request->high_low_type;
         $tradeLog->price_was          = $coinRate;
-        $tradeLog->duration           = $time - Carbon::now();
+        $tradeLog->duration           = $time->diff($then)->format('%H:%I:%S');
         $tradeLog->wallet             = $request->wallet;
         $tradeLog->profit             = $profit ?? 5;
         $tradeLog->save();
@@ -96,7 +108,7 @@ class Trade
         if (!$this->isPracticeTrade) {
             $highLow = $request->high_low_type == Status::TRADE_HIGH ? 'High' : "Low";
             $details = 'Trade to ' . $crypto->name . ' ' . $highLow;
-            $this->createTransaction($tradeLog->amount, $details, '-', $balances[$wallet_map[$tradeLog->wallet]]);
+            $this->createTransaction($tradeLog->amount, $details, '-', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
         return response()->json([
             'success'     => true,
@@ -177,7 +189,7 @@ class Trade
 
         if (!$this->isPracticeTrade) {
             $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
-            $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]]);
+            $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
 
         $tradeLog->result = Status::TRADE_WIN;
@@ -210,7 +222,7 @@ class Trade
 
         if (!$this->isPracticeTrade) {
             $details = "Trade " . $tradeLog->crypto->name . ' ' . "DRAW";
-            $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]]);
+            $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
 
         $tradeLog->result = Status::TRADE_DRAW;
@@ -220,7 +232,7 @@ class Trade
         return $this->successResponse("Trade Draw");
     }
 
-    public function createTransaction($amount, $details, $trxType = "+", $balance)
+    public function createTransaction($amount, $details, $trxType = "+", $balance, $wallet)
     {
         $user = auth()->user();
 
@@ -230,6 +242,7 @@ class Trade
         $transaction->post_balance = $balance;
         $transaction->trx_type     = $trxType;
         $transaction->details      = $details;
+        $transaction->wallet      = $wallet;
         $transaction->trx          = getTrx();
         $transaction->save();
     }

@@ -19,8 +19,11 @@ class TradeSettingController extends Controller
     {
         $request->validate([
             'time' => 'required|integer',
-            'profit' => 'required|integer',
-            'unit' => 'required|in:seconds,minutes,hours,days'
+            'profit' => 'required|integer|max:100|min:0',
+            'unit' => 'required|in:seconds,minutes,hours,days',
+            'minimum_usdt' => 'required|numeric',
+            'minimum_btc' => 'required|numeric',
+            'minimum_eth' => 'required|numeric',
         ]);
         if ($id) {
             $tradeSetting = TradeSetting::findOrFail($id);
@@ -33,6 +36,11 @@ class TradeSettingController extends Controller
         $tradeSetting->time = $request->time;
         $tradeSetting->profit = $request->profit;
         $tradeSetting->unit = $request->unit;
+        $tradeSetting->minimum = json_encode([
+            'USDT' => $request->minimum_usdt,
+            'BTC' => $request->minimum_btc,
+            'ETH' => $request->minimum_eth,
+        ]);
         $tradeSetting->save();
 
         $notify[] = ['success', $message];

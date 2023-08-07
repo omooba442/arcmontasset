@@ -11,7 +11,8 @@
                                 <th>@lang('S.N.')</th>
                                 <th>@lang('Time')</th>
                                 <th>@lang('Unit')</th>
-                                <th>@lang('Profit (%)')</th>
+                                <th>@lang('Profit') (%)</th>
+                                <th>@lang('Minimum')</th>
                                 <th>@lang('Action')</th>
                             </tr>
                         </thead>
@@ -22,8 +23,9 @@
                                 <td>{{$game->time}}</td>
                                 <td>{{ucfirst($game->unit)}}</td>
                                 <td>{{$game->profit}}</td>
+                                <td>{{str_replace('}', '', str_replace('{', '', str_replace('"', '', $game->minimum)))}}</td>
                                 <td>
-                                    <button type="button"  class="btn btn-sm btn-outline--primary editBtn" data-game='@json($game)'>
+                                    <button type="button"  class="btn btn-sm btn-outline--primary editBtn" data-game='@json($game)' data-minimum='@json(json_decode($game->minimum,true))'>
                                         <i class="la la-pencil"></i>@lang('Edit')
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline--danger ms-1 confirmationBtn"
@@ -81,6 +83,18 @@
                         <label>@lang('Profit')</label>
                         <input type="number" class="form-control" name="profit" required>
                     </div>
+                    <div class="form-group">
+                        <label>@lang('Minimum USDT')</label>
+                        <input type="number" class="form-control" name="minimum_usdt" required>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('Minimum BTC')</label>
+                        <input type="number" class="form-control" name="minimum_btc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('Minimum ETH')</label>
+                        <input type="number" class="form-control" name="minimum_eth" required>
+                    </div>
                     <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
                 </div>
             </form>
@@ -114,9 +128,13 @@
         $('.editBtn').on('click', function (e) {
             let action = `{{ route('admin.trade.setting.save',':id') }}`;
             let data   = $(this).data('game');
+            let minimum   = $(this).data('minimum');
             modal.find('form').prop('action', action.replace(':id', data.id))
             modal.find("input[name=time]").val(data.time);
             modal.find("input[name=profit]").val(data.profit);
+            modal.find("input[name=minimum_usdt]").val(minimum.USDT);
+            modal.find("input[name=minimum_btc]").val(minimum.BTC);
+            modal.find("input[name=minimum_eth]").val(minimum.ETH);
             modal.find("select[name=unit]").val(data.unit);
             modal.find('.modal-title').text(`@lang('Update Trade Setting')`);
             $(modal).modal('show');

@@ -474,6 +474,9 @@ p {
 	column-gap: 5px;
 	row-gap: 10px;
 }
+.opentimes div.card{
+	cursor: pointer;
+}
 
 .opentimitem.active,
 .opentimitem:hover {
@@ -486,6 +489,23 @@ p {
 		--bs-gutter-y: 3rem;
 	}
 }
+
+.buy_trx_ctn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.buy_trx{
+	border-radius: 20px;
+    border: 0px;
+    font-size: 14px;
+    color: white;
+    padding: 5px 10px;
+}
+
+
+
 
 /* ===== Scrollbar CSS ===== */
 /* Firefox */

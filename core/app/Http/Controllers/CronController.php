@@ -38,7 +38,7 @@ class CronController extends Controller
                     $user->save();
 
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
-                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]]);
+                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_WIN;
                 } else if ($tradeLog->price_was > $cryptoRate) {
                     $tradeLog->result = Status::TRADE_LOSE;
@@ -49,7 +49,7 @@ class CronController extends Controller
 
                     $tradeLogAmount = $tradeLog->amount;
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
-                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]]);
+                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }
             } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
@@ -59,7 +59,7 @@ class CronController extends Controller
                     $user->balance = json_encode($balances);
                     $user->save();
                     $details = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
-                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]]);
+                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_WIN;
 
                 } else if ($tradeLog->price_was < $cryptoRate) {
@@ -71,7 +71,7 @@ class CronController extends Controller
 
                     $tradeLogAmount = $tradeLog->amount;
                     $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
-                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]]);
+                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }
             }
@@ -84,7 +84,7 @@ class CronController extends Controller
         echo "EXECUTED";
     }
 
-    public function transactions($user, $gameLogAmount, $details, $balance)
+    public function transactions($user, $gameLogAmount, $details, $balance, $wallet)
     {
         $transaction               = new Transaction();
         $transaction->user_id      = $user->id;
@@ -92,6 +92,7 @@ class CronController extends Controller
         $transaction->post_balance = $balance;
         $transaction->trx_type     = "+";
         $transaction->details      = $details;
+        $transaction->wallet      = $wallet;
         $transaction->trx          = getTrx();
         $transaction->save();
     }

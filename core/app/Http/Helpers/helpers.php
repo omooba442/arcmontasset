@@ -450,7 +450,7 @@ function getCoinRate($coinId, $wallet)
     $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $coinId . '&tsyms=' . $wallet_curr;
     $crypto     = file_get_contents($url);
     $usd        = json_decode($crypto, true);
-    $cryptoRate = $usd['USD'];
+    $cryptoRate = $usd[$wallet_curr];
     return $cryptoRate;
 }
 
