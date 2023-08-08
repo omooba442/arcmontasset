@@ -323,17 +323,7 @@
                             },
                             success: function(response) {
                                 if (response.success) {
-                                    gameLogId = response.game_log_id;
-                                    //countDown(timeCount, gameLogId)
-                                    // if (highlowType == 1) {
-                                    //     $(".trade-user-price").text("Your trade high. price was " + response
-                                    //         .trade + " " + "USD");
-                                    //     notify('success', 'Trade High');
-                                    // } else {
-                                    //     $(".trade-user-price").text("Your trade low. price was " + response
-                                    //         .trade + " " + "USD");
-                                    //     notify('success', 'Trade Low');
-                                    // }
+                                    window.location.reload();
                                 } else {
                                     notify('error', response.errors)
                                 }
