@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Str;
+    use Carbon\Carbon;
     $changeCoinFunc = 'a' . Str::random(6);
     $changeWalletFunc = 'b' . Str::random(6);
     $formQuantity = 'c' . Str::random(20);
@@ -10,6 +11,7 @@
     $currentPTimeSubUnit = 'h' . Str::random(6);
     $currentPTimeSubTime = 'i' . Str::random(6);
     $formSubmit = 'j' . Str::random(6);
+    $timer = 'k' . Str::random(13);
     $coin_shortcuts = $cryptos->select('symbol')->pluck('symbol');
     $wallet_shortcuts = [
         1 => 'USDT',
@@ -118,8 +120,7 @@
                                         <th scope="col">Pair</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Purchase Price</th>
-                                        <th scope="col">Transaction Price</th>
-                                        <th scope="col">Profit / Loss</th>
+                                        <th scope="col">Timer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,17 +134,12 @@
                                             $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                         @endphp
                                         <tr>
-                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }} {{formatTimeToShortString($trade->duration)}}</td>
+                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                {{ formatTimeToShortString($trade->duration) }}</td>
                                             <td>{{ number_format($trade->amount, 6) }}</td>
                                             <td>{{ number_format($trade->price_was, 6) }}</td>
-                                            <td>{{ number_format($trade->price_is, 6) }}</td>
-                                            <td
-                                                class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
-                                                @if ($res['result'] == 'loss')
-                                                    -
-                                                @else
-                                                    +
-                                                @endif{{ $res['outcome'] }}
+                                            <td>
+                                                <div id="{{ $timer }}_trade_timer_{{ $trade->id }}"></div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -172,7 +168,8 @@
                                             $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                         @endphp
                                         <tr>
-                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }} {{formatTimeToShortString($trade->duration)}}</td>
+                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                {{ formatTimeToShortString($trade->duration) }}</td>
                                             <td>{{ number_format($trade->amount, 6) }}</td>
                                             <td>{{ number_format($trade->price_was, 6) }}</td>
                                             <td>{{ number_format($trade->price_is, 6) }}</td>
@@ -265,8 +262,8 @@
 
 @push('script')
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://basefex.dtest/assets/templates/basic/js/tv.js"></script>
-    <script src="https://basefex.dtest/assets/templates/basic/js/easytimer.min.js"></script>
+    <script src="/assets/templates/basic/js/tv.js"></script>
+    <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         var {{ $currentPCoin }} = 'BTC';
         var {{ $currentPWallet }} = 1;
@@ -449,5 +446,51 @@
             },
             "container_id": "expert_chart"
         });
+    </script>
+    <script>
+        @foreach ($log->where('status', 0)->get()->toBase() as $trade)
+            // Timer {{ $trade->id }}
+            @php
+                [$cu_hours, $cu_minutes, $cu_seconds] = explode(':', Carbon::parse($trade->in_time)->isPast() ? '00:00:05' : Carbon::parse($trade->in_time)->diff(Carbon::now())->format('%H:%I:%S'));
+            @endphp
+            var {{ $timer }}_trade_timer_{{ $trade->id }} = new easytimer.Timer();
+            {{ $timer }}_trade_timer_{{ $trade->id }}.start({
+                countdown: true,
+                startValues: {
+                    hours: {{ $cu_hours }},
+                    minutes: {{ $cu_minutes }},
+                    seconds: {{ $cu_seconds }}
+                }
+            });
+            $('#{{ $timer }}_trade_timer_{{ $trade->id }}').html(
+                {{ $timer }}_trade_timer_{{ $trade->id }}.getTimeValues().toString());
+            {{ $timer }}_trade_timer_{{ $trade->id }}.addEventListener('secondsUpdated', function(e) {
+                $('#{{ $timer }}_trade_timer_{{ $trade->id }}').html(
+                    {{ $timer }}_trade_timer_{{ $trade->id }}.getTimeValues().toString());
+            });
+
+            {{ $timer }}_trade_timer_{{ $trade->id }}.addEventListener('targetAchieved', function(e) {
+                $.ajax({
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    },
+                    url: "{{ route('user.trade.result') }}",
+                    method: "POST",
+                    data: {
+                        game_log_id: {{ $trade->id }}
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            notify('success', response.message || '');
+                        } else {
+                            notify('error', response.errors || '')
+                        }
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                });
+            });
+        @endforeach
     </script>
 @endpush
