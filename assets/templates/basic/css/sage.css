@@ -43,7 +43,6 @@ ul li {
 	flex-wrap: wrap;
 	padding: 0;
 	margin: 0;
-	justify-content: space-between;
 	align-items: center;
 	font-size: 14px;
 }
@@ -262,6 +261,102 @@ menu li a:hover {
 	background: #1a253b;
 }
 
+.header-bar {
+	position: relative;
+	cursor: pointer;
+	width: 25px;
+	height: 20px;
+}
+
+@media (min-width: 576px) {
+	.header-bar {
+		margin-right: 20px;
+	}
+}
+
+@media (min-width: 992px) {
+	.header-bar {
+		display: none;
+	}
+}
+
+.header-bar span {
+	position: absolute;
+	display: inline-block;
+	height: 3px;
+	width: 100%;
+	-webkit-transition: all ease 0.3s;
+	-moz-transition: all ease 0.3s;
+	transition: all ease 0.3s;
+	background-color: #fff;
+	left: 0;
+}
+
+.header-bar span:first-child {
+	top: 0;
+}
+
+.header-bar span:nth-child(2) {
+	top: 52%;
+	transform: translateY(-65%);
+}
+
+.header-bar span:last-child {
+	bottom: 0;
+}
+
+.header-bar.active span:first-child {
+	-webkit-transform: rotate(45deg) translate(3px, 9px);
+	-ms-transform: rotate(45deg) translate(3px, 9px);
+	transform: rotate(45deg) translate(3px, 9px);
+}
+
+.header-bar.active span:nth-child(2) {
+	opacity: 0;
+}
+
+.header-bar.active span:last-child {
+	-webkit-transform: rotate(-45deg) translate(3px, -9px);
+	-ms-transform: rotate(-45deg) translate(3px, -9px);
+	transform: rotate(-45deg) translate(3px, -9px);
+}
+
+@media (max-width: 767px) {
+	.header-bar {
+		margin-left: 0;
+	}
+}
+
+@media (min-width: 992px) {
+	.mob_gy5 {
+		margin-top: 45px;
+	}
+	.header-bar{
+		margin-left: auto !important;
+	}
+	.m2mble{
+		display: none;
+	}
+	.m2dstp{
+		display: flex;
+	}
+}
+@media (max-width: 992px) {
+	.header-bar{
+		margin-left: auto !important;
+	}
+	.header-top{
+		padding: 5px 3px !important;
+	}
+	.m2mble{
+		display: block;
+	}
+	.m2dstp{
+		display: none;
+	}
+}
+
+
 .dark-logo {
 	display: none;
 }
@@ -410,9 +505,13 @@ menu li a:hover {
 	border-bottom: 1px solid #97a2c0 !important;
 }
 
-#expert_chart div {
+#expert_chart:not(.safe) div {
 	width: 100% !important;
 	height: 350px !important;
+}
+
+#expert_chart.safe div {
+	width: 100% !important;
 }
 
 .link {
@@ -482,6 +581,10 @@ p {
 .opentimitem:hover {
 	background-color: #97a2c0 !important;
 	border: 1px solid #97a2c070;
+}
+
+#expert_chart{
+	background-color: #1a253b;
 }
 
 @media (max-width: 992px) {

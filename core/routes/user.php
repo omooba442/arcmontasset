@@ -63,9 +63,6 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::get('transactions', 'transactions')->name('transactions');
 
                 Route::get('attachment-download/{fil_hash}', 'attachmentDownload')->name('attachment.download');
-                Route::post('/add/practice/balance', 'addPracticeBalance')->name('add.practice.balance');
-
-                Route::get('crypto/rate', 'cryptoRate')->name('crypto.rate');
             });
 
             //Profile setting
@@ -86,28 +83,22 @@ Route::middleware('auth')->name('user.')->group(function () {
                 });
                 Route::get('history', 'withdrawLog')->name('.history');
             });
-
-            Route::prefix('practice/trade')->name('practice.trade.')->controller("PracticeTradeController")->group(function () {
+            
+            Route::controller("TradeController")->name('trade.')->prefix('trade')->group(function () {     
                 Route::get('/', 'index')->name('index');
-                Route::get('log', 'log')->name('log');
                 Route::post('store', 'store')->name('store');
                 Route::post('result', 'tradeResult')->name('result');
-                Route::get('/with/{name}', 'tradeNow')->name('now');
             });
             
-            Route::controller("TradeController")->name('trade.')->prefix('trade')->group(function () {
-                //Route::view('/', 'admin.user.index')->name('index');
-                //Route::view('log', 'admin.user.index'/*'tradeLog'*/)->name('log');
-                //Route::view('wining/log', 'admin.user.index'/*'winingTradeLog'*/)->name('wining.log');
-                //Route::view('losing/log', 'admin.user.index'/*'losingTradeLog'*/)->name('losing.log');
-                //Route::view('draw/log', 'admin.user.index'/*'drawTradeLog'*/)->name('draw.log');
-                
+            Route::controller("LeverageController")->name('leverage.')->prefix('leverage')->group(function () {     
                 Route::get('/', 'index')->name('index');
-
                 Route::post('store', 'store')->name('store');
                 Route::post('result', 'tradeResult')->name('result');
-                // Route::view('with/{name}', 'admin.user.index'/*'tradeNow'*/)->name('now');
-
+            });
+            
+            Route::controller("ExchangeController")->name('exchange.')->prefix('exchange')->group(function () {     
+                Route::get('/', 'index')->name('index');
+                Route::post('achieve', 'achieve')->name('achieve');
             });
 
             Route::controller("ReferralController")->group(function(){

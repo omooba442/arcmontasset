@@ -84,15 +84,15 @@
                         <input type="number" class="form-control" name="profit" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum USDT')</label>
+                        <label>@lang('Minimum USDT Trade')</label>
                         <input type="number" class="form-control" name="minimum_usdt" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum BTC')</label>
+                        <label>@lang('Minimum BTC Trade')</label>
                         <input type="number" class="form-control" name="minimum_btc" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum ETH')</label>
+                        <label>@lang('Minimum ETH Trade')</label>
                         <input type="number" class="form-control" name="minimum_eth" required>
                     </div>
                     <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>

@@ -43,6 +43,7 @@
                 $outcome = $trade;
             }
         }
+        $outcome = number_format($outcome, 8);
         return compact('outcome', 'result');
     }
     function formatTimeToShortString($timeValue)
@@ -68,7 +69,7 @@
 @extends($activeTemplate . 'layouts.sage')
 @section('content')
     <div class="not_a_container">
-        <div class="row gx-2 mob_gy5" style="margin-top: 45px;">
+        <div class="row gx-2 mob_gy5">
             <div class="col-lg-9">
                 <div class="card">
                     <ul class="trade_coin_tab_nav">
@@ -98,93 +99,99 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mt-2 trading-view">
-                    <ul class="nav nav-tabs px-2 py-2" id="trx_tabs_" role="tablist"
-                        style="display: flex;column-gap: 10px;">
-                        <li class="nav-item">
-                            <a class="trx_tab_link active" id="transactions-tab" data-toggle="tab" href="#transactions"
-                                role="tab" aria-controls="transactions" aria-selected="true">Transactions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="trx_tab_link" id="closed-tab" data-toggle="tab" href="#closed" role="tab"
-                                aria-controls="closed" aria-selected="false">Closed</a>
-                        </li>
-                    </ul>
+                <div class="card mt-2 trading-view" style="display: flex; min-height: 200px; overflow-x: auto;">
+                    <div style="flex: 1">
+                        <ul class="nav nav-tabs px-2 py-2" id="trx_tabs_" role="tablist"
+                            style="display: flex;column-gap: 10px;">
+                            <li class="nav-item">
+                                <a class="trx_tab_link active" id="transactions-tab" data-toggle="tab" href="#transactions"
+                                    role="tab" aria-controls="transactions" aria-selected="true">Transactions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="trx_tab_link" id="closed-tab" data-toggle="tab" href="#closed" role="tab"
+                                    aria-controls="closed" aria-selected="false">Closed</a>
+                            </li>
+                        </ul>
 
-                    <div class="tab-content" id="trx_tabs_Content">
-                        <div class="tab-pane fade show active" id="transactions" role="tabpanel"
-                            aria-labelledby="transactions-tab">
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Pair</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Purchase Price</th>
-                                        <th scope="col">Timer</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($log->where('status', 0)->count() < 1)
+                        <div class="tab-content" id="trx_tabs_Content">
+                            <div class="tab-pane fade show active" id="transactions" role="tabpanel"
+                                aria-labelledby="transactions-tab">
+                                <table class="table table-borderless">
+                                    <thead>
                                         <tr>
-                                            <td colspan="5">No data, yet.</td>
+                                            <th scope="col">Pair</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Purchase Price</th>
+                                            <th scope="col">Timer</th>
                                         </tr>
-                                    @endif
-                                    @foreach ($log->where('status', 0)->get()->toBase() as $trade)
-                                        @php
-                                            $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
-                                        @endphp
+                                    </thead>
+                                    <tbody>
+                                        @if ($log->where('status', 0)->count() < 1)
+                                            <tr>
+                                                <td colspan="5">
+                                                    <center>No data, yet.</center>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @foreach ($log->where('status', 0)->get()->toBase() as $trade)
+                                            @php
+                                                $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                    {{ formatTimeToShortString($trade->duration) }}</td>
+                                                <td>{{ number_format($trade->amount, 6) }}</td>
+                                                <td>{{ number_format($trade->price_was, 6) }}</td>
+                                                <td>
+                                                    <div id="{{ $timer }}_trade_timer_{{ $trade->id }}"></div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+                                <table class="table table-borderless">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
-                                                {{ formatTimeToShortString($trade->duration) }}</td>
-                                            <td>{{ number_format($trade->amount, 6) }}</td>
-                                            <td>{{ number_format($trade->price_was, 6) }}</td>
-                                            <td>
-                                                <div id="{{ $timer }}_trade_timer_{{ $trade->id }}"></div>
-                                            </td>
+                                            <th scope="col">Pair</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Purchase Price</th>
+                                            <th scope="col">Transaction Price</th>
+                                            <th scope="col">Profit / Loss</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Pair</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Purchase Price</th>
-                                        <th scope="col">Transaction Price</th>
-                                        <th scope="col">Profit / Loss</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($log2->where('status', 1)->count() < 1)
-                                        <tr>
-                                            <td colspan="5">No data, yet.</td>
-                                        </tr>
-                                    @endif
-                                    @foreach ($log2->where('status', 1)->get()->toBase() as $trade)
-                                        @php
-                                            $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
-                                        @endphp
-                                        <tr>
-                                            <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
-                                                {{ formatTimeToShortString($trade->duration) }}</td>
-                                            <td>{{ number_format($trade->amount, 6) }}</td>
-                                            <td>{{ number_format($trade->price_was, 6) }}</td>
-                                            <td>{{ number_format($trade->price_is, 6) }}</td>
-                                            <td
-                                                class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
-                                                @if ($res['result'] == 'loss')
-                                                    -
-                                                @else
-                                                    +
-                                                @endif{{ $res['outcome'] }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($log2->where('status', 1)->count() < 1)
+                                            <tr>
+                                                <td colspan="5">
+                                                    <center>No data, yet.</center>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        @foreach ($log2->where('status', 1)->get()->toBase() as $trade)
+                                            @php
+                                                $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                    {{ formatTimeToShortString($trade->duration) }}</td>
+                                                <td>{{ number_format($trade->amount, 6) }}</td>
+                                                <td>{{ number_format($trade->price_was, 6) }}</td>
+                                                <td>{{ number_format($trade->price_is, 6) }}</td>
+                                                <td
+                                                    class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
+                                                    @if ($res['result'] == 'loss')
+                                                        -
+                                                    @else
+                                                        +
+                                                    @endif{{ $res['outcome'] }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -242,7 +249,7 @@
                                     </tr>
                                     <tr>
                                         <td style="color: white !important;">Minimum Opening Quantity</td>
-                                        <td style="color: white !important;" id="opqty_r2">- USDT</td>
+                                        <td style="color: white !important;" id="opqty_r2">-</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -264,6 +271,34 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/assets/templates/basic/js/tv.js"></script>
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
+    <script>
+        "use strict";
+        var tv = new TradingView.widget({
+            "width": 980,
+            "height": 610,
+            "symbol": "BTCUSD",
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "overrides": {
+                "paneProperties": {
+                    "background": "#FF0000",
+                },
+            },
+            "container_id": "expert_chart"
+        });
+        tv.onChartReady(function() {
+            const symbolSearchInput = document.querySelector(".symbol-edit");
+            if (symbolSearchInput) {
+                symbolSearchInput.setAttribute("disabled", "true");
+            }
+        });
+    </script>
     <script>
         var {{ $currentPCoin }} = 'BTC';
         var {{ $currentPWallet }} = 1;
@@ -359,7 +394,7 @@
 
         function {{ $changeWalletFunc }}(change) {
             if (change >= 1 && change <= 3) {
-                new TradingView.widget({
+                tv = new TradingView.widget({
                     "width": 980,
                     "height": 610,
                     "symbol": {{ $currentPCoin }} + wallets[change - 1],
@@ -386,11 +421,17 @@
                     change - 1];
                 {{ $currentPWallet }} = change;
                 setOpqty();
+                tv.onChartReady(function() {
+                    const symbolSearchInput = document.querySelector(".symbol-edit");
+                    if (symbolSearchInput) {
+                        symbolSearchInput.setAttribute("disabled", "true");
+                    }
+                });
             }
         }
 
         function {{ $changeCoinFunc }}(change) {
-            new TradingView.widget({
+            tv = new TradingView.widget({
                 "width": 980,
                 "height": 610,
                 "symbol": change + wallets[{{ $currentPWallet }} - 1],
@@ -413,35 +454,26 @@
             document.getElementById('trad_ref_' + change).classList.add('active');
             {{ $currentPCoin }} = change;
             setOpqty();
+            tv.onChartReady(function() {
+                const symbolSearchInput = document.querySelector(".symbol-edit");
+                if (symbolSearchInput) {
+                    symbolSearchInput.setAttribute("disabled", "true");
+                }
+            });
         }
-    </script>
-    <script>
-        "use strict";
-        new TradingView.widget({
-            "width": 980,
-            "height": 610,
-            "symbol": "BTCUSD",
-            "interval": "D",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "allow_symbol_change": true,
-            "overrides": {
-                "paneProperties": {
-                    "background": "#FF0000",
-                },
-            },
-            "container_id": "expert_chart"
-        });
     </script>
     <script>
         @foreach ($log->where('status', 0)->get()->toBase() as $trade)
             // Timer {{ $trade->id }}
             @php
-                [$cu_hours, $cu_minutes, $cu_seconds] = explode(':', Carbon::parse($trade->in_time)->isPast() ? '00:00:05' : Carbon::parse($trade->in_time)->diff(Carbon::now())->format('%H:%I:%S'));
+                [$cu_hours, $cu_minutes, $cu_seconds] = explode(
+                    ':',
+                    Carbon::parse($trade->in_time)->isPast()
+                        ? '00:00:05'
+                        : Carbon::parse($trade->in_time)
+                            ->diff(Carbon::now())
+                            ->format('%H:%I:%S'),
+                );
             @endphp
             var {{ $timer }}_trade_timer_{{ $trade->id }} = new easytimer.Timer();
             {{ $timer }}_trade_timer_{{ $trade->id }}.start({

@@ -194,12 +194,4 @@ class UserController extends Controller
         $notify[] = ['success', 'Practice balance added successfully'];
         return back()->withNotify($notify);
     }
-
-
-
-    public function cryptoRate(Request $request)
-    {
-        $cryptoRate = getCoinRate($request->coinSymbol);
-        return $cryptoRate;
-    }
 }

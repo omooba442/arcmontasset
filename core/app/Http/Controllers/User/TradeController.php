@@ -21,14 +21,6 @@ class TradeController extends Controller
         $log2           = $this->tradeData();
         return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log', 'log2'));
     }
-    public function tradeNow($name)
-    {
-        $currency      = CryptoCurrency::active()->where('name', $name)->firstOrFail();
-        $tradeSettings = TradeSetting::latest()->get();
-        $log           = $this->tradeData();
-        $pageTitle     = "Trade With " . $currency->name;
-        return view($this->activeTemplate. 'user.trade.trade_with', compact('pageTitle','currency', 'tradeSettings', 'log'));
-    }
     public function store(Request $request)
     {
         $trade = new Trade();
