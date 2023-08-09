@@ -100,6 +100,11 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::post('achieve', 'achieve')->name('achieve');
             });
+            
+            Route::controller("AssetsController")->name('assets.')->prefix('assets')->group(function () {     
+                Route::get('/', 'index')->name('index');
+                Route::get('log/{wallet}', 'log')->name('log')->whereIn('wallet', ['USDT', 'BTC', 'ETH']);
+            });
 
             Route::controller("ReferralController")->group(function(){
                 Route::get('commissions/history', 'commissions')->name('commissions.log');

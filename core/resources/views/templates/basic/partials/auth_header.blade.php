@@ -37,8 +37,8 @@
                                 href="{{ route('user.home') }}">@lang('Lock-up mining')</a>
                         </li>
                         <li>
-                            <a class="{{ menuActive('user.transactions') }}"
-                                href="{{ route('user.home') }}">@lang('Assets')</a>
+                            <a class="{{ menuActive('user.assets.index') }} {{ menuActive('user.assets.log') }}"
+                                href="{{ route('user.assets.index') }}">@lang('Assets')</a>
                         </li>
                         <ul class="menu m2mble" style="margin-left: auto;">
                             <li>
