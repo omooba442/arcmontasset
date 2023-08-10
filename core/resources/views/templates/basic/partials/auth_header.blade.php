@@ -9,12 +9,8 @@
                 <div style="display: contents;">
                     <ul class="menu">
                         <li>
-                            <a href="{{ route('user.home') }}"
-                                class="{{ menuActive('user.home') }}">@lang('Dashboard')</a>
-                        </li>
-                        <li>
-                            <a class="{{ menuActive('user.transactions') }}"
-                                href="{{ route('user.home') }}">@lang('Markets')</a>
+                            <a class="{{ menuActive('user.markets.index') }}"
+                                href="{{ route('user.markets.index') }}">@lang('Markets')</a>
                         </li>
                         <li>
                             <a class="{{ menuActive('user.fiat.index') }}"
@@ -38,7 +34,11 @@
                         </li>
                         <li>
                             <a class="{{ menuActive('user.assets.index') }} {{ menuActive('user.assets.log') }}"
-                                href="{{ route('user.assets.index') }}">@lang('Assets')</a>
+                            href="{{ route('user.assets.index') }}">@lang('Assets')</a>
+                        </li>
+                        <li>
+                            <a class="{{ menuActive('user.transactions') }}"
+                                href="{{ route('user.home') }}">@lang('Furures Earn')</a>
                         </li>
                         <ul class="menu m2mble" style="margin-left: auto;">
                             <li>

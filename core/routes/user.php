@@ -46,7 +46,9 @@ Route::middleware('auth')->name('user.')->group(function () {
         Route::middleware('registration.complete')->namespace('User')->group(function () {
 
             Route::controller('UserController')->group(function () {
-                Route::get('dashboard', 'home')->name('home');
+                Route::get('dashboard', function () {
+                    return redirect()->route('user.markets.index');
+                })->name('home');
 
                 //2FA
                 Route::get('twofactor', 'show2faForm')->name('twofactor');
@@ -110,6 +112,10 @@ Route::middleware('auth')->name('user.')->group(function () {
             Route::controller("AssetsController")->name('assets.')->prefix('assets')->group(function () {     
                 Route::get('/', 'index')->name('index');
                 Route::get('log/{wallet}', 'log')->name('log')->whereIn('wallet', ['USDT', 'BTC', 'ETH']);
+            });
+            
+            Route::controller("MarketsController")->name('markets.')->prefix('markets')->group(function () {     
+                Route::get('/', 'index')->name('index');
             });
 
             Route::controller("ReferralController")->group(function(){
