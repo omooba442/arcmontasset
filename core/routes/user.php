@@ -84,6 +84,12 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::get('history', 'withdrawLog')->name('.history');
             });
             
+            Route::controller("FiatController")->name('fiat.')->prefix('fiat')->group(function () {     
+                Route::get('/', 'index')->name('index');
+                Route::post('store', 'store')->name('store');
+                Route::post('result', 'tradeResult')->name('result');
+            });
+            
             Route::controller("TradeController")->name('trade.')->prefix('trade')->group(function () {     
                 Route::get('/', 'index')->name('index');
                 Route::post('store', 'store')->name('store');

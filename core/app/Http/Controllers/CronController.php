@@ -17,14 +17,19 @@ class CronController extends Controller
         $gnl       = gs();
 
         foreach ($tradeLogs as $tradeLog) {
-            $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
-            $user       = $tradeLog->user;
-            $balances = json_decode($user->balance, true);
-            $wallet_map = [
+            $user           = $tradeLog->user;
+            $isFiatTrade    = $tradeLog->isFiat;
+            $balances       = json_decode($user->balance, true);
+            $wallet_map     = [
                 1 => 'USDT',
                 2 => 'BTC',
                 3 => 'ETH',
             ];
+            if($isFiatTrade){
+                $cryptoRate = getFiatCoinRate($tradeLog->fiat ?? 'USD', $tradeLog->wallet);
+            }else{
+                $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
+            }
             if (!$cryptoRate || !$user) {
                 continue;
             }
@@ -37,7 +42,11 @@ class CronController extends Controller
                     $user->balance = json_encode($balances);
                     $user->save();
 
-                    $details        = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
+                    if($isFiatTrade){
+                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
+                    }else{
+                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+                    }
                     $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_WIN;
                 } else if ($tradeLog->price_was > $cryptoRate) {
@@ -48,7 +57,11 @@ class CronController extends Controller
                     $user->save();
 
                     $tradeLogAmount = $tradeLog->amount;
-                    $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
+                    if($isFiatTrade){
+                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
+                    }else{
+                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                    }
                     $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }
@@ -58,7 +71,11 @@ class CronController extends Controller
                     $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
                     $user->balance = json_encode($balances);
                     $user->save();
-                    $details = 'Trade ' . $tradeLog->crypto->name . ' ' . "WIN";
+                    if($isFiatTrade){
+                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
+                    }else{
+                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+                    }
                     $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_WIN;
 
@@ -70,7 +87,11 @@ class CronController extends Controller
                     $user->save();;
 
                     $tradeLogAmount = $tradeLog->amount;
-                    $details        = 'Trade ' . $tradeLog->crypto->name . ' ' .  "Refund";
+                    if($isFiatTrade){
+                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
+                    }else{
+                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                    }
                     $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                     $tradeLog->result = Status::TRADE_DRAW;
                 }

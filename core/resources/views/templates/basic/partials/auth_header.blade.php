@@ -17,8 +17,8 @@
                                 href="{{ route('user.home') }}">@lang('Markets')</a>
                         </li>
                         <li>
-                            <a class="{{ menuActive('user.transactions') }}"
-                                href="{{ route('user.home') }}">@lang('Fiat')</a>
+                            <a class="{{ menuActive('user.fiat.index') }}"
+                                href="{{ route('user.fiat.index') }}">@lang('Fiat')</a>
                         </li>
                         <li>
                             <a class="{{ menuActive('user.exchange.index') }}"

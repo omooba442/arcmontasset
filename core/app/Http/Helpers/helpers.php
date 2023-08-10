@@ -454,6 +454,25 @@ function getCoinRate($coinId, $wallet)
     return $cryptoRate;
 }
 
+function getFiatCoinRate($coinId, $wallet)
+{
+    $wallet_curr = 'USDT';
+    if($wallet == Status::WALLET_USDT){
+        $wallet_curr = 'USDT';
+    }else if($wallet == Status::WALLET_BTC){
+        $wallet_curr = 'BTC';
+    }else if($wallet == Status::WALLET_ETH){
+        $wallet_curr = 'ETH';
+    }else{
+        $wallet_curr = 'USDT';
+    }
+    $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $wallet_curr . '&tsyms=' . $coinId;
+    $crypto     = file_get_contents($url);
+    $usd        = json_decode($crypto, true);
+    $cryptoRate = $usd[$coinId];
+    return $cryptoRate;
+}
+
 function referralCommission($user, $amount)
 {
     $referBy = User::where('id', $user->ref_by)->first();

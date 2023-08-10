@@ -13,7 +13,7 @@
     $currentPTimeSubTime = 'i' . Str::random(6);
     $formSubmit = 'j' . Str::random(6);
     $timer = 'k' . Str::random(13);
-    $coin_shortcuts = $cryptos->select('symbol')->pluck('symbol');
+    $coin_shortcuts = $fiats->select('symbol')->pluck('symbol');
     $wallet_shortcuts = [
         1 => 'USDT',
         2 => 'BTC',
@@ -76,7 +76,7 @@
                         @foreach ($coin_shortcuts as $coin)
                             <li>
                                 <a id="trad_ref_{{ $coin }}" onclick="{{ $changeCoinFunc }}('{{ $coin }}')"
-                                    class="link @if ($coin == 'BTC') active @endif">{{ $coin }}</a>
+                                    class="link @if ($coin == 'USD') active @endif">{{ $coin }}</a>
                             </li>
                         @endforeach
                     </ul>
@@ -138,7 +138,7 @@
                                                 $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                             @endphp
                                             <tr>
-                                                <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                <td>{{ $wallet_shortcuts[$trade->wallet] }}/{{ $trade->fiat }}
                                                     {{ formatTimeToShortString($trade->duration) }}</td>
                                                 <td>{{ number_format($trade->amount, 6) }}</td>
                                                 <td>{{ number_format($trade->price_was, 6) }}</td>
@@ -174,7 +174,7 @@
                                                 $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                             @endphp
                                             <tr>
-                                                <td>{{ $trade->crypto->symbol }}/{{ $wallet_shortcuts[$trade->wallet] }}
+                                                <td>{{ $wallet_shortcuts[$trade->wallet] }}/{{ $trade->fiat }}
                                                     {{ formatTimeToShortString($trade->duration) }}</td>
                                                 <td>{{ number_format($trade->amount, 6) }}</td>
                                                 <td>{{ number_format($trade->price_was, 6) }}</td>
@@ -276,7 +276,7 @@
         var tv = new TradingView.widget({
             "width": 980,
             "height": 610,
-            "symbol": "BTCUSDT",
+            "symbol": "USDT"+"{{$coin_shortcuts[0]}}",
             "interval": "D",
             "timezone": "Etc/UTC",
             "theme": "dark",
@@ -300,7 +300,7 @@
         });
     </script>
     <script>
-        var {{ $currentPCoin }} = 'BTC';
+        var {{ $currentPCoin }} = '{{$coin_shortcuts[0]}}';
         var {{ $currentPWallet }} = 1;
         var {{ $currentPTime }};
         var {{ $currentPTimeSubUnit }};
@@ -346,11 +346,11 @@
                             headers: {
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
                             },
-                            url: "{{ route('user.trade.store') }}",
+                            url: "{{ route('user.fiat.store') }}",
                             method: "POST",
                             data: {
                                 amount: quantity,
-                                coin_id: {{ $currentPCoin }},
+                                fiat: {{ $currentPCoin }},
                                 high_low_type: highlow,
                                 duration: {{ $currentPTimeSubTime }},
                                 unit: {{ $currentPTimeSubUnit }},
@@ -397,7 +397,7 @@
                 tv = new TradingView.widget({
                     "width": 980,
                     "height": 610,
-                    "symbol": {{ $currentPCoin }} + wallets[change - 1],
+                    "symbol": wallets[change - 1] + {{ $currentPCoin }},
                     "interval": "D",
                     "timezone": "Etc/UTC",
                     "theme": "dark",
@@ -434,7 +434,7 @@
             tv = new TradingView.widget({
                 "width": 980,
                 "height": 610,
-                "symbol": change + wallets[{{ $currentPWallet }} - 1],
+                "symbol": wallets[{{ $currentPWallet }} - 1] + change,
                 "interval": "D",
                 "timezone": "Etc/UTC",
                 "theme": "dark",
@@ -497,7 +497,7 @@
                     headers: {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
-                    url: "{{ route('user.trade.result') }}",
+                    url: "{{ route('user.fiat.result') }}",
                     method: "POST",
                     data: {
                         game_log_id: {{ $trade->id }}

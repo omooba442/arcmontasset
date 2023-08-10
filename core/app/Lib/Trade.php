@@ -8,6 +8,7 @@ use App\Constants\Status;
 use App\Models\PracticeLog;
 use App\Models\Transaction;
 use App\Models\CryptoCurrency;
+use App\Models\Fiat;
 use App\Models\TradeSetting;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,11 +16,16 @@ class Trade
 {
 
     protected $isPracticeTrade = false;
+    protected $isFiatTrade = false;
     protected $modelName       = TradeLog::class;
     protected $columnName      = 'balance';
 
-    public function __construct($isPractice = false)
+    public function __construct($isFiat = false, $isPractice = false)
     {
+        if ($isFiat) {
+            $this->isFiatTrade = true;
+        }
+
         if ($isPractice) {
             $this->modelName       = PracticeLog::class;
             $this->columnName      = 'demo_balance';
@@ -28,26 +34,41 @@ class Trade
     }
     public function store($request)
     {
-        $validator = Validator::make($request->all(), [
-            'amount'        => 'required|numeric|gt:0',
-            'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
-            'high_low_type' => 'required|in:1,2',
-            'wallet'        => 'required|in:1,2,3',
-            'duration'      => 'required|exists:trade_settings,time',
-            'unit'          => 'required|in:seconds,minutes,hours,days'
-        ]);
+        if($this->isFiatTrade){
+            $validator = Validator::make($request->all(), [
+                'amount'        => 'required|numeric|gt:0',
+                'fiat'          => 'required|string|exists:fiats,symbol',
+                'high_low_type' => 'required|in:1,2',
+                'wallet'        => 'required|in:1,2,3',
+                'duration'      => 'required|exists:trade_settings,time',
+                'unit'          => 'required|in:seconds,minutes,hours,days'
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'amount'        => 'required|numeric|gt:0',
+                'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
+                'high_low_type' => 'required|in:1,2',
+                'wallet'        => 'required|in:1,2,3',
+                'duration'      => 'required|exists:trade_settings,time',
+                'unit'          => 'required|in:seconds,minutes,hours,days'
+            ]);
+        }
 
         if ($validator->fails()) {
             return $this->errorResponse($validator->errors()->all());
         }
 
         if (!in_array($request->wallet, [Status::WALLET_USDT, Status::WALLET_BTC, Status::WALLET_ETH])) {
-            return $this->errorResponse(['Invalid wallet.']);
+            return $this->errorResponse($this->isFiatTrade ? ['Invalid cryptocurrency'] :['Invalid wallet.']);
         }
 
-        $crypto = CryptoCurrency::active()->where('symbol', $request->coin_id)->first();
+        if($this->isFiatTrade){
+            $crypto = Fiat::active()->where('symbol', $request->fiat)->first();
+        }else{
+            $crypto = CryptoCurrency::active()->where('symbol', $request->coin_id)->first();
+        }
         if (!$crypto) {
-            return $this->errorResponse(['Crypto currency not found']);
+            return $this->errorResponse($this->isFiatTrade ? ['Fiat currency not found'] : ['Crypto currency not found']);
         }
         $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         if(!is_null($tradeSetting)){
@@ -87,19 +108,27 @@ class Trade
         $then = Carbon::parse($now->toString());
         $time = $now->$unit($request->duration);
         
-        $coinRate = getCoinRate($crypto->symbol, intval($request->wallet));
+        if($this->isFiatTrade){
+            $coinRate = getFiatCoinRate($crypto->symbol, intval($request->wallet));
+        }else{
+            $coinRate = getCoinRate($crypto->symbol, intval($request->wallet));
+        }
 
         $tradeLog                     = new $this->modelName();
         $tradeLog->user_id            = $user->id;
-        $tradeLog->crypto_currency_id = $crypto->id;
         $tradeLog->amount             = $request->amount;
         $tradeLog->in_time            = $time;
         $tradeLog->high_low           = $request->high_low_type;
         $tradeLog->price_was          = $coinRate;
         $tradeLog->duration           = $time->diffInSeconds($then);
-        // $tradeLog->duration           = $time->diff($then)->format('%H:%I:%S');
         $tradeLog->wallet             = $request->wallet;
+        $tradeLog->isFiat             = $this->isFiatTrade;
         $tradeLog->profit             = $profit ?? 5;
+        if($this->isFiatTrade){
+            $tradeLog->fiat           = $crypto->symbol;
+        }else{
+            $tradeLog->crypto_currency_id = $crypto->id;
+        }
         $tradeLog->save();
         
         $balances[$wallet_map[$request->wallet]] -= $request->amount;
@@ -108,7 +137,11 @@ class Trade
 
         if (!$this->isPracticeTrade) {
             $highLow = $request->high_low_type == Status::TRADE_HIGH ? 'High' : "Low";
-            $details = 'Trade to ' . $crypto->name . ' ' . $highLow;
+            if($this->isFiatTrade){
+                $details = 'Fiat Trade to ' . $crypto->name . ' ' . $highLow;
+            }else{
+                $details = 'Trade to ' . $crypto->name . ' ' . $highLow;
+            }
             $this->createTransaction($tradeLog->amount, $details, '-', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
         return response()->json([
@@ -144,7 +177,11 @@ class Trade
 
     public function tradeHigh($tradeLog)
     {
-        $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
+        if($this->isFiatTrade){
+            $cryptoRate = getFiatCoinRate($tradeLog->fiat ?? 'USD', $tradeLog->wallet);
+        }else{
+            $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
+        }
         $tradeLog->price_is = $cryptoRate;
         $tradeLog->save();
         if ($tradeLog->price_was < $cryptoRate) {
@@ -158,7 +195,11 @@ class Trade
 
     public function tradeLow($tradeLog)
     {
-        $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
+        if($this->isFiatTrade){
+            $cryptoRate = getFiatCoinRate($tradeLog->fiat ?? 'USD', $tradeLog->wallet);
+        }else{
+            $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
+        }
         $tradeLog->price_is = $cryptoRate;
         $tradeLog->save();
 
@@ -189,7 +230,11 @@ class Trade
         $user->save();
 
         if (!$this->isPracticeTrade) {
-            $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+            if($this->isFiatTrade){
+                $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
+            }else{
+                $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+            }
             $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
 
@@ -222,7 +267,11 @@ class Trade
         $user->save();
 
         if (!$this->isPracticeTrade) {
-            $details = "Trade " . $tradeLog->crypto->name . ' ' . "DRAW";
+            if($this->isFiatTrade){
+                $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "DRAW";
+            }else{
+                $details = "Trade to " . $tradeLog->crypto->name . ' ' . "DRAW";
+            }
             $this->createTransaction($tradeLog->amount, $details, '+', $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
         }
 
