@@ -3,11 +3,8 @@
         <div class="container">
             <ul class="header-top-area">
                 <li>
-                    <a href="/"><img width="25" height="25"
-                            src="{{ getImage(getFilePath('logoIcon') . '/favicon.png') }}"></a>
-                </li>
-                <li class="me-auto">
-                    <a href="/" class="a_no_decs"><b>Furures</b></a>
+                    <a href="/"><img width="auto" height="35"
+                            src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}"></a>
                 </li>
                 <ul class="menu">
                     <li>

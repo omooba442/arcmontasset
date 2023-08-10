@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Str;
     use Carbon\Carbon;
+    use Carbon\CarbonInterval;
     $changeCoinFunc = 'a' . Str::random(6);
     $changeWalletFunc = 'b' . Str::random(6);
     $formQuantity = 'c' . Str::random(20);
@@ -48,8 +49,7 @@
     }
     function formatTimeToShortString($timeValue)
     {
-        [$hours, $minutes, $seconds] = explode(':', $timeValue);
-        $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
+        $totalSeconds = $timeValue;
     
         if ($totalSeconds >= 86400) {
             $days = floor($totalSeconds / 86400);
@@ -466,19 +466,20 @@
         @foreach ($log->where('status', 0)->get()->toBase() as $trade)
             // Timer {{ $trade->id }}
             @php
-                [$cu_hours, $cu_minutes, $cu_seconds] = explode(
-                    ':',
-                    Carbon::parse($trade->in_time)->isPast()
-                        ? '00:00:05'
-                        : Carbon::parse($trade->in_time)
-                            ->diff(Carbon::now())
-                            ->format('%H:%I:%S'),
-                );
+                $durationInSeconds = Carbon::parse($trade->in_time)->isPast() ? 5 : Carbon::parse($trade->in_time)->diffInSeconds(Carbon::now());
+                
+                $cu_days = floor($durationInSeconds / (24 * 3600));
+                $remainingSeconds = $durationInSeconds - $cu_days * 24 * 3600;
+                $cu_hours = floor($remainingSeconds / 3600);
+                $remainingSeconds -= $cu_hours * 3600;
+                $cu_minutes = floor($remainingSeconds / 60);
+                $cu_seconds = $remainingSeconds % 60;
             @endphp
             var {{ $timer }}_trade_timer_{{ $trade->id }} = new easytimer.Timer();
             {{ $timer }}_trade_timer_{{ $trade->id }}.start({
                 countdown: true,
                 startValues: {
+                    days: {{ $cu_days }},
                     hours: {{ $cu_hours }},
                     minutes: {{ $cu_minutes }},
                     seconds: {{ $cu_seconds }}

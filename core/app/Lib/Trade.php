@@ -96,7 +96,8 @@ class Trade
         $tradeLog->in_time            = $time;
         $tradeLog->high_low           = $request->high_low_type;
         $tradeLog->price_was          = $coinRate;
-        $tradeLog->duration           = $time->diff($then)->format('%H:%I:%S');
+        $tradeLog->duration           = $time->diffInSeconds($then);
+        // $tradeLog->duration           = $time->diff($then)->format('%H:%I:%S');
         $tradeLog->wallet             = $request->wallet;
         $tradeLog->profit             = $profit ?? 5;
         $tradeLog->save();
