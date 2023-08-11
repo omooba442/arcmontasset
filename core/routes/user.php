@@ -98,6 +98,11 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('result', 'tradeResult')->name('result');
             });
             
+            Route::controller("EarnController")->name('earn.')->prefix('earn')->group(function () {     
+                Route::get('/', 'index')->name('index');
+                Route::post('store', 'store')->name('store');
+            });
+            
             Route::controller("LeverageController")->name('leverage.')->prefix('leverage')->group(function () {     
                 Route::get('/', 'index')->name('index');
                 Route::post('store', 'store')->name('store');

@@ -9,6 +9,7 @@ use App\Models\PracticeLog;
 use App\Models\Transaction;
 use App\Models\CryptoCurrency;
 use App\Models\Fiat;
+use App\Models\EarnSetting;
 use App\Models\TradeSetting;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,13 +18,18 @@ class Trade
 
     protected $isPracticeTrade = false;
     protected $isFiatTrade = false;
+    protected $isEarnTrade = false;
     protected $modelName       = TradeLog::class;
     protected $columnName      = 'balance';
 
-    public function __construct($isFiat = false, $isPractice = false)
+    public function __construct($isFiat = false, $isEarn = false, $isPractice = false)
     {
         if ($isFiat) {
             $this->isFiatTrade = true;
+        }
+
+        if ($isEarn) {
+            $this->isEarnTrade = true;
         }
 
         if ($isPractice) {
@@ -43,6 +49,16 @@ class Trade
                 'duration'      => 'required|exists:trade_settings,time',
                 'unit'          => 'required|in:seconds,minutes,hours,days'
             ]);
+        }else if($this->isEarnTrade){
+            $validator = Validator::make($request->all(), [
+                'amount'        => 'required|numeric|gt:0',
+                'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
+                'high_low_type' => 'required|in:1,2',
+                'wallet'        => 'required|in:1,2,3',
+                'duration'      => 'required|exists:earn_settings,time',
+                'unit'          => 'required|in:days'
+            ]);
+            $request->high_low_type = Status::TRADE_HIGH;
         }else{
             $validator = Validator::make($request->all(), [
                 'amount'        => 'required|numeric|gt:0',
@@ -70,11 +86,15 @@ class Trade
         if (!$crypto) {
             return $this->errorResponse($this->isFiatTrade ? ['Fiat currency not found'] : ['Crypto currency not found']);
         }
-        $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        if($this->isEarnTrade){
+            $tradeSetting = EarnSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        }else{
+            $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        }
         if(!is_null($tradeSetting)){
             $profit = $tradeSetting->profit;
         } else {
-            return $this->errorResponse(['Invalid open time.']);
+            return $this->errorResponse($this->isEarnTrade ? ['Invalid subscription duration.'] : ['Invalid open time.']);
         }
         
         $user      = auth()->user();
@@ -118,11 +138,12 @@ class Trade
         $tradeLog->user_id            = $user->id;
         $tradeLog->amount             = $request->amount;
         $tradeLog->in_time            = $time;
-        $tradeLog->high_low           = $request->high_low_type;
+        $tradeLog->high_low           = $this->isEarnTrade ? Status::TRADE_HIGH : $request->high_low_type;
         $tradeLog->price_was          = $coinRate;
         $tradeLog->duration           = $time->diffInSeconds($then);
         $tradeLog->wallet             = $request->wallet;
         $tradeLog->isFiat             = $this->isFiatTrade;
+        $tradeLog->isEarn             = $this->isEarnTrade;
         $tradeLog->profit             = $profit ?? 5;
         if($this->isFiatTrade){
             $tradeLog->fiat           = $crypto->symbol;
@@ -136,9 +157,11 @@ class Trade
         $user->save();
 
         if (!$this->isPracticeTrade) {
-            $highLow = $request->high_low_type == Status::TRADE_HIGH ? 'High' : "Low";
+            $highLow = $this->isEarnTrade ? 'High' : ($request->high_low_type == Status::TRADE_HIGH ? 'High' : "Low");
             if($this->isFiatTrade){
                 $details = 'Fiat Trade to ' . $crypto->name . ' ' . $highLow;
+            }else if($this->isEarnTrade){
+                $details = $request->duration . ' ' . $request->unit . ' Earn Trade to ' . $crypto->name . ' Deposit';
             }else{
                 $details = 'Trade to ' . $crypto->name . ' ' . $highLow;
             }
@@ -166,6 +189,14 @@ class Trade
             return $this->errorResponse(['Trade not found']);
         }
 
+        if ($tradeLog->isEarn) {
+            return $this->errorResponse(['Trade not found']);
+        }
+
+        if ($tradeLog->in_time > Carbon::now()->addSeconds(5)) {
+            return $this->errorResponse(['Trade not yet finished.']);
+        }
+
         if ($tradeLog->high_low == Status::TRADE_HIGH) {
             return $this->tradeHigh($tradeLog);
         } else if ($tradeLog->high_low == Status::TRADE_LOW) {
@@ -184,12 +215,21 @@ class Trade
         }
         $tradeLog->price_is = $cryptoRate;
         $tradeLog->save();
-        if ($tradeLog->price_was < $cryptoRate) {
+
+        if($tradeLog->rig == Status::TRADE_RIG_WIN){
             return $this->tradeWin($tradeLog);
-        } else if ($tradeLog->price_was > $cryptoRate) {
-            return $this->tradeLoss($tradeLog);
-        } else {
+        }else if($tradeLog->rig == Status::TRADE_RIG_DRAW){
             return $this->tradeDraw($tradeLog);
+        }else if($tradeLog->rig == Status::TRADE_RIG_LOSE){
+            return $this->tradeLoss($tradeLog);
+        }else{
+            if ($tradeLog->price_was < $cryptoRate) {
+                return $this->tradeWin($tradeLog);
+            } else if ($tradeLog->price_was > $cryptoRate) {
+                return $this->tradeLoss($tradeLog);
+            } else {
+                return $this->tradeDraw($tradeLog);
+            }
         }
     }
 
@@ -203,12 +243,20 @@ class Trade
         $tradeLog->price_is = $cryptoRate;
         $tradeLog->save();
 
-        if ($tradeLog->price_was > $cryptoRate) {
+        if($tradeLog->rig == Status::TRADE_RIG_WIN){
             return $this->tradeWin($tradeLog);
-        } else if ($tradeLog->price_was < $cryptoRate) {
-            return $this->tradeLoss($tradeLog);
-        } else {
+        }else if($tradeLog->rig == Status::TRADE_RIG_DRAW){
             return $this->tradeDraw($tradeLog);
+        }else if($tradeLog->rig == Status::TRADE_RIG_LOSE){
+            return $this->tradeLoss($tradeLog);
+        }else{
+            if ($tradeLog->price_was > $cryptoRate) {
+                return $this->tradeWin($tradeLog);
+            } else if ($tradeLog->price_was < $cryptoRate) {
+                return $this->tradeLoss($tradeLog);
+            } else {
+                return $this->tradeDraw($tradeLog);
+            }
         }
     }
 

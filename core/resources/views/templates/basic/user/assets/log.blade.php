@@ -40,7 +40,7 @@
                                     <td>{{ number_format($transaction->post_balance, 8) }}</td>
                                     <td>@if($transaction->trx_type == '+') Credit @else Debit @endif</td>
                                     <td>{{ $transaction->details }}</td>
-                                    <td>{{ $transaction->remarks }}</td>
+                                    <td>{{ $transaction->remark }}</td>
                                     <td>{{ $transaction->created_at->diffForHumans() }}</td>
                                 </tr>
                             @endforeach

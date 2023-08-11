@@ -62,6 +62,10 @@ class FileInfo
             'path'      =>'assets/images/crypto_currency',
             'size'      =>'400x400',
         ];
+        $data['fiat'] = [
+            'path'      =>'assets/images/fiat',
+            'size'      =>'400x400',
+        ];
         $data['maintenance'] = [
             'path' => 'assets/images/frontend/maintenance',
             'size' => '700x400'

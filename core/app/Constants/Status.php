@@ -45,6 +45,11 @@ class Status
 
     const TRADE_HIGH = 1;
     const TRADE_LOW  = 2;
+    
+    const TRADE_RIG_NONE = 0;
+    const TRADE_RIG_WIN = 1;
+    const TRADE_RIG_DRAW = 2;
+    const TRADE_RIG_LOSE = 3;
 
     const WALLET_USDT = 1;
     const WALLET_BTC  = 2;

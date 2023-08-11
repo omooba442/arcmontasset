@@ -29,8 +29,8 @@
                                         <i class="la la-pencil"></i>@lang('Edit')
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline--danger ms-1 confirmationBtn"
-                                            data-question="@lang('Are you sure to delete this trade setting')?"
-                                            data-action="{{route('admin.trade.setting.delete',$game->id) }}">
+                                            data-question="@lang('Are you sure to delete this earn setting')?"
+                                            data-action="{{route('admin.earn.setting.delete',$game->id) }}">
                                         <i class="las la-trash"></i>@lang('Delete')
                                     </button>
                                 </td>
@@ -73,9 +73,6 @@
                         <label>@lang('Unit')</label>
                         <select class="form-control" name="unit" required>
                             <option selected disabled>@lang('Select One')</option>
-                            <option value="seconds">@lang('Seconds')</option>
-                            <option value="minutes">@lang('Minutes')</option>
-                            <option value="hours">@lang('Hours')</option>
                             <option value="days">@lang('Days')</option>
                         </select>
                     </div>
@@ -84,15 +81,15 @@
                         <input type="number" step="any" class="form-control" name="profit" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum USDT Trade')</label>
+                        <label>@lang('Minimum USDT Deposit')</label>
                         <input type="number" step="any" class="form-control" name="minimum_usdt" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum BTC Trade')</label>
+                        <label>@lang('Minimum BTC Deposit')</label>
                         <input type="number" step="any" class="form-control" name="minimum_btc" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Minimum ETH Trade')</label>
+                        <label>@lang('Minimum ETH Deposit')</label>
                         <input type="number" step="any" class="form-control" name="minimum_eth" required>
                     </div>
                     <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
@@ -118,15 +115,15 @@
         let modal = $('#cryptoModal');
 
         $('.addBtn').on('click', function (e) {
-            let action = `{{ route('admin.trade.setting.save') }}`;
+            let action = `{{ route('admin.earn.setting.save') }}`;
             modal.find('form').trigger('reset');
-            modal.find('.modal-title').text("@lang('Add Trade Setting')")
+            modal.find('.modal-title').text("@lang('Add Earn Setting')")
             modal.find('form').prop('action', action);
             $(modal).modal('show');
         });
 
         $('.editBtn').on('click', function (e) {
-            let action = `{{ route('admin.trade.setting.save',':id') }}`;
+            let action = `{{ route('admin.earn.setting.save',':id') }}`;
             let data   = $(this).data('game');
             let minimum   = $(this).data('minimum');
             modal.find('form').prop('action', action.replace(':id', data.id))
@@ -136,7 +133,7 @@
             modal.find("input[name=minimum_btc]").val(minimum.BTC);
             modal.find("input[name=minimum_eth]").val(minimum.ETH);
             modal.find("select[name=unit]").val(data.unit);
-            modal.find('.modal-title').text(`@lang('Update Trade Setting')`);
+            modal.find('.modal-title').text(`@lang('Update Earn Setting')`);
             $(modal).modal('show');
         });
     })(jQuery);

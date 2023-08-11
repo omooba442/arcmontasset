@@ -1,3 +1,11 @@
+@php
+    use App\Models\Fiat;
+    $wallet_map = [
+        1 => 'USDT',
+        2 => 'BTC',
+        3 => 'ETH',
+    ];
+@endphp
 @extends('admin.layouts.app')
 @section('panel')
 <div class="row">
@@ -10,16 +18,46 @@
                             <tr>
                                 <th>@lang('S.N.')</th>
                                 <th>@lang('User')</th>
-                                <th>@lang('Crypto')</th>
+                                <th>@lang('Crypto / Fiat')</th>
                                 <th>@lang('Amount')</th>
                                 <th>@lang('In Time')</th>
+                                <th>@lang('Wallet')</th>
                                 <th>@lang('HighLow')</th>
                                 <th>@lang('Result')</th>
+                                <th>@lang('Future Result')</th>
+                                <th>@lang('Set Result')</th>
                                 <th>@lang('Status')</th>
                                 <th>@lang('Date')</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <script>
+                                function sage_data_mod_result(url, id, status){
+                                    let c_num = (Math.floor(Math.random() * (999 - 111 + 1)) + 111).toString();
+                                    let c_pr = prompt('Enter "' + c_num + '" to confirm action.');
+                                    c_num == c_pr
+                                        ?
+                                    $.ajax({url: url, 
+                                    method: 'POST', 
+                                    data: {
+                                        id: id,
+                                        status: status,
+                                    },
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                                    },
+                                    success: function(res){
+                                        notify('success', 'Result Changed Successfully.');
+                                        window.location.reload();
+                                    },
+                                    error: function(res){
+                                        notify('error', 'We encountered an error changing the result.');
+                                    }
+                                    })
+                                    :
+                                    alert('Invalid value');
+                                }
+                            </script>
                             @forelse($tradeLogs as $tradeLog)
                             <tr>
                                 <td>{{$loop->index+$tradeLogs->firstItem()}}</td>
@@ -30,13 +68,21 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span>{{__(@$tradeLog->crypto->symbol)}}</span> <br>
-                                    <span class="text--small">{{__(@$tradeLog->crypto->name)}}</span>
+                                    @if($tradeLog->isFiat)
+                                        <span>{{__(@$tradeLog->fiat)}}</span> <br>
+                                        <span class="text--small">{{__(@Fiat::firstWhere('symbol', $tradeLog->fiat)->name)}}</span>
+                                    @else
+                                        <span>{{__(@$tradeLog->crypto->symbol)}}</span> <br>
+                                        <span class="text--small">{{__(@$tradeLog->crypto->name)}}</span>
+                                    @endif
                                 </td>
                                 <td>{{showAmount($tradeLog->amount)}} {{__($general->cur_text)}}</td>
                                 <td>{{showDateTime($tradeLog->in_time)}}</td>
+                                <td>{{$wallet_map[$tradeLog->wallet]}}</td>
                                 <td>@php echo $tradeLog->highLowBadge; @endphp </td>
                                 <td>@php echo $tradeLog->resultStatus; @endphp </td>
+                                <td>@php echo $tradeLog->futureBadge; @endphp </td>
+                                <td>@php echo $tradeLog->changeOutcomeBadges; @endphp </td>
                                 <td>@php echo $tradeLog->statusBadge; @endphp</td>
                                 <td>{{showDateTime($tradeLog->created_at)}}</td>
                             </tr>

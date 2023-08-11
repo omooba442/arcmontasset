@@ -19,10 +19,24 @@
                         <span class="menu-title">@lang('Crypto Currency') </span>
                     </a>
                 </li>
+
+                <li class="sidebar-menu-item  {{menuActive('admin.fiat.currency.index')}}">
+                    <a href="{{route('admin.fiat.currency.index')}}" class="nav-link"
+                       data-default-url="{{ route('admin.fiat.currency.index') }}">
+                        <i class="menu-icon las la-coins"></i>
+                        <span class="menu-title">@lang('Fiat Currency') </span>
+                    </a>
+                </li>
                 <li class="sidebar-menu-item  {{menuActive('admin.trade.setting*')}}">
                     <a href="{{route('admin.trade.setting.index')}}" class="nav-link">
                         <i class="menu-icon las la-cog"></i>
                         <span class="menu-title">@lang('Trade Setting') </span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item  {{menuActive('admin.earn.setting*')}}">
+                    <a href="{{route('admin.earn.setting.index')}}" class="nav-link">
+                        <i class="menu-icon las la-cog"></i>
+                        <span class="menu-title">@lang('Earn Setting') </span>
                     </a>
                 </li>
 
@@ -61,7 +75,7 @@
                     </div>
                 </li>
 
-                <li class="sidebar-menu-item sidebar-dropdown">
+                {{-- <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.practice.trade.log.*',3)}}">
                         <i class="menu-icon las la-folder-plus"></i>
                         <span class="menu-title">@lang('Practice Trade Log')</span>
@@ -94,7 +108,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.users*',3)}}">
@@ -444,13 +458,13 @@
                     </a>
                 </li>
 
-                <li class="sidebar-menu-item  {{menuActive(['admin.language.manage','admin.language.key'])}}">
+                {{-- <li class="sidebar-menu-item  {{menuActive(['admin.language.manage','admin.language.key'])}}">
                     <a href="{{route('admin.language.manage')}}" class="nav-link"
                        data-default-url="{{ route('admin.language.manage') }}">
                         <i class="menu-icon las la-language"></i>
                         <span class="menu-title">@lang('Language') </span>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="sidebar-menu-item {{menuActive('admin.seo')}}">
                     <a href="{{route('admin.seo')}}" class="nav-link">
@@ -502,7 +516,7 @@
                     </div>
                 </li>
 
-                <li class="sidebar__menu-header">@lang('Frontend Manager')</li>
+                {{-- <li class="sidebar__menu-header">@lang('Frontend Manager')</li>
 
                 <li class="sidebar-menu-item {{menuActive('admin.frontend.templates')}}">
                     <a href="{{route('admin.frontend.templates')}}" class="nav-link ">
@@ -540,7 +554,7 @@
                             @endforeach
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="sidebar__menu-header">@lang('Extra')</li>
 

@@ -79,7 +79,7 @@
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Quantity:</p>
                     <div class="align-middle text-center mt-2 ">
-                        <input class="opqty" type="number" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
+                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
                             placeholder="Enter quantity">
                     </div>
                     <div class="mt-2">

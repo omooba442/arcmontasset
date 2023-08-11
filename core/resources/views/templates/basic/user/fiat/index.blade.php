@@ -223,7 +223,7 @@
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Opening Quantity:</p>
                     <div class="align-middle text-center mt-2 ">
-                        <input class="opqty" type="number" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
+                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
                             placeholder="Enter opening quantity">
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Open Time:</p>
@@ -233,7 +233,7 @@
                                 <div id="trx_time_ref_{{ $time->id }}"
                                     onclick="{{ $formTime }}({{ $time->id }}, '{{ $time->unit }}', '{{ $time->time }}')"
                                     class="card opentimitem">{{ $time->time }}{{ $time->unit[0] }}</div>
-                                <b style="font-size: 11px; font-weight: 200; color: #97a2c0">{{ $time->profit }}%</b>
+                                <b style="font-size: 11px; font-weight: 200; color: #97a2c0">{{ number_format($time->profit, 2) }}%</b>
                             </div>
                         @endforeach
                     </div>

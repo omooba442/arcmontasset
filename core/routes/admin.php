@@ -170,18 +170,18 @@ Route::middleware('admin')->group(function () {
     });
 
 
-    // Language Manager
-    Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
-        Route::get('/', 'langManage')->name('manage');
-        Route::post('/', 'langStore')->name('manage.store');
-        Route::post('delete/{id}', 'langDelete')->name('manage.delete');
-        Route::post('update/{id}', 'langUpdate')->name('manage.update');
-        Route::get('edit/{id}', 'langEdit')->name('key');
-        Route::post('import', 'langImport')->name('import.lang');
-        Route::post('store/key/{id}', 'storeLanguageJson')->name('store.key');
-        Route::post('delete/key/{id}', 'deleteLanguageJson')->name('delete.key');
-        Route::post('update/key/{id}', 'updateLanguageJson')->name('update.key');
-    });
+    // // Language Manager
+    // Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
+    //     Route::get('/', 'langManage')->name('manage');
+    //     Route::post('/', 'langStore')->name('manage.store');
+    //     Route::post('delete/{id}', 'langDelete')->name('manage.delete');
+    //     Route::post('update/{id}', 'langUpdate')->name('manage.update');
+    //     Route::get('edit/{id}', 'langEdit')->name('key');
+    //     Route::post('import', 'langImport')->name('import.lang');
+    //     Route::post('store/key/{id}', 'storeLanguageJson')->name('store.key');
+    //     Route::post('delete/key/{id}', 'deleteLanguageJson')->name('delete.key');
+    //     Route::post('update/key/{id}', 'updateLanguageJson')->name('update.key');
+    // });
 
     Route::controller('GeneralSettingController')->group(function () {
         // General Setting
@@ -258,28 +258,28 @@ Route::middleware('admin')->group(function () {
     Route::get('seo', 'FrontendController@seoEdit')->name('seo');
 
 
-    // Frontend
-    Route::name('frontend.')->prefix('frontend')->group(function () {
+    // // Frontend
+    // Route::name('frontend.')->prefix('frontend')->group(function () {
 
-        Route::controller('FrontendController')->group(function () {
-            Route::get('templates', 'templates')->name('templates');
-            Route::post('templates', 'templatesActive')->name('templates.active');
-            Route::get('frontend-sections/{key}', 'frontendSections')->name('sections');
-            Route::post('frontend-content/{key}', 'frontendContent')->name('sections.content');
-            Route::get('frontend-element/{key}/{id?}', 'frontendElement')->name('sections.element');
-            Route::post('remove/{id}', 'remove')->name('remove');
-        });
+    //     Route::controller('FrontendController')->group(function () {
+    //         Route::get('templates', 'templates')->name('templates');
+    //         Route::post('templates', 'templatesActive')->name('templates.active');
+    //         Route::get('frontend-sections/{key}', 'frontendSections')->name('sections');
+    //         Route::post('frontend-content/{key}', 'frontendContent')->name('sections.content');
+    //         Route::get('frontend-element/{key}/{id?}', 'frontendElement')->name('sections.element');
+    //         Route::post('remove/{id}', 'remove')->name('remove');
+    //     });
 
-        // Page Builder
-        Route::controller('PageBuilderController')->group(function () {
-            Route::get('manage-pages', 'managePages')->name('manage.pages');
-            Route::post('manage-pages', 'managePagesSave')->name('manage.pages.save');
-            Route::post('manage-pages/update', 'managePagesUpdate')->name('manage.pages.update');
-            Route::post('manage-pages/delete/{id}', 'managePagesDelete')->name('manage.pages.delete');
-            Route::get('manage-section/{id}', 'manageSection')->name('manage.section');
-            Route::post('manage-section/{id}', 'manageSectionUpdate')->name('manage.section.update');
-        });
-    });
+    //     // Page Builder
+    //     Route::controller('PageBuilderController')->group(function () {
+    //         Route::get('manage-pages', 'managePages')->name('manage.pages');
+    //         Route::post('manage-pages', 'managePagesSave')->name('manage.pages.save');
+    //         Route::post('manage-pages/update', 'managePagesUpdate')->name('manage.pages.update');
+    //         Route::post('manage-pages/delete/{id}', 'managePagesDelete')->name('manage.pages.delete');
+    //         Route::get('manage-section/{id}', 'manageSection')->name('manage.section');
+    //         Route::post('manage-section/{id}', 'manageSectionUpdate')->name('manage.section.update');
+    //     });
+    // });
 
     //crypto currency controller
     Route::controller("CryptoCurrencyController")->name('crypto.currency.')->prefix('crypto/currency')->group(function () {
@@ -288,6 +288,18 @@ Route::middleware('admin')->group(function () {
         Route::post('status/{id}', 'status')->name('status');
     });
 
+    //fiat currency controller
+    Route::controller("FiatCurrencyController")->name('fiat.currency.')->prefix('fiat/currency')->group(function () {
+        Route::get('list', 'index')->name('index');
+        Route::post('save/{id?}', 'save')->name('save');
+        Route::post('status/{id}', 'status')->name('status');
+    });
+
+    Route::prefix('earn/setting')->name('earn.setting.')->controller("EarnSettingController")->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::post('save/{id?}', 'save')->name('save');
+        Route::post('delete/{id}', 'delete')->name('delete');
+    });
     Route::prefix('trade/setting')->name('trade.setting.')->controller("TradeSettingController")->group(function () {
         Route::get('index', 'index')->name('index');
         Route::post('save/{id?}', 'save')->name('save');
@@ -298,14 +310,15 @@ Route::middleware('admin')->group(function () {
         Route::get('wining', 'win')->name('wining');
         Route::get('losing', 'loss')->name('losing');
         Route::get('draw', 'draw')->name('draw');
+        Route::post('modify', 'modify')->name('modify');
     });
 
-    Route::controller("PracticeTradeController")->name("practice.trade.log.")->prefix("practice/trade/log")->group(function () {
-        Route::get('log', 'index')->name('index');
-        Route::get('wining', 'wining')->name('wining');
-        Route::get('losing', 'losing')->name('losing');
-        Route::get('draw', 'draw')->name('draw');
-    });
+    // Route::controller("PracticeTradeController")->name("practice.trade.log.")->prefix("practice/trade/log")->group(function () {
+    //     Route::get('log', 'index')->name('index');
+    //     Route::get('wining', 'wining')->name('wining');
+    //     Route::get('losing', 'losing')->name('losing');
+    //     Route::get('draw', 'draw')->name('draw');
+    // });
 });
 
 

@@ -13,89 +13,130 @@ class CronController extends Controller
 {
     public function index()
     {
-        $tradeLogs = TradeLog::where('result', Status::TRADE_PENDING)->where('status', Status::TRADE_RUNNING)->where('in_time','<',Carbon::now())->get();
+        $tradeLogs = TradeLog::where('result', Status::TRADE_PENDING)->where('status', Status::TRADE_RUNNING)->where('in_time', '<', Carbon::now())->get();
         $gnl       = gs();
 
         foreach ($tradeLogs as $tradeLog) {
             $user           = $tradeLog->user;
             $isFiatTrade    = $tradeLog->isFiat;
+            $isEarnTrade    = $tradeLog->isEarn;
             $balances       = json_decode($user->balance, true);
             $wallet_map     = [
                 1 => 'USDT',
                 2 => 'BTC',
                 3 => 'ETH',
             ];
-            if($isFiatTrade){
+            if ($isFiatTrade) {
                 $cryptoRate = getFiatCoinRate($tradeLog->fiat ?? 'USD', $tradeLog->wallet);
-            }else{
+            } else {
                 $cryptoRate = getCoinRate($tradeLog->crypto->symbol, $tradeLog->wallet);
             }
             if (!$cryptoRate || !$user) {
                 continue;
             }
 
-            
-            if ($tradeLog->high_low == Status::TRADE_HIGH) {
-                if ($tradeLog->price_was < $cryptoRate) {
-                    $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
-                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
-                    $user->balance = json_encode($balances);
-                    $user->save();
+            if ($tradeLog->rig == Status::TRADE_RIG_WIN) {
+                $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+                $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
+                $user->balance = json_encode($balances);
+                $user->save();
 
-                    if($isFiatTrade){
-                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
-                    }else{
-                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
-                    }
-                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
-                    $tradeLog->result = Status::TRADE_WIN;
-                } else if ($tradeLog->price_was > $cryptoRate) {
-                    $tradeLog->result = Status::TRADE_LOSE;
+                if ($isFiatTrade) {
+                    $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
                 } else {
-                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
-                    $user->balance = json_encode($balances);
-                    $user->save();
-
-                    $tradeLogAmount = $tradeLog->amount;
-                    if($isFiatTrade){
-                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
-                    }else{
-                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
-                    }
-                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
-                    $tradeLog->result = Status::TRADE_DRAW;
+                    $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
                 }
-            } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
-                if ($tradeLog->price_was > $cryptoRate) {
-                    $tradeAmountWithProfit  = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
-                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
-                    $user->balance = json_encode($balances);
-                    $user->save();
-                    if($isFiatTrade){
-                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
-                    }else{
-                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
-                    }
-                    $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
-                    $tradeLog->result = Status::TRADE_WIN;
+                $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                $tradeLog->result = Status::TRADE_WIN;
+            } else if ($tradeLog->rig == Status::TRADE_RIG_DRAW) {
+                $tradeLog->result = Status::TRADE_LOSE;
+            } else if ($tradeLog->rig == Status::TRADE_RIG_LOSE) {
+                $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                $user->balance = json_encode($balances);
+                $user->save();
 
-                } else if ($tradeLog->price_was < $cryptoRate) {
-                    $tradeLog->result = Status::TRADE_LOSE;
+                $tradeLogAmount = $tradeLog->amount;
+                if ($isFiatTrade) {
+                    $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
                 } else {
-                    $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
-                    $user->balance = json_encode($balances);
-                    $user->save();;
+                    $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                }
+                $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                $tradeLog->result = Status::TRADE_DRAW;
+            } else {
+                if ($tradeLog->high_low == Status::TRADE_HIGH) {
+                    if ($tradeLog->price_was < $cryptoRate) {
+                        $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+                        $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
+                        $user->balance = json_encode($balances);
+                        $user->save();
 
-                    $tradeLogAmount = $tradeLog->amount;
-                    if($isFiatTrade){
-                        $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
-                    }else{
-                        $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                        if ($isFiatTrade) {
+                            $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
+                        } else if ($isEarnTrade) {
+                            $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Reward";
+                        } else {
+                            $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+                        }
+                        $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                        $tradeLog->result = Status::TRADE_WIN;
+                    } else if ($tradeLog->price_was > $cryptoRate) {
+                        $tradeLog->result = Status::TRADE_LOSE;
+                        if ($isEarnTrade) {
+                            $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                            $user->balance = json_encode($balances);
+                            $user->save();
+                            $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                            $this->transactions($user, $tradeLog->amount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                        }
+                    } else {
+                        $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                        $user->balance = json_encode($balances);
+                        $user->save();
+
+                        $tradeLogAmount = $tradeLog->amount;
+                        if ($isFiatTrade) {
+                            $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
+                        } else if ($isEarnTrade) {
+                            $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                        } else {
+                            $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                        }
+                        $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                        $tradeLog->result = Status::TRADE_DRAW;
                     }
-                    $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
-                    $tradeLog->result = Status::TRADE_DRAW;
+                } elseif ($tradeLog->high_low == Status::TRADE_LOW) {
+                    if ($tradeLog->price_was > $cryptoRate) {
+                        $tradeAmountWithProfit = $tradeLog->amount + (($tradeLog->amount / 100) * $tradeLog->profit);
+                        $balances[$wallet_map[$tradeLog->wallet]] += $tradeAmountWithProfit;
+                        $user->balance = json_encode($balances);
+                        $user->save();
+                        if ($isFiatTrade) {
+                            $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
+                        } else {
+                            $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
+                        }
+                        $this->transactions($user, $tradeAmountWithProfit, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                        $tradeLog->result = Status::TRADE_WIN;
+                    } else if ($tradeLog->price_was < $cryptoRate) {
+                        $tradeLog->result = Status::TRADE_LOSE;
+                    } else {
+                        $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
+                        $user->balance = json_encode($balances);
+                        $user->save();;
+
+                        $tradeLogAmount = $tradeLog->amount;
+                        if ($isFiatTrade) {
+                            $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
+                        } else {
+                            $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                        }
+                        $this->transactions($user, $tradeLogAmount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
+                        $tradeLog->result = Status::TRADE_DRAW;
+                    }
                 }
             }
+
             $tradeLog->status = Status::TRADE_COMPLETED;
             $tradeLog->price_is = $cryptoRate;
             $tradeLog->save();
