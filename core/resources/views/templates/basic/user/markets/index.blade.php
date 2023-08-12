@@ -5,7 +5,7 @@
 @endphp
 @extends($activeTemplate . 'layouts.sage')
 @section('content')
-    <div class="not_a_container">
+    <div class="not_a_container p-0">
         <div class="row gx-2">
             <div class="col-12">
                 <div class="px-4 py-5 ">

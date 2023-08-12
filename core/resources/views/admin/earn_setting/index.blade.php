@@ -1,3 +1,9 @@
+@php
+    use App\Models\CryptoCurrency;
+    use Illuminate\Support\Str;
+    $cryptos = CryptoCurrency::get();
+@endphp
+
 @extends('admin.layouts.app')
 @section('panel')
 <div class="row">
@@ -22,10 +28,10 @@
                                 <td>{{$loop->index+$games->firstItem()}}</td>
                                 <td>{{$game->time}}</td>
                                 <td>{{ucfirst($game->unit)}}</td>
-                                <td>{{$game->profit}}</td>
+                                <td>{{str_replace('}', '', str_replace('{', '', str_replace('"', '', $game->profit)))}}</td>
                                 <td>{{str_replace('}', '', str_replace('{', '', str_replace('"', '', $game->minimum)))}}</td>
                                 <td>
-                                    <button type="button"  class="btn btn-sm btn-outline--primary editBtn" data-game='@json($game)' data-minimum='@json(json_decode($game->minimum,true))'>
+                                    <button type="button"  class="btn btn-sm btn-outline--primary editBtn" data-game='@json($game)' data-minimum='@json(json_decode($game->minimum,true))' data-profit='@json(json_decode($game->profit,true))'>
                                         <i class="la la-pencil"></i>@lang('Edit')
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline--danger ms-1 confirmationBtn"
@@ -77,10 +83,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>@lang('Profit')</label>
-                        <input type="number" step="any" class="form-control" name="profit" required>
-                    </div>
-                    <div class="form-group">
                         <label>@lang('Minimum USDT Deposit')</label>
                         <input type="number" step="any" class="form-control" name="minimum_usdt" required>
                     </div>
@@ -92,6 +94,12 @@
                         <label>@lang('Minimum ETH Deposit')</label>
                         <input type="number" step="any" class="form-control" name="minimum_eth" required>
                     </div>
+                    @foreach($cryptos as $crypto)
+                        <div class="form-group">
+                            <label>{{$crypto->symbol}} @lang('Profit') %</label>
+                            <input type="number" step="any" class="form-control" name="profit_{{Str::lower($crypto->symbol)}}" required>
+                        </div>
+                    @endforeach
                     <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
                 </div>
             </form>
@@ -126,12 +134,20 @@
             let action = `{{ route('admin.earn.setting.save',':id') }}`;
             let data   = $(this).data('game');
             let minimum   = $(this).data('minimum');
+            let profit   = $(this).data('profit');
             modal.find('form').prop('action', action.replace(':id', data.id))
             modal.find("input[name=time]").val(data.time);
             modal.find("input[name=profit]").val(data.profit);
             modal.find("input[name=minimum_usdt]").val(minimum.USDT);
             modal.find("input[name=minimum_btc]").val(minimum.BTC);
             modal.find("input[name=minimum_eth]").val(minimum.ETH);
+            @foreach($cryptos as $crypto)
+                try{
+                    modal.find("input[name=profit_{{Str::lower($crypto->symbol)}}]").val(profit.{{$crypto->symbol}});
+                }catch(e) {
+                    //
+                }
+            @endforeach
             modal.find("select[name=unit]").val(data.unit);
             modal.find('.modal-title').text(`@lang('Update Earn Setting')`);
             $(modal).modal('show');

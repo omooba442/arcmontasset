@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\EarnSetting;
+use App\Models\CryptoCurrency;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class EarnSettingController extends Controller
 {
@@ -17,13 +19,18 @@ class EarnSettingController extends Controller
 
     public function save(Request $request, $id = 0)
     {
+        $crypto_vald = [];
+
+        foreach(CryptoCurrency::get() as $crypto){
+            $crypto_vald['profit_'.Str::lower($crypto->symbol)] = 'required|numeric|max:100.00|min:0.00';
+        }
         $request->validate([
             'time' => 'required|integer',
-            'profit' => 'required|numeric|max:100.00|min:0.00',
             'unit' => 'required|in:days,days',
             'minimum_usdt' => 'required|numeric',
             'minimum_btc' => 'required|numeric',
             'minimum_eth' => 'required|numeric',
+            ...$crypto_vald
         ]);
         if ($id) {
             $tradeSetting = EarnSetting::findOrFail($id);
@@ -33,9 +40,14 @@ class EarnSettingController extends Controller
             $message      = "Trade setting successfully";
         }
 
+        $profits = [];
+
+        foreach(CryptoCurrency::get() as $crypto){
+            $profits[$crypto->symbol] = $request->{'profit_'.Str::lower($crypto->symbol)};
+        }
         $tradeSetting->time = $request->time;
-        $tradeSetting->profit = $request->profit;
         $tradeSetting->unit = $request->unit;
+        $tradeSetting->profit = json_encode($profits);
         $tradeSetting->minimum = json_encode([
             'USDT' => $request->minimum_usdt,
             'BTC' => $request->minimum_btc,

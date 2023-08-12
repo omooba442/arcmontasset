@@ -158,7 +158,9 @@
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Purchase Price</th>
                                             <th scope="col">Transaction Price</th>
+                                            <th scope="col">Handling Fee</th>
                                             <th scope="col">Profit / Loss</th>
+                                            <th scope="col">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -179,6 +181,7 @@
                                                 <td>{{ number_format($trade->amount, 6) }}</td>
                                                 <td>{{ number_format($trade->price_was, 6) }}</td>
                                                 <td>{{ number_format($trade->price_is, 6) }}</td>
+                                                <td>{{ number_format(0.0, 6) }}</td>
                                                 <td
                                                     class="@if ($res['result'] == 'win') closed_tab_win @endif @if ($res['result'] == 'loss') closed_tab_loss @endif">
                                                     @if ($res['result'] == 'loss')
@@ -187,6 +190,7 @@
                                                         +
                                                     @endif{{ $res['outcome'] }}
                                                 </td>
+                                                <td>{{$trade->created_at}} GMT</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -14,7 +14,7 @@ class EarnController extends Controller
     public function index()
     {
         $pageTitle = "Earn";
-        $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC');
+        $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC')->get();
         $balances  = json_decode(auth()->user()->balance, true);
         $durations = EarnSetting::oldest()->get();
         $log           = $this->tradeData();
