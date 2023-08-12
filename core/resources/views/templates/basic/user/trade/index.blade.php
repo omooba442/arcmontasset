@@ -344,7 +344,7 @@
                 quantity = document.getElementById('{{ $formQuantity }}').value;
                 if (quantity != null && {{ $currentPTime }} != null && {{ $currentPTimeSubUnit }} != null &&
                     {{ $currentPTimeSubTime }} != null) {
-                    if (quantity > minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} - 1]]) {
+                    if (quantity >= minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} - 1]]) {
                         $('input[name="{{ $formQuantity }}"]').val("");
                         $.ajax({
                             headers: {

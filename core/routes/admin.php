@@ -311,6 +311,7 @@ Route::middleware('admin')->group(function () {
         Route::get('losing', 'loss')->name('losing');
         Route::get('draw', 'draw')->name('draw');
         Route::post('modify', 'modify')->name('modify');
+        Route::post('change_profit', 'change_profit')->name('change_profit');
     });
 
     // Route::controller("PracticeTradeController")->name("practice.trade.log.")->prefix("practice/trade/log")->group(function () {

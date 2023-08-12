@@ -27,6 +27,8 @@
                                 <th>@lang('Future Result')</th>
                                 <th>@lang('Set Result')</th>
                                 <th>@lang('Status')</th>
+                                <th>@lang('Profit')</th>
+                                <th>@lang('Change Profit')</th>
                                 <th>@lang('Date')</th>
                             </tr>
                         </thead>
@@ -42,6 +44,32 @@
                                     data: {
                                         id: id,
                                         status: status,
+                                    },
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                                    },
+                                    success: function(res){
+                                        notify('success', 'Result Changed Successfully.');
+                                        window.location.reload();
+                                    },
+                                    error: function(res){
+                                        notify('error', 'We encountered an error changing the result.');
+                                    }
+                                    })
+                                    :
+                                    alert('Invalid value');
+                                }
+                                function sage_data_mod_profit(url, id){
+                                    let profit = prompt('Enter the new profit value');
+                                    let c_num = (Math.floor(Math.random() * (999 - 111 + 1)) + 111).toString();
+                                    let c_pr = prompt('Enter "' + c_num + '" to confirm action.');
+                                    c_num == c_pr
+                                        ?
+                                    $.ajax({url: url, 
+                                    method: 'POST', 
+                                    data: {
+                                        id: id,
+                                        profit: profit,
                                     },
                                     headers: {
                                         'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -84,6 +112,8 @@
                                 <td>@php echo $tradeLog->futureBadge; @endphp </td>
                                 <td>@php echo $tradeLog->changeOutcomeBadges; @endphp </td>
                                 <td>@php echo $tradeLog->statusBadge; @endphp</td>
+                                <td>@php echo number_format($tradeLog->profit, 2); @endphp</td>
+                                <td>@php echo $tradeLog->changeProfitBadge; @endphp</td>
                                 <td>{{showDateTime($tradeLog->created_at)}}</td>
                             </tr>
                             @empty

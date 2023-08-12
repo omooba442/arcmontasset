@@ -86,6 +86,19 @@ trait TradeModel
             return $html;
         });
     }
+
+    public function changeProfitBadge(): Attribute
+    {
+        return new Attribute(function () {
+            $html = '';
+            $changeOutcomeUrl = route('admin.trade.log.change_profit');
+            if($this->status != Status::TRADE_COMPLETED){
+                $html = '<span style="cursor: pointer;" onclick="sage_data_mod_profit(\'' . $changeOutcomeUrl . '\', \'' . $this->id . '\');" class="badge badge--dark">' . trans('Change profit') . '</span>';
+            }
+            return $html;
+        });
+    }
+
     public function changeOutcomeBadges(): Attribute
     {
         return new Attribute(function () {

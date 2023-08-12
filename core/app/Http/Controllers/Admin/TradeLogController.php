@@ -38,6 +38,10 @@ class TradeLogController extends Controller
         return view('admin.trade_log.index', compact('pageTitle', 'tradeLogs'));
     }
 
+    public function change_profit(Request $request){
+        dd($request);
+    }
+
     public function modify(Request $request)
     {
         $request->validate([

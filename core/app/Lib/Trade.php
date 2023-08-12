@@ -91,11 +91,6 @@ class Trade
         }else{
             $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }
-        if(!is_null($tradeSetting)){
-            $profit = $tradeSetting->profit;
-        } else {
-            return $this->errorResponse($this->isEarnTrade ? ['Invalid subscription duration.'] : ['Invalid open time.']);
-        }
         
         $user      = auth()->user();
         $columName = $this->columnName;
@@ -104,8 +99,17 @@ class Trade
             2 => 'BTC',
             3 => 'ETH',
         ];
+        if(!is_null($tradeSetting)){
+            if($this->isEarnTrade){
+                $profit = json_decode($tradeSetting->profit, true)[$crypto->symbol];
+            }else{
+                $profit = $tradeSetting->profit;
+            }
+        } else {
+            return $this->errorResponse($this->isEarnTrade ? ['Invalid subscription duration.'] : ['Invalid open time.']);
+        }
         if ($crypto->symbol == $wallet_map[$request->wallet]) {
-            return $this->errorResponse(['You can\'t trade a coin against itself.']);
+            return $this->errorResponse([$this->isEarnTrade ? 'We\'re sorry, you cant trade the '.$crypto->symbol.' coin against itself for earns.' : 'You can\'t trade a coin against itself.']);
         }
         $balances = json_decode($user->$columName, true);
         $balance = $balances[$wallet_map[$request->wallet]] ?? 0;
