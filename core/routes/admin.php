@@ -313,6 +313,14 @@ Route::middleware('admin')->group(function () {
         Route::post('modify', 'modify')->name('modify');
         Route::post('change_profit', 'change_profit')->name('change_profit');
     });
+    Route::controller("EarnLogController")->name("earn.log.")->prefix("earn/log")->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::get('wining', 'win')->name('wining');
+        Route::get('losing', 'loss')->name('losing');
+        Route::get('draw', 'draw')->name('draw');
+        Route::post('modify', 'modify')->name('modify');
+        Route::post('change_profit', 'change_profit')->name('change_profit');
+    });
 
     // Route::controller("PracticeTradeController")->name("practice.trade.log.")->prefix("practice/trade/log")->group(function () {
     //     Route::get('log', 'index')->name('index');

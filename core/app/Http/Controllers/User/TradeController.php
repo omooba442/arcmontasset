@@ -64,9 +64,9 @@ class TradeController extends Controller
     protected function tradeData($scope = null)
     {
         if ($scope) {
-            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false)->$scope();
+            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false)->where('isEarn', false)->$scope();
         } else {
-            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false);
+            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false)->where('isEarn', false);
         }
         // return $tradeLogs->with("crypto")->latest('id')->paginate(getPaginate());
         return $tradeLogs->with("crypto")->latest('id');

@@ -75,6 +75,41 @@
                     </div>
                 </li>
 
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.earn.log*',3)}}">
+                        <i class="menu-icon las la-dice"></i>
+                        <span class="menu-title">@lang('Earn log')</span>
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.earn.log*',2)}} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{menuActive('admin.earn.log.index')}} ">
+                                <a href="{{route('admin.earn.log.index')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.earn.log.wining')}} ">
+                                <a href="{{route('admin.earn.log.wining')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Wining')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.earn.log.losing')}} ">
+                                <a href="{{route('admin.earn.log.losing')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Losing')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.earn.log.draw')}} ">
+                                <a href="{{route('admin.earn.log.draw')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Draw')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                 {{-- <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.practice.trade.log.*',3)}}">
                         <i class="menu-icon las la-folder-plus"></i>
