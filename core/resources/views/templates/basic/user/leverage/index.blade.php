@@ -1,23 +1,23 @@
 @php
-    use Illuminate\Support\Str;
-    use Carbon\Carbon;
-    $changeFromWalletFunc = 'a' . Str::random(6);
-    $changeToWalletFunc = 'b' . Str::random(6);
-    $currentFromWallet = 'f' . Str::random(6);
-    $currentToWallet = 'g' . Str::random(6);
-    $formSubmit = 'j' . Str::random(6);
-    $coin_shortcuts = $cryptos->select('symbol')->pluck('symbol');
-    $wallet_shortcuts = [
-        1 => 'USDT',
-        2 => 'BTC',
-        3 => 'ETH',
-    ];
+    // use Illuminate\Support\Str;
+    // use Carbon\Carbon;
+    // $changeFromWalletFunc = 'a' . Str::random(6);
+    // $changeToWalletFunc = 'b' . Str::random(6);
+    // $currentFromWallet = 'f' . Str::random(6);
+    // $currentToWallet = 'g' . Str::random(6);
+    // $formSubmit = 'j' . Str::random(6);
+    // $coin_shortcuts = $cryptos->select('symbol')->pluck('symbol');
+    // $wallet_shortcuts = [
+    //     1 => 'USDT',
+    //     2 => 'BTC',
+    //     3 => 'ETH',
+    // ];
     
 @endphp
 @extends($activeTemplate . 'layouts.sage')
 @section('content')
     <div class="not_a_container">
-        <div class="row gx-2 mob_gy5">
+        {{-- <div class="row gx-2 mob_gy5">
             <div class="col-lg-9">
                 <div class="card trading-view">
                     <div class="tab-content pt-50">
@@ -101,12 +101,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
 
 @push('script')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/assets/templates/basic/js/tv.js"></script>
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
@@ -241,5 +241,5 @@
                 });
             }
         }
-    </script>
+    </script> --}}
 @endpush
