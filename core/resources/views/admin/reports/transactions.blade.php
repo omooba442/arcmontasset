@@ -54,6 +54,7 @@
                                 <th>@lang('Transacted')</th>
                                 <th>@lang('Amount')</th>
                                 <th>@lang('Post Balance')</th>
+                                <th>@lang('Wallet')</th>
                                 <th>@lang('Details')</th>
                             </tr>
                         </thead>
@@ -76,12 +77,16 @@
 
                                     <td class="budget">
                                         <span class="fw-bold @if($trx->trx_type == '+')text--success @else text--danger @endif">
-                                            {{ $trx->trx_type }} {{showAmount($trx->amount)}} {{ $general->cur_text }}
+                                            {{ $trx->trx_type }} {{showAmount($trx->amount, 8)}} {{ $trx->wallet }}
                                         </span>
                                     </td>
 
                                     <td class="budget">
-                                        {{ showAmount($trx->post_balance) }} {{ __($general->cur_text) }}
+                                        {{ showAmount($trx->post_balance, 8) }} {{ $trx->wallet }}
+                                    </td>
+
+                                    <td>
+                                        {{$trx->wallet}}
                                     </td>
 
                                     <td>{{ __($trx->details) }}</td>

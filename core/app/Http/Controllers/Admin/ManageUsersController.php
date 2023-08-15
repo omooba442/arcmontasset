@@ -216,6 +216,7 @@ class ManageUsersController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|gt:0',
+            'wallet' => 'required|string|in:USDT,BTC,ETH',
             'act' => 'required|in:add,sub',
             'remark' => 'required|string|max:255',
         ]);
@@ -225,10 +226,13 @@ class ManageUsersController extends Controller
         $general = gs();
         $trx = getTrx();
 
+        $balances = json_decode($user->balance, true);
+        $balance = $balances[$request->wallet] ?? 0;
+
         $transaction = new Transaction();
 
         if ($request->act == 'add') {
-            $user->balance += $amount;
+            $balance += $amount;
 
             $transaction->trx_type = '+';
             $transaction->remark = 'balance_add';
@@ -238,12 +242,12 @@ class ManageUsersController extends Controller
             $notify[] = ['success', $general->cur_sym . $amount . ' added successfully'];
 
         } else {
-            if ($amount > $user->balance) {
+            if ($amount > $balance) {
                 $notify[] = ['error', $user->username . ' doesn\'t have sufficient balance.'];
                 return back()->withNotify($notify);
             }
 
-            $user->balance -= $amount;
+            $balance -= $amount;
 
             $transaction->trx_type = '-';
             $transaction->remark = 'balance_subtract';
@@ -251,12 +255,12 @@ class ManageUsersController extends Controller
             $notifyTemplate = 'BAL_SUB';
             $notify[] = ['success', $general->cur_sym . $amount . ' subtracted successfully'];
         }
-
+        $balances[$request->wallet] = $balance;
+        $user->balance = json_encode($balances);
         $user->save();
-
         $transaction->user_id = $user->id;
         $transaction->amount = $amount;
-        $transaction->post_balance = $user->balance;
+        $transaction->post_balance = $balance;
         $transaction->charge = 0;
         $transaction->trx =  $trx;
         $transaction->details = $request->remark;
@@ -266,7 +270,7 @@ class ManageUsersController extends Controller
             'trx' => $trx,
             'amount' => showAmount($amount),
             'remark' => $request->remark,
-            'post_balance' => showAmount($user->balance)
+            'post_balance' => showAmount($balance)
         ]);
 
         return back()->withNotify($notify);

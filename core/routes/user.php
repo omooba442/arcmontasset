@@ -100,6 +100,7 @@ Route::middleware('auth')->name('user.')->group(function () {
             
             Route::controller("EarnController")->name('earn.')->prefix('earn')->group(function () {     
                 Route::get('/', 'index')->name('index');
+                Route::get('/log', 'log')->name('log');
                 Route::post('store', 'store')->name('store');
             });
             

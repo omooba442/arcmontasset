@@ -43,9 +43,17 @@
 
 
                                 <td>
+                                    @php
+                                        $u_balance = json_decode($user->balance, true)
+                                    @endphp
                                     <span class="fw-bold">
-
-                                    {{ $general->cur_sym }}{{ showAmount($user->balance) }}
+                                        USDT: {{@$u_balance['USDT']}}
+                                    </span> <br />
+                                    <span class="fw-bold">
+                                        BTC: {{@$u_balance['BTC']}}
+                                    </span> <br />
+                                    <span class="fw-bold">
+                                        ETH: {{@$u_balance['ETH']}}
                                     </span>
                                 </td>
 

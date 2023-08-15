@@ -213,13 +213,6 @@
                                 </a>
                             </li>
 
-                            <li class="sidebar-menu-item {{menuActive('admin.users.with.balance')}}">
-                                <a href="{{route('admin.users.with.balance')}}" class="nav-link">
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('With Balance')</span>
-                                </a>
-                            </li>
-
                             <li class="sidebar-menu-item {{menuActive('admin.users.all')}} ">
                                 <a href="{{route('admin.users.all')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

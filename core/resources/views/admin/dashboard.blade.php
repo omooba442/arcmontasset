@@ -259,7 +259,7 @@
     </div>
 
 
-<div class="modal fade cron-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+{{-- <div class="modal fade cron-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
    <div class="modal-content">
@@ -300,7 +300,7 @@ aria-hidden="true">
        </div>
    </div>
 </div>
-</div>
+</div> --}}
 
 @endsection
 

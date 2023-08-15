@@ -27,6 +27,15 @@ class EarnController extends Controller
         return $trade->store($request);
     }
 
+    
+    public function log(Request $request)
+    {
+        $pageTitle = "Earn log";
+        $user = auth()->user();
+        $log = $this->tradeData()->paginate(20);
+        return view($this->activeTemplate . 'user.earn.log', compact('pageTitle', 'log'));
+    }
+
     protected function tradeData($scope = null)
     {
         if ($scope) {
