@@ -299,6 +299,11 @@ Route::middleware('admin')->group(function () {
         Route::post('save/{id?}', 'save')->name('save');
         Route::post('delete/{id}', 'delete')->name('delete');
     });
+    Route::prefix('leverage/setting')->name('leverage.setting.')->controller("LeverageSettingController")->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::post('save/{id?}', 'save')->name('save');
+        Route::post('delete/{id}', 'delete')->name('delete');
+    });
     Route::prefix('trade/setting')->name('trade.setting.')->controller("TradeSettingController")->group(function () {
         Route::get('index', 'index')->name('index');
         Route::post('save/{id?}', 'save')->name('save');

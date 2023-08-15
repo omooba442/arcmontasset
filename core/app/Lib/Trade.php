@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\CryptoCurrency;
 use App\Models\Fiat;
 use App\Models\EarnSetting;
+use App\Models\LeverageSetting;
 use App\Models\TradeSetting;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,10 +20,11 @@ class Trade
     protected $isPracticeTrade = false;
     protected $isFiatTrade = false;
     protected $isEarnTrade = false;
+    protected $isLeverageTrade = false;
     protected $modelName       = TradeLog::class;
     protected $columnName      = 'balance';
 
-    public function __construct($isFiat = false, $isEarn = false, $isPractice = false)
+    public function __construct($isFiat = false, $isEarn = false, $isLeverage = false, $isPractice = false)
     {
         if ($isFiat) {
             $this->isFiatTrade = true;
@@ -30,6 +32,10 @@ class Trade
 
         if ($isEarn) {
             $this->isEarnTrade = true;
+        }
+
+        if ($isLeverage) {
+            $this->isLeverageTrade = true;
         }
 
         if ($isPractice) {
@@ -59,6 +65,15 @@ class Trade
                 'unit'          => 'required|in:days'
             ]);
             $request->high_low_type = Status::TRADE_HIGH;
+        }else if($this->isLeverageTrade){
+            $validator = Validator::make($request->all(), [
+                'amount'        => 'required|numeric|gt:0',
+                'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
+                'high_low_type' => 'required|in:1,2',
+                'wallet'        => 'required|in:1,2,3',
+                'duration'      => 'required|exists:leverage_settings,time',
+                'unit'          => 'required|in:days'
+            ]);
         }else{
             $validator = Validator::make($request->all(), [
                 'amount'        => 'required|numeric|gt:0',
@@ -88,6 +103,8 @@ class Trade
         }
         if($this->isEarnTrade){
             $tradeSetting = EarnSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        }else if($this->isLeverageTrade){
+            $tradeSetting = LeverageSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }else{
             $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }
@@ -148,6 +165,7 @@ class Trade
         $tradeLog->wallet             = $request->wallet;
         $tradeLog->isFiat             = $this->isFiatTrade;
         $tradeLog->isEarn             = $this->isEarnTrade;
+        $tradeLog->isLeverage         = $this->isLeverageTrade;
         $tradeLog->profit             = $profit ?? 5;
         if($this->isFiatTrade){
             $tradeLog->fiat           = $crypto->symbol;
@@ -164,6 +182,8 @@ class Trade
             $highLow = $this->isEarnTrade ? 'High' : ($request->high_low_type == Status::TRADE_HIGH ? 'High' : "Low");
             if($this->isFiatTrade){
                 $details = 'Fiat Trade to ' . $crypto->name . ' ' . $highLow;
+            }else if($this->isLeverageTrade){
+                $details = 'Leverage Trade to ' . $crypto->name . ' ' . $highLow;
             }else if($this->isEarnTrade){
                 $details = $request->duration . ' ' . $request->unit . ' Earn Trade to ' . $crypto->name . ' Deposit';
             }else{

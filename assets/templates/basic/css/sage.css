@@ -573,6 +573,18 @@ p {
 	column-gap: 5px;
 	row-gap: 10px;
 }
+
+.opentimes.leverages {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 5px;
+	row-gap: 10px;
+}
+
+.opentimitem.leverages {
+	background-color: #0000001a !important;
+}
+
 .opentimes div.card {
 	cursor: pointer;
 }

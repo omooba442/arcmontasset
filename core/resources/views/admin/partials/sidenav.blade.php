@@ -39,6 +39,12 @@
                         <span class="menu-title">@lang('Earn Setting') </span>
                     </a>
                 </li>
+                <li class="sidebar-menu-item  {{menuActive('admin.leverage.setting*')}}">
+                    <a href="{{route('admin.leverage.setting.index')}}" class="nav-link">
+                        <i class="menu-icon las la-cog"></i>
+                        <span class="menu-title">@lang('Leverage Setting') </span>
+                    </a>
+                </li>
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.trade.log*',3)}}">

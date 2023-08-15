@@ -106,6 +106,7 @@ Route::middleware('auth')->name('user.')->group(function () {
             
             Route::controller("LeverageController")->name('leverage.')->prefix('leverage')->group(function () {     
                 Route::get('/', 'index')->name('index');
+                Route::middleware('throttle: 15, 1')->post('/historicalData', 'historicalData')->name('historicalData');
                 Route::post('store', 'store')->name('store');
                 Route::post('result', 'tradeResult')->name('result');
             });
