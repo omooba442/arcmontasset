@@ -17,8 +17,8 @@ class TradeController extends Controller
         $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC');
         $balances  = json_decode(auth()->user()->balance, true);
         $durations = TradeSetting::oldest()->get();
-        $log           = $this->tradeData();
-        $log2           = $this->tradeData();
+        $log           = $this->tradeData()->where('status', 0)->paginate($perPage = 15, $columns = ['*'], $pageName = 'page_tr');
+        $log2           = $this->tradeData()->where('status', 1)->paginate($perPage = 15, $columns = ['*'], $pageName = 'page_cl');
         return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log', 'log2'));
     }
     public function store(Request $request)

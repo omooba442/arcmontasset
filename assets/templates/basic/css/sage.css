@@ -704,6 +704,27 @@ thead{
 	}	
 }
 
+.page-link {
+    padding: 0.2rem 0.5rem !important;
+    background-color: #1a253b !important;
+	color: white !important;
+	border-color: #97a2c0 !important;
+}
+
+.page-link.active {
+    padding: 0.2rem 0.5rem !important;
+    background-color: #97a2c0 !important;
+	color: white !important;
+	border-color: #97a2c0 !important;
+}
+
+.page-item.active .page-link {
+    padding: 0.2rem 0.5rem !important;
+    background-color: #97a2c0 !important;
+	color: white !important;
+	border-color: #97a2c0 !important;
+}
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {

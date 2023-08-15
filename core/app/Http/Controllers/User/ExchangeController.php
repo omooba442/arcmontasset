@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Models\TradeLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Constants\Status;
@@ -15,7 +16,8 @@ class ExchangeController extends Controller
     {
         $pageTitle = "Exchange";
         $balances  = json_decode(auth()->user()->balance, true);
-        return view($this->activeTemplate . 'user.exchange.index', compact('pageTitle', 'balances'));
+        $log           = Exchange::paginate(20);
+        return view($this->activeTemplate . 'user.exchange.index', compact('pageTitle', 'balances', 'log'));
     }
 
     public function achieve(Request $request)

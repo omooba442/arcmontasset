@@ -8,7 +8,7 @@
         <div class="row gx-2 mob_gy5">
             <div class="col-12">
                 <div class="card px-1 py-2 align-middle text-center">
-                    <p class="m-0" style="font-size: 20px;">{{$pageTitle}}</p>
+                    <p class="m-0" style="font-size: 20px;">{{ $pageTitle }}</p>
                 </div>
                 <div class="mt-3 card">
                     <table class="table table-borderless">
@@ -32,23 +32,32 @@
                                     </td>
                                 </tr>
                             @endif
-                            @foreach ($log->get() as $transaction)
+                            @foreach ($log as $transaction)
                                 <tr>
                                     <td>{{ $transaction->trx }}</td>
                                     <td>{{ number_format($transaction->amount, 8) }}</td>
                                     <td>{{ number_format($transaction->charge, 8) }}</td>
                                     <td>{{ number_format($transaction->post_balance, 8) }}</td>
-                                    <td>@if($transaction->trx_type == '+') Credit @else Debit @endif</td>
+                                    <td>
+                                        @if ($transaction->trx_type == '+')
+                                            Credit
+                                        @else
+                                            Debit
+                                        @endif
+                                    </td>
                                     <td>{{ $transaction->details }}</td>
                                     <td>{{ $transaction->remark }}</td>
-                                    <td>{{ $transaction->created_at->diffForHumans() }}</td>
+                                    <td>{{ $transaction->created_at }} GMT</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    @if ($log->hasPages())
+                        <div style="display: flex; justify-content: center;">{{ paginateLinks($log) }}</div>
+                    @endif
                 </div>
                 <div class="card px-1 py-2 align-middle text-center mt-2">
-                    <p class="m-0" style="font-size: 16px;">Current Balance: {{$balance}}</p>
+                    <p class="m-0" style="font-size: 16px;">Current Balance: {{ $balance }}</p>
                 </div>
             </div>
         </div>

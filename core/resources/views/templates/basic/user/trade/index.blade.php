@@ -126,14 +126,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($log->where('status', 0)->count() < 1)
+                                        @if ($log->count() < 1)
                                             <tr>
                                                 <td colspan="5">
                                                     <center>No data, yet.</center>
                                                 </td>
                                             </tr>
                                         @endif
-                                        @foreach ($log->where('status', 0)->get()->toBase() as $trade)
+                                        @foreach ($log as $trade)
                                             @php
                                                 $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                             @endphp
@@ -149,6 +149,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @if ($log->hasPages())
+                                    <div style="display: flex; justify-content: center;">{{ paginateLinks($log) }}</div>
+                                @endif
                             </div>
                             <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
                                 <table class="table table-borderless">
@@ -164,14 +167,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($log2->where('status', 1)->count() < 1)
+                                        @if ($log2->count() < 1)
                                             <tr>
                                                 <td colspan="5">
                                                     <center>No data, yet.</center>
                                                 </td>
                                             </tr>
                                         @endif
-                                        @foreach ($log2->where('status', 1)->get()->toBase() as $trade)
+                                        @foreach ($log2 as $trade)
                                             @php
                                                 $res = getProfitLoss($trade->amount, $trade->high_low == 1, $trade->profit, $trade->price_was, $trade->price_is);
                                             @endphp
@@ -190,11 +193,14 @@
                                                         +
                                                     @endif{{ $res['outcome'] }}
                                                 </td>
-                                                <td>{{$trade->created_at}} GMT</td>
+                                                <td>{{ $trade->created_at }} GMT</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @if ($log2->hasPages())
+                                    <div style="display: flex; justify-content: center;">{{ paginateLinks($log2) }}</div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -227,8 +233,8 @@
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Opening Quantity:</p>
                     <div class="align-middle text-center mt-2 ">
-                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
-                            placeholder="Enter opening quantity">
+                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}"
+                            id="{{ $formQuantity }}" placeholder="Enter opening quantity">
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Open Time:</p>
                     <div class="align-middle text-center mt-2 mb-2 opentimes">
@@ -237,7 +243,8 @@
                                 <div id="trx_time_ref_{{ $time->id }}"
                                     onclick="{{ $formTime }}({{ $time->id }}, '{{ $time->unit }}', '{{ $time->time }}')"
                                     class="card opentimitem">{{ $time->time }}{{ $time->unit[0] }}</div>
-                                <b style="font-size: 11px; font-weight: 200; color: #97a2c0">{{ number_format($time->profit, 2) }}%</b>
+                                <b
+                                    style="font-size: 11px; font-weight: 200; color: #97a2c0">{{ number_format($time->profit, 2) }}%</b>
                             </div>
                         @endforeach
                     </div>
@@ -467,7 +474,7 @@
         }
     </script>
     <script>
-        @foreach ($log->where('status', 0)->get()->toBase() as $trade)
+        @foreach ($log as $trade)
             // Timer {{ $trade->id }}
             @php
                 $durationInSeconds = Carbon::parse($trade->in_time)->isPast() ? 5 : Carbon::parse($trade->in_time)->diffInSeconds(Carbon::now());

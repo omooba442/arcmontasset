@@ -27,13 +27,59 @@
                                     <div class="card custom--card h-100">
                                         <div class="not_card-body">
                                             <div class="tradingview-widget-container">
-                                                <div id="expert_chart" class="safe"></div>
+                                                <div id="expert_chart" class="not_safe"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mt-2 trading-view" style="display: flex; min-height: 200px; overflow-x: auto;">
+                    <div style="flex: 1;">
+                        <ul class="nav nav-tabs px-2 py-2" id="trx_tabs_" role="tablist"
+                            style="display: flex;column-gap: 10px;">
+                            <li class="nav-item">
+                                <a class="trx_tab_link" role="tab" aria-selected="true">Exchange Log</a>
+                            </li>
+                        </ul>
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">From</th>
+                                    <th scope="col">To</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Return</th>
+                                    <th scope="col">Charge</th>
+                                    <th scope="col">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($log->count() < 1)
+                                    <tr>
+                                        <td colspan="5">
+                                            <center>No data, yet.</center>
+                                        </td>
+                                    </tr>
+                                @endif
+                                @foreach ($log as $trade)
+                                    <tr>
+                                        <td>{{ $trade->trx }}</td>
+                                        <td>{{ $trade->from_wallet }}</td>
+                                        <td>{{ $trade->to_wallet }}</td>
+                                        <td>{{ number_format($trade->amount, 6) }}</td>
+                                        <td>{{ number_format($trade->rate * $trade->amount, 6) }}</td>
+                                        <td>{{ number_format($trade->charge, 6) }}</td>
+                                        <td>{{ $trade->created_at }} GMT</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @if ($log->hasPages())
+                            <div style="display: flex; justify-content: center;">{{ paginateLinks($log) }}</div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -79,8 +125,8 @@
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Quantity:</p>
                     <div class="align-middle text-center mt-2 ">
-                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}" id="{{ $formQuantity }}"
-                            placeholder="Enter quantity">
+                        <input class="opqty" type="number" step="any" name="{{ $formQuantity }}"
+                            id="{{ $formQuantity }}" placeholder="Enter quantity">
                     </div>
                     <div class="mt-2">
                         <p class="m-0 mt-1" style="font-size: 14px;">Swiping:</p>
@@ -147,10 +193,10 @@
         ];
 
         function {{ $formSubmit }}() {
-            if(document.getElementById('{{ $formQuantity }}').value == null){
+            if (document.getElementById('{{ $formQuantity }}').value == null) {
                 notify('error', 'Invalid amount.');
-            }else{
-                if(balances_val[{{$currentFromWallet}} - 1] >= document.getElementById('{{ $formQuantity }}').value){
+            } else {
+                if (balances_val[{{ $currentFromWallet }} - 1] >= document.getElementById('{{ $formQuantity }}').value) {
                     $.ajax({
                         headers: {
                             "X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -173,8 +219,9 @@
                             }, 1000);
                         }
                     });
-                }else{
-                    notify('error', 'Your current ' + wallets[{{$currentFromWallet}} - 1] +' balance is not enough for this exchange.')
+                } else {
+                    notify('error', 'Your current ' + wallets[{{ $currentFromWallet }} - 1] +
+                        ' balance is not enough for this exchange.')
                 }
             }
         }
