@@ -75,6 +75,12 @@
                             <a href="javascript:void(0)"><i class="fa fa-solid fa-user"></i></a>
                             <ul class="submenu">
                                 <li>
+                                    <a href="{{ route('user.deposit.index') }}">@lang('Deposit')</a>
+                                    <a href="{{ route('user.deposit.history') }}">@lang('Deposit Log')</a>
+                                    <a href="{{ route('user.withdraw.index') }}">@lang('Withdraw')</a>
+                                    <a href="{{ route('user.withdraw.history') }}">@lang('Withdraw Log')</a>
+                                    <a href="{{ route('user.referral.log') }}">@lang('Referral Log')</a>
+                                    <a href="{{ route('user.commissions.log') }}">@lang('Commissions Log')</a>
                                     <a href="{{ route('user.logout') }}">@lang('Logout')</a>
                                 </li>
                             </ul>

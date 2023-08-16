@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-<div class="container">
-    <div class="table-responsive">
+<div class="container" style="height: calc(100vh - 35px);">
+    <div class="table-responsive vertical-center">
         <table class="table cmn--table">
             <thead>
                 <tr>
