@@ -17,9 +17,8 @@ class EarnController extends Controller
         $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC')->get();
         $balances  = json_decode(auth()->user()->balance, true);
         $durations = EarnSetting::oldest()->get();
-        $log           = $this->tradeData();
-        $log2           = $this->tradeData();
-        return view($this->activeTemplate . 'user.earn.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log', 'log2'));
+        $log           = $this->tradeData()->count();
+        return view($this->activeTemplate . 'user.earn.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log'));
     }
     public function store(Request $request)
     {

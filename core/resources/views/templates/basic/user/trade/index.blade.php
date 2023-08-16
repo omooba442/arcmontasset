@@ -169,7 +169,7 @@
                                     <tbody>
                                         @if ($log2->count() < 1)
                                             <tr>
-                                                <td colspan="5">
+                                                <td colspan="8">
                                                     <center>No data, yet.</center>
                                                 </td>
                                             </tr>
@@ -377,7 +377,8 @@
                         });
                     } else {
                         notify('error', 'You can\'t trade less than ' + minimums[{{ $currentPTime }}][wallets[
-                            {{ $currentPWallet }} - 1]] + ' ' + {{ $currentPCoin }} + ' for this time');
+                            {{ $currentPWallet }} - 1]] + ' ' + wallets[
+                            {{ $currentPWallet }} - 1] + ' for this time');
                     }
                 } else {
                     if (quantity == null) {

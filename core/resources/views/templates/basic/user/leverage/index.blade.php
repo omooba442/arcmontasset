@@ -204,7 +204,7 @@
                                     <tbody>
                                         @if ($log2->count() < 1)
                                             <tr>
-                                                <td colspan="5">
+                                                <td colspan="6">
                                                     <center>No data, yet.</center>
                                                 </td>
                                             </tr>
@@ -274,6 +274,27 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="card px-3 py-2 border-0 align-middle text-center" style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+                        <p class="m-0 mt-1" style="font-size: 14px;">Minimum Opening Quantity:</p>
+                        <p class="m-0 mt-1" style="font-size: 14px;" id="opqty_r2">-</p>
+                    </div>
+                    <div class="card px-3 py-2 border-0 align-middle text-center" style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+                        <p class="m-0 mt-1" style="font-size: 14px;">Opening Quantity:</p>
+                        <div class="align-middle text-center mt-2 w-50">
+                            <input style="border: 1px solid #97a2c01a;" class="opqty" type="number" step="any" name="{{ $formQuantity }}"
+                                id="{{ $formQuantity }}" placeholder="Enter opening quantity">
+                        </div>
+                    </div>
+                    <div class="px-5 mt-2 row gx-3 gy-2">
+                        <div class="col-lg-6">
+                            <button onclick="{{ $formSubmit }}(1)" class="buy_trx w-100"
+                                style="background-color: green;" type="button">Buy up</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button onclick="{{ $formSubmit }}(2)" class="buy_trx w-100" style="background-color: red;"
+                                type="button">Buy down</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -286,7 +307,7 @@
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         "use strict";
-        var tv = new TradingView.widget({
+        new TradingView.widget({
             "width": 980,
             "height": 610,
             "symbol": "BTCUSDT",
@@ -304,12 +325,6 @@
                 },
             },
             "container_id": "expert_chart"
-        });
-        tv.onChartReady(function() {
-            const symbolSearchInput = document.querySelector(".symbol-edit");
-            if (symbolSearchInput) {
-                symbolSearchInput.setAttribute("disabled", "true");
-            }
         });
     </script>
     <script>
@@ -344,8 +359,10 @@
         };
 
         function setOpqty() {
-            document.getElementById('opqty_r2').innerText = minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} -
-                1]] + ' ' + wallets[{{ $currentPWallet }} - 1];
+            if ({{ $currentPTime }} != null){
+                document.getElementById('opqty_r2').innerText = minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} -
+                    1]] + ' ' + wallets[{{ $currentPWallet }} - 1];
+            }
         }
 
         function {{ $formSubmit }}(highlow) {
@@ -379,7 +396,8 @@
                         });
                     } else {
                         notify('error', 'You can\'t trade less than ' + minimums[{{ $currentPTime }}][wallets[
-                            {{ $currentPWallet }} - 1]] + ' ' + {{ $currentPCoin }} + ' for this time');
+                            {{ $currentPWallet }} - 1]] + ' ' + wallets[
+                            {{ $currentPWallet }} - 1] + ' for this time');
                     }
                 } else {
                     if (quantity == null) {
@@ -430,11 +448,9 @@
                 document.getElementById('wallt_ref_' + wallets[change - 1]).classList.add('active');
                 {{ $currentPWallet }} = change;
                 {{ $updateHData }}();
+                setOpqty();
                 document.getElementById('wallt_balance_tx').innerText = balances[change - 1] + ' ' + wallets[
                     change - 1];
-                document.getElementById('wallt_balance_tx_r2').innerText = balances[change - 1] + ' ' + wallets[
-                    change - 1];
-                setOpqty();
             }
         }
 
@@ -482,8 +498,8 @@
                         dataHighRows += `
                     <tr>
                         <td class="text-success">buy${index + 1}</td>
-                        <td>${data.price_was.toFixed(6)}</td>
-                        <td>${data.amount.toFixed(6)}</td>
+                        <td>${data.price_was.toFixed(8)}</td>
+                        <td>${data.amount.toFixed(8)}</td>
                     </tr>`;
                     });
 
@@ -492,8 +508,8 @@
                         dataLowRows += `
                     <tr>
                         <td class="text-danger">sell${response.data_low.length - index}</td>
-                        <td>${data.price_was.toFixed(6)}</td>
-                        <td>${data.amount.toFixed(6)}</td>
+                        <td>${data.price_was.toFixed(8)}</td>
+                        <td>${data.amount.toFixed(8)}</td>
                     </tr>`;
                     });
 

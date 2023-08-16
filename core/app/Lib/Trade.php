@@ -72,7 +72,7 @@ class Trade
                 'high_low_type' => 'required|in:1,2',
                 'wallet'        => 'required|in:1,2,3',
                 'duration'      => 'required|exists:leverage_settings,time',
-                'unit'          => 'required|in:days'
+                'unit'          => 'required|in:seconds,minutes,hours,days'
             ]);
         }else{
             $validator = Validator::make($request->all(), [

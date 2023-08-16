@@ -23,9 +23,24 @@
 @extends($activeTemplate . 'layouts.sage')
 @section('content')
     <div class="not_a_container p-0">
-        <div class="card py-5 px-5">
-            <p class="m-0"><b style="font-size: 35px;">Furures Earn</b></p>
-            <p style="font-size: 18px;">Simple and secure. Check our supported coins ans start earning.</p>
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-6 pt-5 pb-lg-5 pb-sm-2 px-5">
+                    <p class="m-0 pt-3"><b style="font-size: 35px; color: #97a2c0">Furures Earn</b></p>
+                    <p style="font-size: 18px;">Simple and secure. Check our supported coins and start earning.</p>
+                </div>
+                <div class="col-lg-6 d-flex pt-2 pb-lg-2 pb-sm-5" style="justify-content: center; align-items: center">
+                    <div class="card w-50 py-2 px-2" style="background-color: #97a2c01a; height: fit-content;"> 
+                        <div class="d-flex" style="justify-content: space-between;">
+                            <p style="font-size: 14px;">Running Trades:</p>
+                            <p style="font-size: 14px;">{{$log}}</p>
+                        </div>
+                        <div class="asset_item_top mt-2 px-6">
+                            <a class="asset_a" href="{{route('user.earn.log')}}">View log</a>
+                         </div>       
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container mt-5">

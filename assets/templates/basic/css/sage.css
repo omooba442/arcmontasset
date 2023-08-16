@@ -575,8 +575,7 @@ p {
 }
 
 .opentimes.leverages {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	display: flex !important;
 	column-gap: 5px;
 	row-gap: 10px;
 }
