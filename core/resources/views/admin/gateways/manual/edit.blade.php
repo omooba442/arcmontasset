@@ -24,7 +24,13 @@
                                             <input type="text" name="currency" class="form-control border-radius-5" value="{{ @$method->singleCurrency->currency }}" required/>
                                         </div>
                                     </div>
-                                    <div class="col-xl-5 col-md-12">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-15">
+                                        <div class="form-group">
+                                            <label>@lang('Gateway Network')</label>
+                                            <input type="text" name="network" class="form-control" value="{{ @$method->network }}" required/>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-xl-5 col-md-12">
                                         <div class="form-group">
                                             <label>@lang('Rate')</label>
                                             <div class="input-group">
@@ -33,7 +39,7 @@
                                                 <span class="currency_symbol input-group-text"></span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
 
@@ -46,7 +52,7 @@
                                                 <div class="form-group">
                                                     <label>@lang('Minimum Amount')</label>
                                                     <div class="input-group">
-                                                        <input type="number" step="any" class="form-control" name="min_limit" value="{{ getAmount(@$method->singleCurrency->min_amount) }}" required/>
+                                                        <input type="number" step="0.001" class="form-control" name="min_limit" value="{{ getAmount(@$method->singleCurrency->min_amount) }}" required/>
                                                         <div class="input-group-text">{{ __($general->cur_text) }}</div>
                                                     </div>
                                                 </div>

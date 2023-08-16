@@ -26,6 +26,12 @@
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-15">
                                         <div class="form-group">
+                                            <label>@lang('Gateway Network')</label>
+                                            <input type="text" name="network" class="form-control" value="{{ @$method->network }}" required/>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-15">
+                                        <div class="form-group">
                                             <label>@lang('Rate')</label>
                                             <div class="input-group">
                                                 <div class="input-group-text">1 {{ __($general->cur_text )}} =</div>
@@ -33,7 +39,7 @@
                                                 <div class="input-group-text"><span class="currency_symbol"></span></div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="row">

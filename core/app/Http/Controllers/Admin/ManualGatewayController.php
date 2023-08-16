@@ -46,7 +46,7 @@ class ManualGatewayController extends Controller
         $method->status = Status::ENABLE;
         $method->gateway_parameters = json_encode([]);
         $method->supported_currencies = [];
-        $method->crypto = Status::DISABLE;
+        $method->crypto = Status::ENABLE;
         $method->description = $request->instruction;
         $method->save();
 
@@ -65,6 +65,49 @@ class ManualGatewayController extends Controller
 
         $notify[] = ['success', $method->name . ' Manual gateway has been added.'];
         return back()->withNotify($notify);
+    }
+
+    public function copy(Request $request)
+    {
+        $formProcessor = new FormProcessor();
+        $this->validation($request,$formProcessor);
+
+        $lastMethod = Gateway::manual()->orderBy('id','desc')->first();
+        $methodCode = 1000;
+        if ($lastMethod) {
+            $methodCode = $lastMethod->code + 1;
+        }
+
+
+        $method = new Gateway();
+        $method->code = $methodCode;
+        $method->form_id = 22;
+        $method->name = $request->name;
+        $method->network = $request->network;
+        $method->alias = strtolower(trim(str_replace(' ','_',$request->name)));
+        $method->status = Status::ENABLE;
+        $method->gateway_parameters = json_encode([]);
+        $method->supported_currencies = [];
+        $method->crypto = Status::ENABLE;
+        $method->description = $request->instruction;
+        $method->save();
+
+        $gatewayCurrency = new GatewayCurrency();
+        $gatewayCurrency->name = $request->name;
+        $gatewayCurrency->gateway_alias = strtolower(trim(str_replace(' ','_',$request->name)));
+        $gatewayCurrency->currency = $request->currency;
+        $gatewayCurrency->network = $request->network;
+        $gatewayCurrency->symbol = '';
+        $gatewayCurrency->method_code = $methodCode;
+        $gatewayCurrency->min_amount = $request->min_limit;
+        $gatewayCurrency->max_amount = $request->max_limit;
+        $gatewayCurrency->fixed_charge = $request->fixed_charge;
+        $gatewayCurrency->percent_charge = $request->percent_charge;
+        $gatewayCurrency->rate = 1;
+        $gatewayCurrency->save();
+
+        $notify[] = ['success', $method->name . ' Manual gateway has been copied.'];
+        return redirect()->route('admin.gateway.manual.edit', $method->alias);
     }
 
     public function edit($alias)
@@ -115,8 +158,8 @@ class ManualGatewayController extends Controller
     {
         $validation = [
             'name'           => 'required',
-            'rate'           => 'required|numeric|gt:0',
-            'currency'       => 'required',
+            'network'        => 'required|string',
+            'currency'       => 'required|in:USDT,BTC,ETH',
             'min_limit'      => 'required|numeric|gt:0',
             'max_limit'      => 'required|numeric|gt:min_limit',
             'fixed_charge'   => 'required|numeric|gte:0',

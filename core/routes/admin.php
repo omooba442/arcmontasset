@@ -84,14 +84,14 @@ Route::middleware('admin')->group(function () {
     // Deposit Gateway
     Route::name('gateway.')->prefix('gateway')->group(function () {
 
-        // Automatic Gateway
-        Route::controller('AutomaticGatewayController')->prefix('automatic')->name('automatic.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('edit/{alias}', 'edit')->name('edit');
-            Route::post('update/{code}', 'update')->name('update');
-            Route::post('remove/{id}', 'remove')->name('remove');
-            Route::post('status/{id}', 'status')->name('status');
-        });
+        // // Automatic Gateway
+        // Route::controller('AutomaticGatewayController')->prefix('automatic')->name('automatic.')->group(function () {
+        //     Route::get('/', 'index')->name('index');
+        //     Route::get('edit/{alias}', 'edit')->name('edit');
+        //     Route::post('update/{code}', 'update')->name('update');
+        //     Route::post('remove/{id}', 'remove')->name('remove');
+        //     Route::post('status/{id}', 'status')->name('status');
+        // });
 
 
         // Manual Methods
@@ -99,6 +99,7 @@ Route::middleware('admin')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('new', 'create')->name('create');
             Route::post('new', 'store')->name('store');
+            // Route::post('copy', 'copy')->name('copy');
             Route::get('edit/{alias}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
             Route::post('status/{id}', 'status')->name('status');

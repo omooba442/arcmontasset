@@ -736,6 +736,12 @@ thead{
 	border-color: #97a2c0 !important;
 }
 
+.vertical-center {
+	min-height: 100%;
+	display: flex;
+	align-items: center;
+}
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {

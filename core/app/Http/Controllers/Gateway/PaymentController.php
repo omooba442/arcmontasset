@@ -16,47 +16,58 @@ class PaymentController extends Controller
 {
     public function deposit()
     {
-        $gatewayCurrency = GatewayCurrency::whereHas('method', function ($gate) {
-            $gate->where('status', Status::ENABLE);
-        })->with('method')->orderby('method_code')->get();
         $pageTitle = 'Deposit Methods';
-        return view($this->activeTemplate . 'user.payment.deposit', compact('gatewayCurrency', 'pageTitle'));
+        return view($this->activeTemplate . 'user.payment.deposit', compact('pageTitle'));
     }
 
     public function depositInsert(Request $request)
     {
-
         $request->validate([
-            'amount'   => 'required|numeric|gt:0',
-            'gateway'  => 'required',
-            'currency' => 'required',
+            'amount'   => 'required|numeric|gt:0.00',
+            'wallet'   => 'required|in:1,2,3',
         ]);
+        $wallet_map = [
+            1 => 'USDT',
+            2 => 'BTC',
+            3 => 'ETH',
+        ];
 
+        $minimums = [
+            'USDT' => 5.0,
+            'BTC'  => 0.001,
+            'ETH'  => 0.01,
+        ];
+
+        if ($request->amount < $minimums[$wallet_map[$request->wallet]]) {
+            $notify[] = ['error', 'You can\'t deposit less than ' . $minimums[$wallet_map[$request->wallet]] . ' ' . $wallet_map[$request->wallet]];
+            return back()->withNotify($notify);
+        }
+
+        $currency = $wallet_map[$request->wallet];
 
         $user = auth()->user();
-        $gate = GatewayCurrency::whereHas('method', function ($gate) {
-            $gate->where('status', Status::ENABLE);
-        })->where('method_code', $request->gateway)->where('currency', $request->currency)->first();
+        try{
+            $gate = GatewayCurrency::whereHas('method', function ($gate) {
+                $gate->where('status', Status::ENABLE);
+            })->where('currency', $currency)->get()->random();
+        }catch(\Throwable $th){
+            $gate = null;
+        }
+
         if (!$gate) {
-            $notify[] = ['error', 'Invalid gateway'];
+            $notify[] = ['error', 'We encountered an error retrieving a deposit address for you.'];
             return back()->withNotify($notify);
         }
 
-        if ($gate->min_amount > $request->amount || $gate->max_amount < $request->amount) {
-            $notify[] = ['error', 'Please follow deposit limit'];
-            return back()->withNotify($notify);
-        }
-
-        $charge = $gate->fixed_charge + ($request->amount * $gate->percent_charge / 100);
-        $payable = $request->amount + $charge;
-        $final_amo = $payable * $gate->rate;
+        $final_amo = $request->amount;
 
         $data = new Deposit();
         $data->user_id = $user->id;
         $data->method_code = $gate->method_code;
         $data->method_currency = strtoupper($gate->currency);
+        $data->network = $gate->network;
         $data->amount = $request->amount;
-        $data->charge = $charge;
+        $data->charge = 0;
         $data->rate = $gate->rate;
         $data->final_amo = $final_amo;
         $data->btc_amo = 0;
@@ -71,7 +82,7 @@ class PaymentController extends Controller
     public function depositConfirm()
     {
         $track = session()->get('Track');
-        $deposit = Deposit::where('trx', $track)->where('status',Status::PAYMENT_INITIATE)->orderBy('id', 'DESC')->with('gateway')->firstOrFail();
+        $deposit = Deposit::where('trx', $track)->where('status', Status::PAYMENT_INITIATE)->orderBy('id', 'DESC')->with('gateway')->firstOrFail();
 
         if ($deposit->method_code >= 1000) {
             return to_route('user.deposit.manual.confirm');
@@ -94,7 +105,7 @@ class PaymentController extends Controller
         }
 
         // for Stripe V3
-        if(@$data->session){
+        if (@$data->session) {
             $deposit->btc_wallet = $data->session->id;
             $deposit->save();
         }
@@ -104,31 +115,36 @@ class PaymentController extends Controller
     }
 
 
-    public static function userDataUpdate($deposit,$isManual = null)
+    public static function userDataUpdate($deposit, $isManual = null)
     {
         if ($deposit->status == Status::PAYMENT_INITIATE || $deposit->status == Status::PAYMENT_PENDING) {
             $deposit->status = Status::PAYMENT_SUCCESS;
             $deposit->save();
 
             $user = User::find($deposit->user_id);
-            $user->balance += $deposit->amount;
+            $balances = json_decode($user->balance, true);
+            $balance = $balances[$deposit->method_currency] ?? 0;
+            $balance += $deposit->amount;
+            $balances[$deposit->method_currency] = $balance;
+            $user->balance = json_encode($balances);
             $user->save();
 
             $transaction = new Transaction();
             $transaction->user_id = $deposit->user_id;
             $transaction->amount = $deposit->amount;
-            $transaction->post_balance = $user->balance;
+            $transaction->post_balance = $balance;
             $transaction->charge = $deposit->charge;
             $transaction->trx_type = '+';
-            $transaction->details = 'Deposit Via ' . $deposit->gatewayCurrency()->name;
+            $transaction->details = 'Deposit Via ' . $deposit->network;
             $transaction->trx = $deposit->trx;
             $transaction->remark = 'deposit';
+            $transaction->wallet = $deposit->method_currency;
             $transaction->save();
 
             if (!$isManual) {
                 $adminNotification = new AdminNotification();
                 $adminNotification->user_id = $user->id;
-                $adminNotification->title = 'Deposit successful via '.$deposit->gatewayCurrency()->name;
+                $adminNotification->title = 'Deposit successful via ' . $deposit->gatewayCurrency()->name;
                 $adminNotification->click_url = urlPath('admin.deposit.successful');
                 $adminNotification->save();
             }
@@ -141,10 +157,10 @@ class PaymentController extends Controller
                 'charge'          => showAmount($deposit->charge),
                 'rate'            => showAmount($deposit->rate),
                 'trx'             => $deposit->trx,
-                'post_balance'    => showAmount($user->balance)
+                'post_balance'    => showAmount($balance)
             ]);
 
-            referralCommission($user,$deposit->amount);
+            referralCommission($user, $deposit->amount);
         }
     }
 
@@ -159,7 +175,7 @@ class PaymentController extends Controller
             $pageTitle = 'Deposit Confirm';
             $method    = $data->gatewayCurrency();
             $gateway   = $method->method;
-            return view($this->activeTemplate . 'user.payment.manual', compact('data', 'pageTitle', 'method','gateway'));
+            return view($this->activeTemplate . 'user.payment.manual', compact('data', 'pageTitle', 'method', 'gateway'));
         }
         abort(404);
     }
@@ -188,8 +204,8 @@ class PaymentController extends Controller
 
         $adminNotification = new AdminNotification();
         $adminNotification->user_id = $data->user->id;
-        $adminNotification->title = 'Deposit request from '.$data->user->username;
-        $adminNotification->click_url = urlPath('admin.deposit.details',$data->id);
+        $adminNotification->title = 'Deposit request from ' . $data->user->username;
+        $adminNotification->click_url = urlPath('admin.deposit.details', $data->id);
         $adminNotification->save();
 
         notify($data->user, 'DEPOSIT_REQUEST', [
@@ -206,5 +222,11 @@ class PaymentController extends Controller
         return to_route('user.deposit.history')->withNotify($notify);
     }
 
-
+    public function errorResponse($errors)
+    {
+        return response()->json([
+            'success' => false,
+            'errors'  => $errors
+        ]);
+    }
 }

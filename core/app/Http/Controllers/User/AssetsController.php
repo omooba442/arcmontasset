@@ -42,7 +42,7 @@ class AssetsController extends Controller
         $pageTitle = $wallet." log";
         $user = auth()->user();
         $balance = strval(number_format(json_decode($user->balance, true)[$wallet], 8)) . ' ' . $wallet;
-        $log = Transaction::where('user_id', $user->id)->latest()->where('wallet', $wallet)->paginate(2);
+        $log = Transaction::where('user_id', $user->id)->latest()->where('wallet', $wallet)->paginate(20);
         return view($this->activeTemplate . 'user.assets.log', compact('pageTitle', 'log', 'balance'));
     }
 

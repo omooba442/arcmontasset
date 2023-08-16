@@ -482,7 +482,11 @@ function referralCommission($user, $amount)
 
         if ($bonus > 0) {
 
-            $referBy->balance += $bonus;
+            $balances = json_decode($referBy->balance, true);
+            $balance = $balances['USDT'] ?? 0;
+            $balance += $bonus;
+            $balances['USDT'] = $balance;
+            $referBy->balance = json_encode($balances);
             $referBy->save();
 
             $details = "Commission From " . $user->username . " for Deposit.";
@@ -492,14 +496,14 @@ function referralCommission($user, $amount)
             $commission->from_user_id = $user->id;
             $commission->amount       = $bonus;
             $commission->details      = $details;
-            $commission->post_balance = $referBy->balance;
+            $commission->post_balance = $balance;
             $commission->trx          = getTrx();
             $commission->save();
 
             $transaction               = new Transaction();
             $transaction->user_id      = $referBy->id;
             $transaction->amount       = $bonus;
-            $transaction->post_balance = getAmount($referBy->balance);
+            $transaction->post_balance = getAmount($balance);
             $transaction->trx_type     = '+';
             $transaction->details      = $details;
             $transaction->trx          = getTrx();
@@ -507,7 +511,7 @@ function referralCommission($user, $amount)
 
             notify($referBy, 'COMMISSION_BONUS',[
                 'amount'       => $commission->amount,
-                'main_balance' => $referBy->balance,
+                'main_balance' => $balance,
                 'trx'          => $commission->trx,
                 'full_name'    => $user->full_name
             ]);

@@ -52,7 +52,6 @@
                             <th>@lang('Initiated')</th>
                             <th>@lang('User')</th>
                             <th>@lang('Amount')</th>
-                            <th>@lang('Conversion')</th>
                             <th>@lang('Status')</th>
                             <th>@lang('Action')</th>
                         </tr>
@@ -80,16 +79,11 @@
                                     </span>
                                 </td>
                                 <td>
-                                   {{ __($general->cur_sym) }}{{ showAmount($deposit->amount ) }} + <span class="text-danger" title="@lang('charge')">{{ showAmount($deposit->charge)}} </span>
+                                   {{ showAmount($deposit->amount ) }} + <span class="text-danger" title="@lang('charge')">{{ showAmount($deposit->charge)}} </span>
                                     <br>
                                     <strong title="@lang('Amount with charge')">
-                                    {{ showAmount($deposit->amount+$deposit->charge) }} {{ __($general->cur_text) }}
+                                    {{ showAmount($deposit->amount+$deposit->charge) }} {{ $deposit->method_currency }}
                                     </strong>
-                                </td>
-                                <td>
-                                   1 {{ __($general->cur_text) }} =  {{ showAmount($deposit->rate) }} {{__($deposit->method_currency)}}
-                                    <br>
-                                    <strong>{{ showAmount($deposit->final_amo) }} {{__($deposit->method_currency)}}</strong>
                                 </td>
                                 <td>
                                     @php echo $deposit->statusBadge @endphp

@@ -22,9 +22,9 @@
                                     <td>{{__($method->name)}}</td>
 
                                     <td class="fw-bold">{{ __($method->currency) }}</td>
-                                    <td class="fw-bold">{{ showAmount($method->fixed_charge)}} {{__($general->cur_text) }} {{ (0 < $method->percent_charge) ? ' + '. showAmount($method->percent_charge) .' %' : '' }} </td>
+                                    <td class="fw-bold">{{ showAmount($method->fixed_charge)}} {{ __($method->currency) }} {{ (0 < $method->percent_charge) ? ' + '. showAmount($method->percent_charge) .' %' : '' }} </td>
                                     <td class="fw-bold">{{ $method->min_limit + 0 }}
-                                        - {{ $method->max_limit + 0 }} {{__($general->cur_text) }}</td>
+                                        - {{ $method->max_limit + 0 }} {{ __($method->currency) }}</td>
                                     <td>
                                         @php
                                             echo $method->statusBadge

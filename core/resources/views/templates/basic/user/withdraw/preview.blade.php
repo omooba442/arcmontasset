@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center vertical-center">
             <div class="col-lg-8">
                 <div class="card custom--card">
                     <div class="card-header">
@@ -18,8 +18,8 @@
                                 <input type="text" name="authenticator_code" class="form-control form--control" required>
                             </div>
                             @endif
-                            <div class="form-group">
-                                <button type="submit" class="cmn--btn btn-block">@lang('Submit')</button>
+                            <div class="asset_item_top mt-2 px-6">
+                                <button type="submit" class="asset_a">@lang('Submit')</button>
                             </div>
                         </form>
                     </div>

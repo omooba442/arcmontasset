@@ -9,6 +9,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('Gateway')</th>
+                                <th>@lang('Network')</th>
                                 <th>@lang('Status')</th>
                                 <th>@lang('Action')</th>
                             </tr>
@@ -17,6 +18,7 @@
                             @forelse($gateways as $gateway)
                                 <tr>
                                     <td>{{__($gateway->name)}}</td>
+                                    <td>{{__($gateway->network)}}</td>
 
                                     <td>
                                         @php

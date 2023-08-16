@@ -26,17 +26,17 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Amount')
-                            <span class="fw-bold">{{ showAmount($deposit->amount ) }} {{ __($general->cur_text) }}</span>
+                            <span class="fw-bold">{{ showAmount($deposit->amount ) }} {{ $deposit->method_currency }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Charge')
-                            <span class="fw-bold">{{ showAmount($deposit->charge ) }} {{ __($general->cur_text) }}</span>
+                            <span class="fw-bold">{{ showAmount($deposit->charge ) }} {{ $deposit->method_currency }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('After Charge')
-                            <span class="fw-bold">{{ showAmount($deposit->amount+$deposit->charge ) }} {{ __($general->cur_text) }}</span>
+                            <span class="fw-bold">{{ number_format($deposit->amount+$deposit->charge, 8) }} {{ $deposit->method_currency }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{-- <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Rate')
                             <span class="fw-bold">1 {{__($general->cur_text)}}
                                 = {{ showAmount($deposit->rate) }} {{__($deposit->baseCurrency)}}</span>
@@ -44,7 +44,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Payable')
                             <span class="fw-bold">{{ showAmount($deposit->final_amo ) }} {{__($deposit->method_currency)}}</span>
-                        </li>
+                        </li> --}}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Status')
                             @php echo $deposit->statusBadge @endphp

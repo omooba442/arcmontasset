@@ -43,7 +43,6 @@
                                 <th>@lang('Initiated')</th>
                                 <th>@lang('User')</th>
                                 <th>@lang('Amount')</th>
-                                <th>@lang('Conversion')</th>
                                 <th>@lang('Status')</th>
                                 <th>@lang('Action')</th>
 
@@ -72,18 +71,12 @@
 
 
                                 <td>
-                                   {{ __($general->cur_sym) }}{{ showAmount($withdraw->amount ) }} - <span class="text-danger" title="@lang('charge')">{{ showAmount($withdraw->charge)}} </span>
+                                   {{ showAmount($withdraw->amount ) }} - <span class="text-danger" title="@lang('charge')">{{ showAmount($withdraw->charge)}} </span>
                                     <br>
                                     <strong title="@lang('Amount after charge')">
-                                    {{ showAmount($withdraw->amount-$withdraw->charge) }} {{ __($general->cur_text) }}
+                                    {{ showAmount($withdraw->amount-$withdraw->charge) }} {{ __($withdraw->currency) }}
                                     </strong>
 
-                                </td>
-
-                                <td>
-                                   1 {{ __($general->cur_text) }} =  {{ showAmount($withdraw->rate) }} {{ __($withdraw->currency) }}
-                                    <br>
-                                    <strong>{{ showAmount($withdraw->final_amount) }} {{ __($withdraw->currency) }}</strong>
                                 </td>
 
                                 <td>

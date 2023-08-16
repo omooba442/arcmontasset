@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-<div class="container">
-    <div class="row justify-content-end gy-4">
+<div class="container" style="height: calc(100vh - 35px);">
+    <div class="row justify-content-end gy-4 vertical-center">
         <div class="col-4">
             <form action="">
                 <div class="input-group">
@@ -20,7 +20,6 @@
                             <th>@lang('Gateway | Transaction')</th>
                             <th>@lang('Initiated')</th>
                             <th>@lang('Amount')</th>
-                            <th>@lang('Conversion')</th>
                             <th>@lang('Status')</th>
                             <th>@lang('Action')</th>
                         </tr>
@@ -30,24 +29,17 @@
                         <tr>
                             <td>
                                 <div>
-                                    <span class="fw-bold d-block"><span class="text-primary"> {{ __(@$withdraw->method->name) }}</span></span>
+                                    <span class="fw-bold d-block"><span class="text-bold"> {{ __(@$withdraw->method->name) }}</span></span>
                                     <small>{{ $withdraw->trx }}</small>
                                 </div>
                             </td>
                             <td> {{ showDateTime($withdraw->created_at) }} <br>  {{ diffForHumans($withdraw->created_at) }}</td>
                             <td>
                                  <div>
-                                    {{ __($general->cur_sym) }}{{ showAmount($withdraw->amount ) }} - <span class="text--danger" title="@lang('charge')">{{ showAmount($withdraw->charge)}} </span> <br>
+                                    {{ showAmount($withdraw->amount ) }} - <span class="text--danger" title="@lang('charge')">{{ showAmount($withdraw->charge)}} </span> <br>
                                     <strong title="@lang('Amount after charge')">
-                                        {{ showAmount($withdraw->amount-$withdraw->charge) }} {{ __($general->cur_text) }}
+                                        {{ number_format($withdraw->amount-$withdraw->charge, 8) }} {{ $withdraw->currency }}
                                     </strong>
-                                </div>
-                             </td>
-                             <td>
-                                <div>
-                                    1 {{ __($general->cur_text) }} =  {{ showAmount($withdraw->rate) }} {{ __($withdraw->currency) }}
-                                 <br>
-                                 <strong>{{ showAmount($withdraw->final_amount) }} {{ __($withdraw->currency) }}</strong>
                                 </div>
                              </td>
                              <td> @php echo $withdraw->statusBadge @endphp </td>
@@ -136,4 +128,19 @@
         })(jQuery);
 
     </script>
+@endpush
+@push('style')
+    <style>
+        .modal-content,
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            background-color: #1a253b;
+        }
+
+        .modal-header,
+        .modal-body {
+            border-bottom-color: #97a2c0;
+        }
+    </style>
 @endpush

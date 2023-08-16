@@ -29,6 +29,8 @@ class WithdrawController extends Controller
         ]);
         $method = WithdrawMethod::where('id', $request->method_code)->where('status', Status::ENABLE)->firstOrFail();
         $user = auth()->user();
+        $balances = json_decode($user->balance, true);
+        $balance = $balances[$method->currency] ?? 0;
         if ($request->amount < $method->min_limit) {
             $notify[] = ['error', 'Your requested amount is smaller than minimum amount.'];
             return back()->withNotify($notify);
@@ -38,7 +40,7 @@ class WithdrawController extends Controller
             return back()->withNotify($notify);
         }
 
-        if ($request->amount > $user->balance) {
+        if ($request->amount > $balance) {
             $notify[] = ['error', 'You do not have sufficient balance for withdraw.'];
             return back()->withNotify($notify);
         }
@@ -87,6 +89,8 @@ class WithdrawController extends Controller
         $userData = $formProcessor->processFormData($request, $formData);
 
         $user = auth()->user();
+        $balances = json_decode($user->balance, true);
+        $balance = $balances[$withdraw->currency] ?? 0;
         if ($user->ts) {
             $response = verifyG2fa($user,$request->authenticator_code);
             if (!$response) {
@@ -95,7 +99,7 @@ class WithdrawController extends Controller
             }
         }
 
-        if ($withdraw->amount > $user->balance) {
+        if ($withdraw->amount > $balance) {
             $notify[] = ['error', 'Your request amount is larger then your current balance.'];
             return back()->withNotify($notify);
         }
@@ -103,13 +107,15 @@ class WithdrawController extends Controller
         $withdraw->status = Status::PAYMENT_PENDING;
         $withdraw->withdraw_information = $userData;
         $withdraw->save();
-        $user->balance  -=  $withdraw->amount;
+        $balance  -=  $withdraw->amount;
+        $balances[$withdraw->currency] = $balance;
+        $user->balance = json_encode($balances);
         $user->save();
 
         $transaction = new Transaction();
         $transaction->user_id = $withdraw->user_id;
         $transaction->amount = $withdraw->amount;
-        $transaction->post_balance = $user->balance;
+        $transaction->post_balance = $balance;
         $transaction->charge = $withdraw->charge;
         $transaction->trx_type = '-';
         $transaction->details = showAmount($withdraw->final_amount) . ' ' . $withdraw->currency . ' Withdraw Via ' . $withdraw->method->name;
@@ -131,7 +137,7 @@ class WithdrawController extends Controller
             'charge' => showAmount($withdraw->charge),
             'rate' => showAmount($withdraw->rate),
             'trx' => $withdraw->trx,
-            'post_balance' => showAmount($user->balance),
+            'post_balance' => showAmount($balance),
         ]);
 
         $notify[] = ['success', 'Withdraw request sent successfully'];
