@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center vertical-center">
             <div class="col-lg-8">
                 <div class="card custom--card">
                     <div class="card-body p-0">
@@ -17,7 +17,7 @@
                                 @elseif($val->type == 'file')
                                     <a href="{{ route('user.attachment.download',encrypt(getFilePath('verify').'/'.$val->value)) }}" class="me-3"><i class="fa fa-file"></i>  @lang('Attachment') </a>
                                 @else
-                                <p>{{__($val->value)}}</p>
+                                <p style="font-size: 14px">{{__($val->value)}}</p>
                                 @endif
                             </span>
                           </li>

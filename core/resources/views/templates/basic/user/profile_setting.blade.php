@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center vertical-center">
             <div class="col-lg-10">
                 <div class="card custom--card">
                     <div class="card-body">
@@ -34,7 +34,7 @@
                             <div class="col-md-7 col-lg-8">
                                 <form class="register py-3 pe-3 ps-3 ps-md-0" action="" method="post" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="row">
+                                    <div class="row gy-2">
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label">@lang('First Name')</label>
@@ -76,8 +76,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="cmn--btn btn-block">@lang('Submit')</button>
+                                    <div class="asset_item_top mt-2 px-6">
+                                        <button type="submit" class="asset_a">@lang('Submit')</button>
+                                    </div>
                                 </form>
+                                <div class="asset_item_top mt-2 px-6">
+                                    <a href="{{route('user.change.password')}}" class="asset_a">@lang('Change Password')</a>
+                                </div>
+                                <div class="asset_item_top mt-2 px-6">
+                                    <a href="{{route('user.twofactor')}}" class="asset_a">@lang('Enable/Disable 2FA')</a>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,17 +1,17 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container" style="height: calc(100vh - 35px);">
+    <div class="row justify-content-center vertical-center">
         <div class="col-md-8 col-lg-7 col-xl-6">
             <div class="card custom--card">
                 <div class="card-body">
-                    <div class="alert bg--section" role="alert">
+                    <div class="alert bg--section" style="background-color: #97a2c01a;" role="alert">
                         <strong> @lang('Complete your profile')</strong>
                         <p class="mt-0">@lang('You need to complete your profile by providing below information.')</p>
                     </div>
                     <form method="POST" action="{{ route('user.data.submit') }}">
                         @csrf
-                        <div class="row">
+                        <div class="row gy-1">
                             <div class="form-group col-sm-6">
                                 <label class="form-label">@lang('First Name')</label>
                                 <input type="text" class="form-control cmn--form--control" name="firstname" value="{{ old('firstname') }}" required>
@@ -39,8 +39,8 @@
                                 <input type="text" class="form-control cmn--form--control" name="city" value="{{ old('city') }}">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="cmn--btn btn-block">
+                        <div class="asset_item_top mt-2 px-6">
+                            <button type="submit" class="asset_a">
                                 @lang('Submit')
                             </button>
                         </div>

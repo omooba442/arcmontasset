@@ -1,16 +1,17 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container" style="height: calc(100vh - 35px);">
+    <div class="row justify-content-center vertical-center">
         <div class="col-lg-8">
             <div class="card custom--card">
                 <div class="card-body">
+                    <h3 class="mb-2"><center>KYC Verification</center></h3>
                     <form action="{{ route('user.kyc.submit') }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         <x-viser-form identifier="act" identifierValue="kyc" />
-                        <div class="form-group">
-                            <button type="submit" class="btn btn--base w-100">@lang('Submit')</button>
+                        <div class="asset_item_top mt-2 px-6">
+                            <button type="submit" class="asset_a">@lang('Submit')</button>
                         </div>
                     </form>
                 </div>

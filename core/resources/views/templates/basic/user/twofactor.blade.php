@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center gy-4">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center gy-4 vertical-center">
             @if(!auth()->user()->ts)
             <div class="col-md-6">
                 <div class="card custom--card">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
 
-                        <label class="mb-3"><i class="fa fa-info-circle"></i> @lang('Help')</label>
+                        <label class="mb-2 mt-2"><i class="fa fa-info-circle"></i> @lang('Help')</label>
                         <p>@lang('Google Authenticator is a multifactor app for mobile devices. It generates timed codes used during the 2-step verification process. To use Google Authenticator, install the Google Authenticator application on your mobile device.') <a class="text--base" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en" target="_blank">@lang('Download')</a></p>
                     </div>
                 </div>
@@ -46,7 +46,9 @@
                                     <label class="form-label">@lang('Google Authenticatior OTP')</label>
                                     <input type="text" class="form-control cmn--form--control" name="code" required>
                                 </div>
-                                <button type="submit" class="cmn--btn btn-block">@lang('Submit')</button>
+                                <div class="asset_item_top mt-2 px-6">
+                                    <button type="submit" class="asset_a">@lang('Submit')</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -63,7 +65,9 @@
                                     <label class="form-label">@lang('Google Authenticatior OTP')</label>
                                     <input type="text" class="form-control cmn--form--control" name="code" required>
                                 </div>
-                                <button type="submit" class="cmn--btn btn-block">@lang('Submit')</button>
+                                <div class="asset_item_top mt-2 px-6">
+                                    <button type="submit" class="asset_a">@lang('Submit')</button>
+                                </div>
                             </div>
                         </form>
                     </div>

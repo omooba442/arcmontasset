@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center vertical-center">
             <div class="col-md-8">
                 <div class="card custom--card">
                     <div class="card-body">
@@ -11,7 +11,7 @@
                                 <label class="form-label">@lang('Current Password')</label>
                                 <input type="password" class="form-control cmn--form--control" name="current_password" required autocomplete="current-password">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-1">
                                 <label class="form-label">@lang('Password')</label>
                                 <input type="password" class="form-control cmn--form--control" name="password" required autocomplete="current-password">
                                 @if($general->secure_password)
@@ -24,12 +24,12 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-1">
                                 <label class="form-label">@lang('Confirm Password')</label>
                                 <input type="password" class="form-control cmn--form--control" name="password_confirmation" required autocomplete="current-password">
                             </div>
-                            <div class="form-group">
-                                <button type="submit" class="cmn--btn btn-block">@lang('Submit')</button>
+                            <div class="asset_item_top mt-2 px-6">
+                                <button type="submit" class="asset_a">@lang('Submit')</button>
                             </div>
                         </form>
                     </div>

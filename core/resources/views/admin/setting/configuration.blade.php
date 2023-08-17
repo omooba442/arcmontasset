@@ -29,7 +29,7 @@
                                 <input type="checkbox" data-width="100%" data-size="large" data-onstyle="-success" data-offstyle="-danger" data-bs-toggle="toggle" data-height="35" data-on="@lang('Enable')" data-off="@lang('Disable')" name="force_ssl" @if($general->force_ssl) checked @endif>
                             </div>
                         </li>
-                        <li class="list-group-item d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-between align-items-center">
+                        {{-- <li class="list-group-item d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-between align-items-center">
                             <div>
                                 <p class="fw-bold mb-0">@lang('Agree Policy')</p>
                                 <p class="mb-0">
@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <input type="checkbox" data-width="100%" data-size="large" data-onstyle="-success" data-offstyle="-danger" data-bs-toggle="toggle" data-height="35" data-on="@lang('Enable')" data-off="@lang('Disable')" name="agree" @if($general->agree) checked @endif>
                             </div>
-                        </li>
+                        </li> --}}
 
                         <li class="list-group-item d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-between align-items-center">
                             <div>
@@ -122,7 +122,7 @@
                             </div>
                         </li>
 
-                        <li class="list-group-item d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-between align-items-center">
+                        {{-- <li class="list-group-item d-flex flex-wrap flex-sm-nowrap gap-2 justify-content-between align-items-center">
                             <div>
                                 <p class="fw-bold mb-0">@lang('Language Option')</p>
                                 <p class="mb-0">
@@ -132,7 +132,7 @@
                             <div class="form-group">
                                 <input type="checkbox" data-width="100%" data-size="large" data-onstyle="-success" data-offstyle="-danger" data-bs-toggle="toggle" data-height="35" data-on="@lang('Enable')" data-off="@lang('Disable')" name="multi_language" @if($general->multi_language) checked @endif>
                             </div>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </div>
