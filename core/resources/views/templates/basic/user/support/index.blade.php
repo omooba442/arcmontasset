@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center gy-4">
+    <div class="container" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center gy-4 vertical-center">
             <div class=" col-12 text-end">
                 <a href="{{route('ticket.open') }}" class="btn btn--base-outline btn-sm"> <i class="las la-plus"></i> @lang('New Ticket')</a>
             </div>

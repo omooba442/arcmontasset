@@ -1,7 +1,8 @@
-@extends($activeTemplate.'layouts.'.$layout)
+@extends($activeTemplate.'layouts.sage')
+{{-- @extends($activeTemplate.'layouts.'.$layout) --}}
 @section('content')
-    <div class="container {{ $layout == 'frontend' ? 'pt-120 pb-120' : '' }}">
-        <div class="row justify-content-center">
+    <div class="container {{ $layout == 'frontend' ? 'pt-120 pb-120' : '' }}" style="height: calc(100vh - 35px);">
+        <div class="row justify-content-center vertical-center">
             <div class="col-md-12">
                 <div class="card custom--card">
                     <div class="card-header card-header-bg d-flex flex-wrap justify-content-between align-items-center">
@@ -11,14 +12,14 @@
                         </h5>
                         <div class="d-flex">
                             @if($myTicket->status != Status::TICKET_CLOSE && $myTicket->user)
-                            <button class="btn btn--danger-outline close-button btn-sm confirmationBtn" type="button" data-question="@lang('Are you sure to close this ticket?')"
+                            <button style="background-color: red" class="btn btn--danger-outline close-button btn-sm confirmationBtn" type="button" data-question="@lang('Are you sure to close this ticket?')"
                                     data-action="{{ route('ticket.close', $myTicket->id) }}">
                                 <i class="las la-times-circle"></i> @lang('Close')
                             </button>
                             @endif
                             @auth
                             <a href="{{ route('ticket.index') }}" class="btn btn--base-outline close-button btn-sm ms-2">
-                                <i class="las la-list"></i> @lang('My Tickest')
+                                <i class="las la-list"></i> @lang('My Tickets')
                             </a>
                             @endauth
                         </div>
@@ -151,5 +152,20 @@
             }
         })(jQuery);
     </script>
+@endpush
+@push('style')
+    <style>
+        .modal-content,
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            background-color: #1a253b;
+        }
+
+        .modal-header,
+        .modal-body {
+            border-bottom-color: #97a2c0;
+        }
+    </style>
 @endpush
 

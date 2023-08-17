@@ -742,6 +742,99 @@ thead{
 	align-items: center;
 }
 
+.btn--base,
+.badge--base,
+.bg--base {
+	background-color: #97a2c0 !important;
+}
+
+.btn--primary,
+.badge--primary,
+.bg--primary {
+	background-color: #97a2c0 !important;
+}
+
+.btn--secondary .badge--secondary .bg--secondary {
+	background-color: #868e96 !important;
+}
+
+.btn--success,
+.badge--success,
+.bg--success {
+	background-color: #28c76f !important;
+}
+
+.btn--danger,
+.badge--danger,
+.bg--danger {
+	background-color: #ea2027 !important;
+}
+
+.btn--warning,
+.badge--warning,
+.bg--warning {
+	background-color: #f99f0b !important;
+}
+
+.btn--info,
+.badge--info,
+.bg--info {
+	background-color: #1e9ff2 !important;
+}
+
+.btn--dark,
+.badge--dark,
+.bg--dark {
+	background-color: #fff !important;
+}
+
+.btn--white,
+.badge--white,
+.bg--white {
+	background-color: #fff !important;
+}
+
+[class*="btn--"] {
+	color: #fff;
+	font-weight: 500;
+}
+
+[class*="btn--"]:hover {
+	color: #fff;
+}
+
+.btn--warning,
+.badge--warning,
+.btn--white,
+.badge--white {
+	color: #fff;
+}
+
+.btn--warning:hover,
+.badge--warning:hover,
+.btn--white:hover,
+.badge--white:hover {
+	color: #fff;
+}
+
+.btn--black,
+.badge--black,
+.bg--black {
+	background-color: #000 !important;
+}
+
+.btn--title,
+.badge--title,
+.bg--title {
+	background-color: #fff !important;
+}
+
+.btn--1,
+.badge--1,
+.bg--1 {
+	background-color: #47c2ef !important;
+}
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {

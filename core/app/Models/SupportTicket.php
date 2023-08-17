@@ -37,7 +37,7 @@ class SupportTicket extends Model
                 $html = '<span class="badge badge--warning">'.trans("Customer Reply").'</span>';
             }
             elseif($this->status == Status::TICKET_CLOSE){
-                $html = '<span class="badge badge--dark">'.trans("Closed").'</span>';
+                $html = '<span class="badge badge--danger">'.trans("Closed").'</span>';
             }
             return $html;
         });

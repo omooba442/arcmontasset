@@ -40,38 +40,115 @@
                             <a class="{{ menuActive('user.earn.index') }}"
                                 href="{{ route('user.earn.index') }}">@lang('Furures Earn')</a>
                         </li>
-                        <ul class="menu m2mble" style="margin-left: auto;">
+                        @auth
+                            <ul class="menu m2mble" style="margin-left: auto;">
+                                <li>
+                                    <b class="mr-1">{{ auth()->user()->email }}</b>
+                                    <i class="{{ auth()->user()->kv == 0 ? 'fas fa-exclamation-circle text-danger' : (auth()->user()->kv == 2 ? 'fas fa-exclamation-circle text-warning' : 'fas fa-certificate text-success') }}"
+                                        data-toggle="tooltip" data-placement="bottom"
+                                        title="{{ auth()->user()->kv == 0 ? 'KYC not verified' : (auth()->user()->kv == 2 ? 'KYC verification ongoing' : 'KYC Verified') }}"
+                                        style="cursor: pointer"
+                                        onclick="window.location.href = '{{ auth()->user()->kv == 0 ? route('user.kyc.form') : route('user.kyc.data') }}'"></i>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="fa fa-solid fa-user"></i></a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a href="{{ route('user.profile.setting') }}"
+                                                class="{{ menuActive('user.profile.*') }} {{ menuActive('user.change.*') }}">@lang('Profile')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.deposit.index') }}"
+                                                class="{{ menuActive('user.deposit.index') }}"">@lang('Deposit')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.deposit.history') }}"
+                                                class="{{ menuActive('user.deposit.history') }}">@lang('Deposit Log')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.withdraw.index') }}"
+                                                class="{{ menuActive('user.withdraw.index') }}">@lang('Withdraw')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.withdraw.history') }}"
+                                                class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.referral.log') }}"
+                                                class="{{ menuActive('user.referral.log') }}">@lang('Referral Log')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.commissions.log') }}"
+                                                class="{{ menuActive('user.commissions.log') }}">@lang('Commissions Log')</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('user.logout') }}"
+                                                class="{{ menuActive('user.logout') }}">@lang('Logout')</a>
+                                        </li>
+                                        <li>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    @if (!$general->multi_language)
+                                        <div class="select-bar">
+                                            <i class="fa fa-solid fa-globe"></i>
+                                            <select class="langSel">
+                                                @foreach ($language as $item)
+                                                    <option value="{{ $item->code }}" @selected(session('lang') == $item->code)>
+                                                        {{ __($item->name) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+                                </li>
+                            </ul>
+                        @endauth
+                    </ul>
+                    @auth
+                        <ul class="menu m2dstp" style="margin-left: auto;">
                             <li>
                                 <b class="mr-1">{{ auth()->user()->email }}</b>
-                                <i class="{{auth()->user()->kv == 0 ? 'fas fa-exclamation-circle text-danger' : (auth()->user()->kv == 2 ? 'fas fa-exclamation-circle text-warning' : 'fas fa-certificate text-success')}}"
-                                    data-toggle="tooltip" data-placement="bottom" title="{{auth()->user()->kv == 0 ? 'KYC not verified' : (auth()->user()->kv == 2 ? 'KYC verification ongoing' : 'KYC Verified')}}" style="cursor: pointer" onclick="window.location.href = '{{auth()->user()->kv == 0 ? route('user.kyc.form') : route('user.kyc.data')}}'"></i>
+                                <i class="{{ auth()->user()->kv == 0 ? 'fas fa-exclamation-circle text-danger' : (auth()->user()->kv == 2 ? 'fas fa-exclamation-circle text-warning' : 'fas fa-certificate text-success') }}"
+                                    data-toggle="tooltip" data-placement="bottom"
+                                    title="{{ auth()->user()->kv == 0 ? 'KYC not verified' : (auth()->user()->kv == 2 ? 'KYC verification ongoing' : 'KYC Verified') }}"
+                                    style="cursor: pointer"
+                                    onclick="window.location.href = '{{ auth()->user()->kv == 0 ? route('user.kyc.form') : route('user.kyc.data') }}'"></i>
                             </li>
                             <li>
                                 <a href="javascript:void(0)"><i class="fa fa-solid fa-user"></i></a>
                                 <ul class="submenu">
                                     <li>
-                                        <a href="{{ route('user.profile.setting') }}"  class="{{ menuActive('user.profile.*') }} {{ menuActive('user.change.*') }}">@lang('Profile')</a>
+                                        <a href="{{ route('user.profile.setting') }}"
+                                            class="{{ menuActive('user.profile.*') }} {{ menuActive('user.change.*') }}">@lang('Profile')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.deposit.index') }}" class="{{ menuActive('user.deposit.index') }}"">@lang('Deposit')</a>
+                                        <a href="{{ route('user.deposit.index') }}"
+                                            class="{{ menuActive('user.deposit.index') }}"">@lang('Deposit')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.deposit.history') }}" class="{{ menuActive('user.deposit.history') }}">@lang('Deposit Log')</a>
+                                        <a href="{{ route('user.deposit.history') }}"
+                                            class="{{ menuActive('user.deposit.history') }}">@lang('Deposit Log')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.withdraw.index') }}" class="{{ menuActive('user.withdraw.index') }}">@lang('Withdraw')</a>
+                                        <a href="{{ route('user.withdraw.index') }}"
+                                            class="{{ menuActive('user.withdraw.index') }}">@lang('Withdraw')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.withdraw.history') }}" class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
+                                        <a href="{{ route('user.withdraw.history') }}"
+                                            class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.referral.log') }}" class="{{ menuActive('user.referral.log') }}">@lang('Referral Log')</a>
+                                        <a href="{{ route('user.referral.log') }}"
+                                            class="{{ menuActive('user.referral.log') }}">@lang('Referral Log')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.commissions.log') }}" class="{{ menuActive('user.commissions.log') }}">@lang('Commissions Log')</a>
+                                        <a href="{{ route('user.commissions.log') }}"
+                                            class="{{ menuActive('user.commissions.log') }}">@lang('Commissions Log')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('user.logout') }}" class="{{ menuActive('user.logout') }}">@lang('Logout')</a>
+                                        <a href="{{ route('user.logout') }}"
+                                            class="{{ menuActive('user.logout') }}">@lang('Logout')</a>
                                     </li>
                                     <li>
                                     </li>
@@ -91,58 +168,7 @@
                                 @endif
                             </li>
                         </ul>
-                    </ul>
-                    <ul class="menu m2dstp" style="margin-left: auto;">
-                        <li>
-                            <b class="mr-1">{{ auth()->user()->email }}</b>
-                            <i class="{{auth()->user()->kv == 0 ? 'fas fa-exclamation-circle text-danger' : (auth()->user()->kv == 2 ? 'fas fa-exclamation-circle text-warning' : 'fas fa-certificate text-success')}}"
-                                data-toggle="tooltip" data-placement="bottom" title="{{auth()->user()->kv == 0 ? 'KYC not verified' : (auth()->user()->kv == 2 ? 'KYC verification ongoing' : 'KYC Verified')}}" style="cursor: pointer" onclick="window.location.href = '{{auth()->user()->kv == 0 ? route('user.kyc.form') : route('user.kyc.data')}}'"></i>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fa fa-solid fa-user"></i></a>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="{{ route('user.profile.setting') }}"  class="{{ menuActive('user.profile.*') }} {{ menuActive('user.change.*') }}">@lang('Profile')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.deposit.index') }}" class="{{ menuActive('user.deposit.index') }}"">@lang('Deposit')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.deposit.history') }}" class="{{ menuActive('user.deposit.history') }}">@lang('Deposit Log')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.withdraw.index') }}" class="{{ menuActive('user.withdraw.index') }}">@lang('Withdraw')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.withdraw.history') }}" class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.referral.log') }}" class="{{ menuActive('user.referral.log') }}">@lang('Referral Log')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.commissions.log') }}" class="{{ menuActive('user.commissions.log') }}">@lang('Commissions Log')</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('user.logout') }}" class="{{ menuActive('user.logout') }}">@lang('Logout')</a>
-                                </li>
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            @if (!$general->multi_language)
-                                <div class="select-bar">
-                                    <i class="fa fa-solid fa-globe"></i>
-                                    <select class="langSel">
-                                        @foreach ($language as $item)
-                                            <option value="{{ $item->code }}" @selected(session('lang') == $item->code)>
-                                                {{ __($item->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
-                        </li>
-                    </ul>
+                    @endauth
                 </div>
                 <div class="header-bar m-0">
                     <span></span>
