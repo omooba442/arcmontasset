@@ -128,7 +128,7 @@
                                             <th scope="col">Pair</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Purchase Price</th>
-                                            <th scope="col">Timer</th>
+                                            <th scope="col">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -148,9 +148,7 @@
                                                     {{ formatTimeToShortString($trade->duration) }}</td>
                                                 <td>{{ number_format($trade->amount, 6) }}</td>
                                                 <td>{{ number_format($trade->price_was, 6) }}</td>
-                                                <td>
-                                                    <div id="{{ $timer }}_trade_timer_{{ $trade->id }}"></div>
-                                                </td>
+                                                <td>{{ $trade->created_at }} GMT</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -478,59 +476,5 @@
             {{ $currentPCoin }} = change;
             setOpqty();
         }
-    </script>
-    <script>
-        @foreach ($log as $trade)
-            // Timer {{ $trade->id }}
-            @php
-                $durationInSeconds = Carbon::parse($trade->in_time)->isPast() ? 5 : Carbon::parse($trade->in_time)->diffInSeconds(Carbon::now());
-                
-                $cu_days = floor($durationInSeconds / (24 * 3600));
-                $remainingSeconds = $durationInSeconds - $cu_days * 24 * 3600;
-                $cu_hours = floor($remainingSeconds / 3600);
-                $remainingSeconds -= $cu_hours * 3600;
-                $cu_minutes = floor($remainingSeconds / 60);
-                $cu_seconds = $remainingSeconds % 60;
-            @endphp
-            var {{ $timer }}_trade_timer_{{ $trade->id }} = new easytimer.Timer();
-            {{ $timer }}_trade_timer_{{ $trade->id }}.start({
-                countdown: true,
-                startValues: {
-                    days: {{ $cu_days }},
-                    hours: {{ $cu_hours }},
-                    minutes: {{ $cu_minutes }},
-                    seconds: {{ $cu_seconds }}
-                }
-            });
-            $('#{{ $timer }}_trade_timer_{{ $trade->id }}').html(
-                {{ $timer }}_trade_timer_{{ $trade->id }}.getTimeValues().toString());
-            {{ $timer }}_trade_timer_{{ $trade->id }}.addEventListener('secondsUpdated', function(e) {
-                $('#{{ $timer }}_trade_timer_{{ $trade->id }}').html(
-                    {{ $timer }}_trade_timer_{{ $trade->id }}.getTimeValues().toString());
-            });
-
-            {{ $timer }}_trade_timer_{{ $trade->id }}.addEventListener('targetAchieved', function(e) {
-                $.ajax({
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    },
-                    url: "{{ route('user.trade.result') }}",
-                    method: "POST",
-                    data: {
-                        game_log_id: {{ $trade->id }}
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            notify('success', response.message || '');
-                        } else {
-                            notify('error', response.errors || '')
-                        }
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1000);
-                    }
-                });
-            });
-        @endforeach
     </script>
 @endpush
