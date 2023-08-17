@@ -29,8 +29,8 @@
                                 href="{{ route('user.trade.index') }}">@lang('Future Trades')</a>
                         </li>
                         <li>
-                            <a class="{{ menuActive('user.transactions') }}"
-                                href="{{ route('user.home') }}">@lang('Lock-up mining')</a>
+                            <a class="{{ menuActive('user.lockup.index') }}"
+                                href="{{ route('user.lockup.index') }}">@lang('Lock-up mining')</a>
                         </li>
                         <li>
                             <a class="{{ menuActive('user.assets.index') }} {{ menuActive('user.assets.log') }}"

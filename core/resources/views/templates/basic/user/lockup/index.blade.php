@@ -231,20 +231,18 @@
                         <p class="m-0" style="font-size: 14px;"> <span class="icon_dot mx-2"><i
                                     class="fa fa-solid fa-check"></i></span>Transaction details</p>
                     </div>
-                    <p class="m-0 mt-1" style="font-size: 14px;">Opening Quantity:</p>
+                    <p class="m-0 mt-1" style="font-size: 14px;">Lock Quantity:</p>
                     <div class="align-middle text-center mt-2 ">
                         <input class="opqty" type="number" step="any" name="{{ $formQuantity }}"
                             id="{{ $formQuantity }}" placeholder="Enter opening quantity">
                     </div>
-                    <p class="m-0 mt-1" style="font-size: 14px;">Open Time:</p>
-                    <div class="align-middle text-center mt-2 mb-2 opentimes">
+                    <p class="m-0 mt-1" style="font-size: 14px;">Lock Time:</p>
+                    <div class="align-middle text-center mt-2 mb-2 opentimes" style="grid-template-columns: repeat(3, 1fr)">
                         @foreach ($durations as $time)
                             <div>
                                 <div id="trx_time_ref_{{ $time->id }}"
                                     onclick="{{ $formTime }}({{ $time->id }}, '{{ $time->unit }}', '{{ $time->time }}')"
-                                    class="card opentimitem">{{ $time->time }}{{ $time->unit[0] }}</div>
-                                <b
-                                    style="font-size: 11px; font-weight: 200; color: #97a2c0">{{ number_format($time->profit, 2) }}%</b>
+                                    class="card opentimitem px-1 py-1">{{ $time->time }} {{ $time->time == 1 ? substr($time->unit, 0, -1) : $time->unit }}</div>
                             </div>
                         @endforeach
                     </div>
@@ -261,6 +259,10 @@
                                     <tr>
                                         <td style="color: white !important;">Minimum Opening Quantity</td>
                                         <td style="color: white !important;" id="opqty_r2">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: white !important;">Potential Profits</td>
+                                        <td style="color: white !important;" id="pot_pr_r2">-</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -334,10 +336,20 @@
                 },
             @endforeach
         };
+        const profits = {
+            @foreach ($durations as $time)
+                {{ $time->id }}: {
+                    @foreach ($cryptos2 as $coin)
+                        '{{ $coin->symbol }}': '{{ json_decode($time->profit, true)[$coin->symbol] }} %',
+                    @endforeach
+                },
+            @endforeach
+        };
 
         function setOpqty() {
             document.getElementById('opqty_r2').innerText = minimums[{{ $currentPTime }}][wallets[{{ $currentPWallet }} -
                 1]] + ' ' + wallets[{{ $currentPWallet }} - 1];
+            document.getElementById('pot_pr_r2').innerText = profits[{{ $currentPTime }}][{{ $currentPCoin }}];
         }
 
         function {{ $formSubmit }}(highlow) {

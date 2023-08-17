@@ -305,6 +305,11 @@ Route::middleware('admin')->group(function () {
         Route::post('save/{id?}', 'save')->name('save');
         Route::post('delete/{id}', 'delete')->name('delete');
     });
+    Route::prefix('lockup/setting')->name('lockup.setting.')->controller("LockupSettingController")->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::post('save/{id?}', 'save')->name('save');
+        Route::post('delete/{id}', 'delete')->name('delete');
+    });
     Route::prefix('trade/setting')->name('trade.setting.')->controller("TradeSettingController")->group(function () {
         Route::get('index', 'index')->name('index');
         Route::post('save/{id?}', 'save')->name('save');
@@ -319,6 +324,14 @@ Route::middleware('admin')->group(function () {
         Route::post('change_profit', 'change_profit')->name('change_profit');
     });
     Route::controller("EarnLogController")->name("earn.log.")->prefix("earn/log")->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::get('wining', 'win')->name('wining');
+        Route::get('losing', 'loss')->name('losing');
+        Route::get('draw', 'draw')->name('draw');
+        Route::post('modify', 'modify')->name('modify');
+        Route::post('change_profit', 'change_profit')->name('change_profit');
+    });
+    Route::controller("LockupLogController")->name("lockup.log.")->prefix("lockup/log")->group(function () {
         Route::get('index', 'index')->name('index');
         Route::get('wining', 'win')->name('wining');
         Route::get('losing', 'loss')->name('losing');

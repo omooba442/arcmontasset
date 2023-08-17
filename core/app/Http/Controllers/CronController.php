@@ -20,6 +20,7 @@ class CronController extends Controller
             $user           = $tradeLog->user;
             $isFiatTrade    = $tradeLog->isFiat;
             $isEarnTrade    = $tradeLog->isEarn;
+            $isLockupTrade  = $tradeLog->isLockup;
             $balances       = json_decode($user->balance, true);
             $wallet_map     = [
                 1 => 'USDT',
@@ -75,6 +76,8 @@ class CronController extends Controller
                             $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "WIN";
                         } else if ($isEarnTrade) {
                             $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Reward";
+                        } else if ($isLockupTrade) {
+                            $details = "Lockup Trade to " . $tradeLog->crypto->name . ' ' . "Reward";
                         } else {
                             $details = "Trade to " . $tradeLog->crypto->name . ' ' . "WIN";
                         }
@@ -82,11 +85,11 @@ class CronController extends Controller
                         $tradeLog->result = Status::TRADE_WIN;
                     } else if ($tradeLog->price_was > $cryptoRate) {
                         $tradeLog->result = Status::TRADE_LOSE;
-                        if ($isEarnTrade) {
+                        if ($isEarnTrade || $isLockupTrade) {
                             $balances[$wallet_map[$tradeLog->wallet]] += $tradeLog->amount;
                             $user->balance = json_encode($balances);
                             $user->save();
-                            $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                            $details = $isEarnTrade? "Earn" : "Lockup" ." Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
                             $this->transactions($user, $tradeLog->amount, $details, $balances[$wallet_map[$tradeLog->wallet]], $wallet_map[$tradeLog->wallet]);
                         }
                     } else {
@@ -99,6 +102,8 @@ class CronController extends Controller
                             $details = "Fiat Trade to " . $tradeLog->fiat . ' ' . "Refund";
                         } else if ($isEarnTrade) {
                             $details = "Earn Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
+                        } else if ($isLockupTrade) {
+                            $details = "Lockup Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
                         } else {
                             $details = "Trade to " . $tradeLog->crypto->name . ' ' . "Refund";
                         }

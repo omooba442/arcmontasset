@@ -2,6 +2,7 @@
 
 namespace App\Lib;
 
+use App\Models\LockupSetting;
 use Carbon\Carbon;
 use App\Models\TradeLog;
 use App\Constants\Status;
@@ -21,10 +22,11 @@ class Trade
     protected $isFiatTrade = false;
     protected $isEarnTrade = false;
     protected $isLeverageTrade = false;
+    protected $isLockupTrade = false;
     protected $modelName       = TradeLog::class;
     protected $columnName      = 'balance';
 
-    public function __construct($isFiat = false, $isEarn = false, $isLeverage = false, $isPractice = false)
+    public function __construct($isFiat = false, $isEarn = false, $isLeverage = false, $isLockup = true, $isPractice = false)
     {
         if ($isFiat) {
             $this->isFiatTrade = true;
@@ -36,6 +38,10 @@ class Trade
 
         if ($isLeverage) {
             $this->isLeverageTrade = true;
+        }
+
+        if ($isLockup) {
+            $this->isLockupTrade = true;
         }
 
         if ($isPractice) {
@@ -74,6 +80,15 @@ class Trade
                 'duration'      => 'required|exists:leverage_settings,time',
                 'unit'          => 'required|in:seconds,minutes,hours,days'
             ]);
+        }else if($this->isLockupTrade){
+            $validator = Validator::make($request->all(), [
+                'amount'        => 'required|numeric|gt:0',
+                'coin_id'       => 'required|string|exists:crypto_currencies,symbol',
+                'high_low_type' => 'required|in:1,2',
+                'wallet'        => 'required|in:1,2,3',
+                'duration'      => 'required|exists:lockup_settings,time',
+                'unit'          => 'required|in:months'
+            ]);
         }else{
             $validator = Validator::make($request->all(), [
                 'amount'        => 'required|numeric|gt:0',
@@ -105,6 +120,8 @@ class Trade
             $tradeSetting = EarnSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }else if($this->isLeverageTrade){
             $tradeSetting = LeverageSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
+        }else if($this->isLockupTrade){
+            $tradeSetting = LockupSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }else{
             $tradeSetting = TradeSetting::where('time', $request->duration)->where('unit', $request->unit)->first();
         }
@@ -118,6 +135,8 @@ class Trade
         ];
         if(!is_null($tradeSetting)){
             if($this->isEarnTrade){
+                $profit = json_decode($tradeSetting->profit, true)[$crypto->symbol];
+            }else if($this->isLockupTrade){
                 $profit = json_decode($tradeSetting->profit, true)[$crypto->symbol];
             }else{
                 $profit = $tradeSetting->profit;
@@ -166,6 +185,7 @@ class Trade
         $tradeLog->isFiat             = $this->isFiatTrade;
         $tradeLog->isEarn             = $this->isEarnTrade;
         $tradeLog->isLeverage         = $this->isLeverageTrade;
+        $tradeLog->isLockup            = $this->isLockupTrade;
         $tradeLog->profit             = $profit ?? 5;
         if($this->isFiatTrade){
             $tradeLog->fiat           = $crypto->symbol;
@@ -186,6 +206,8 @@ class Trade
                 $details = 'Leverage Trade to ' . $crypto->name . ' ' . $highLow;
             }else if($this->isEarnTrade){
                 $details = $request->duration . ' ' . $request->unit . ' Earn Trade to ' . $crypto->name . ' Deposit';
+            }else if($this->isLockupTrade){
+                $details = $request->duration . ' ' . $request->unit . ' Lockup Trade to ' . $crypto->name . ' Deposit';
             }else{
                 $details = 'Trade to ' . $crypto->name . ' ' . $highLow;
             }
@@ -214,6 +236,10 @@ class Trade
         }
 
         if ($tradeLog->isEarn) {
+            return $this->errorResponse(['Trade not found']);
+        }
+
+        if ($tradeLog->isLockup) {
             return $this->errorResponse(['Trade not found']);
         }
 

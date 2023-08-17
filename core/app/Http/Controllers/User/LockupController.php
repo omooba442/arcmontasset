@@ -7,29 +7,30 @@ use App\Models\CryptoCurrency;
 use App\Http\Controllers\Controller;
 use App\Lib\Trade;
 use App\Models\TradeLog;
-use App\Models\TradeSetting;
+use App\Models\LockupSetting;
 
-class TradeController extends Controller
+class LockupController extends Controller
 {
     public function index()
     {
         $pageTitle = "Future Trades";
         $cryptos   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC');
+        $cryptos2   = CryptoCurrency::active()->orderByRaw('rank = 0, rank ASC')->get();
         $balances  = json_decode(auth()->user()->balance, true);
-        $durations = TradeSetting::oldest()->get();
+        $durations = LockupSetting::oldest()->get();
         $log           = $this->tradeData()->where('status', 0)->paginate($perPage = 15, $columns = ['*'], $pageName = 'page_tr');
         $log2           = $this->tradeData()->where('status', 1)->paginate($perPage = 15, $columns = ['*'], $pageName = 'page_cl');
-        return view($this->activeTemplate . 'user.trade.index', compact('pageTitle', 'cryptos', 'balances', 'durations', 'log', 'log2'));
+        return view($this->activeTemplate . 'user.lockup.index', compact('pageTitle', 'cryptos', 'cryptos2', 'balances', 'durations', 'log', 'log2'));
     }
     public function store(Request $request)
     {
-        $trade = new Trade();
+        $trade = new Trade(isLockup: true);
         return $trade->store($request);
     }
 
     public function tradeResult(Request $request)
     {
-        $trade = new Trade();
+        $trade = new Trade(isLockup: true);
         return $trade->result($request);
     }
 
@@ -64,9 +65,9 @@ class TradeController extends Controller
     protected function tradeData($scope = null)
     {
         if ($scope) {
-            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false)->where('isEarn', false)->where('isLeverage', false)->where('isLockup', false)->$scope();
+            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isLockup', true)->$scope();
         } else {
-            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isFiat', false)->where('isEarn', false)->where('isLeverage', false)->where('isLockup', false);
+            $tradeLogs = TradeLog::where('user_id', auth()->id())->where('isLockup', true);
         }
         // return $tradeLogs->with("crypto")->latest('id')->paginate(getPaginate());
         return $tradeLogs->with("crypto")->latest('id');

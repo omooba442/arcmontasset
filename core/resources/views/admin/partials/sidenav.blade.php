@@ -45,6 +45,12 @@
                         <span class="menu-title">@lang('Leverage Setting') </span>
                     </a>
                 </li>
+                <li class="sidebar-menu-item  {{menuActive('admin.lockup.setting*')}}">
+                    <a href="{{route('admin.lockup.setting.index')}}" class="nav-link">
+                        <i class="menu-icon las la-cog"></i>
+                        <span class="menu-title">@lang('Lockup Setting') </span>
+                    </a>
+                </li>
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.trade.log*',3)}}">
@@ -108,6 +114,41 @@
                             </li>
                             <li class="sidebar-menu-item {{menuActive('admin.earn.log.draw')}} ">
                                 <a href="{{route('admin.earn.log.draw')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Draw')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.lockup.log*',3)}}">
+                        <i class="menu-icon las la-dice"></i>
+                        <span class="menu-title">@lang('Lockup log')</span>
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.lockup.log*',2)}} ">
+                        <ul>
+                            <li class="sidebar-menu-item {{menuActive('admin.lockup.log.index')}} ">
+                                <a href="{{route('admin.lockup.log.index')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.lockup.log.wining')}} ">
+                                <a href="{{route('admin.lockup.log.wining')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Wining')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.lockup.log.losing')}} ">
+                                <a href="{{route('admin.lockup.log.losing')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Losing')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{menuActive('admin.lockup.log.draw')}} ">
+                                <a href="{{route('admin.lockup.log.draw')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Draw')</span>
                                 </a>

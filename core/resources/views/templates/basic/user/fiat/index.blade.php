@@ -284,7 +284,7 @@
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         "use strict";
-        var tv = new TradingView.widget({
+        new TradingView.widget({
             "width": 980,
             "height": 610,
             "symbol": "USDT" + "{{ $coin_shortcuts[0] }}",
@@ -302,12 +302,6 @@
                 },
             },
             "container_id": "expert_chart"
-        });
-        tv.onChartReady(function() {
-            const symbolSearchInput = document.querySelector(".symbol-edit");
-            if (symbolSearchInput) {
-                symbolSearchInput.setAttribute("disabled", "true");
-            }
         });
     </script>
     <script>
@@ -406,7 +400,7 @@
 
         function {{ $changeWalletFunc }}(change) {
             if (change >= 1 && change <= 3) {
-                tv = new TradingView.widget({
+                new TradingView.widget({
                     "width": 980,
                     "height": 610,
                     "symbol": wallets[change - 1] + {{ $currentPCoin }},
@@ -433,17 +427,11 @@
                     change - 1];
                 {{ $currentPWallet }} = change;
                 setOpqty();
-                tv.onChartReady(function() {
-                    const symbolSearchInput = document.querySelector(".symbol-edit");
-                    if (symbolSearchInput) {
-                        symbolSearchInput.setAttribute("disabled", "true");
-                    }
-                });
             }
         }
 
         function {{ $changeCoinFunc }}(change) {
-            tv = new TradingView.widget({
+            new TradingView.widget({
                 "width": 980,
                 "height": 610,
                 "symbol": wallets[{{ $currentPWallet }} - 1] + change,
@@ -466,12 +454,6 @@
             document.getElementById('trad_ref_' + change).classList.add('active');
             {{ $currentPCoin }} = change;
             setOpqty();
-            tv.onChartReady(function() {
-                const symbolSearchInput = document.querySelector(".symbol-edit");
-                if (symbolSearchInput) {
-                    symbolSearchInput.setAttribute("disabled", "true");
-                }
-            });
         }
     </script>
     <script>

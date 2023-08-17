@@ -98,6 +98,12 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::post('result', 'tradeResult')->name('result');
             });
             
+            Route::controller("LockupController")->name('lockup.')->prefix('lockup')->group(function () {     
+                Route::get('/', 'index')->name('index');
+                Route::post('store', 'store')->name('store');
+                Route::post('result', 'tradeResult')->name('result');
+            });
+            
             Route::controller("EarnController")->name('earn.')->prefix('earn')->group(function () {     
                 Route::get('/', 'index')->name('index');
                 Route::get('/log', 'log')->name('log');
@@ -132,7 +138,7 @@ Route::middleware('auth')->name('user.')->group(function () {
         });
 
         // Payment
-        Route::middleware('registration.complete')->middleware('kyc')->prefix('deposit')->name('deposit.')->controller('Gateway\PaymentController')->group(function () {
+        Route::middleware('registration.complete')->prefix('deposit')->name('deposit.')->controller('Gateway\PaymentController')->group(function () {
             Route::any('/', 'deposit')->name('index');
             Route::post('insert', 'depositInsert')->name('insert');
             Route::get('confirm', 'depositConfirm')->name('confirm');
