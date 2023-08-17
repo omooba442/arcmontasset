@@ -19,6 +19,12 @@
         2 => 'BTC',
         3 => 'ETH',
     ];
+    function prf_rmv_p($time){
+        $prf_time =Carbon::now()->addMonths($time)->startOfMonth();
+        $prf_time2 = Carbon::now()->addMonths($time);
+        
+        return ($prf_time->diffInDays($prf_time2) / $prf_time->daysInMonth);
+    }
     function getProfitLoss($trade, $hl, $rate, $was, $is)
     {
         if ($hl) {
@@ -237,12 +243,14 @@
                             id="{{ $formQuantity }}" placeholder="Enter opening quantity">
                     </div>
                     <p class="m-0 mt-1" style="font-size: 14px;">Lock Time:</p>
-                    <div class="align-middle text-center mt-2 mb-2 opentimes" style="grid-template-columns: repeat(3, 1fr)">
+                    <div class="align-middle text-center mt-2 mb-2 opentimes"
+                        style="grid-template-columns: repeat(3, 1fr)">
                         @foreach ($durations as $time)
                             <div>
                                 <div id="trx_time_ref_{{ $time->id }}"
                                     onclick="{{ $formTime }}({{ $time->id }}, '{{ $time->unit }}', '{{ $time->time }}')"
-                                    class="card opentimitem px-1 py-1">{{ $time->time }} {{ $time->time == 1 ? substr($time->unit, 0, -1) : $time->unit }}</div>
+                                    class="card opentimitem px-1 py-1">{{ $time->time }}
+                                    {{ $time->time == 1 ? substr($time->unit, 0, -1) : $time->unit }}</div>
                             </div>
                         @endforeach
                     </div>
@@ -340,7 +348,10 @@
             @foreach ($durations as $time)
                 {{ $time->id }}: {
                     @foreach ($cryptos2 as $coin)
-                        '{{ $coin->symbol }}': '{{ json_decode($time->profit, true)[$coin->symbol] }} %',
+                    @php
+                        $cu_profit = json_decode($time->profit, true)[$coin->symbol];
+                    @endphp
+                        '{{ $coin->symbol }}': '{{ $cu_profit - ($cu_profit * prf_rmv_p($time->time))}} %',
                     @endforeach
                 },
             @endforeach
