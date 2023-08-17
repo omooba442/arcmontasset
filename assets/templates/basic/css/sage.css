@@ -76,7 +76,7 @@ ul li {
 }
 
 .menu {
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	font-weight: 500;
 	display: flex;
 	padding: 5px;

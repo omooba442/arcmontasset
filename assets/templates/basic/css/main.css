@@ -12,7 +12,7 @@ body {
 	color: #ddd;
 	line-height: 26px;
 	overflow-x: hidden;
-	font-family: "Roboto", sans-serif;
+	/* font-family: "Roboto", sans-serif; */
 	background: #000;
 }
 
@@ -25,7 +25,7 @@ h6 {
 	margin: 0;
 	line-height: 1.2;
 	color: #fff;
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	font-weight: 700;
 }
 
@@ -888,7 +888,7 @@ header {
 }
 
 .menu {
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	font-weight: 500;
 }
 
@@ -2162,7 +2162,7 @@ div[class*="col"]:nth-child(2) .contact__item .contact__content span {
 }
 
 .cmn--table thead tr th {
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	padding: 15px 10px;
 	text-align: center;
 	color: #fff;
@@ -2761,7 +2761,7 @@ input[readonly].cmn--form--control:focus {
 	border-radius: 0 5px 0 0;
 	background: #2e86de;
 	color: #fff;
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	font-size: 14px;
 	line-height: 24px;
 }
@@ -2820,7 +2820,7 @@ input[readonly].cmn--form--control:focus {
 }
 
 .post__item .post__read {
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	margin-top: 25px;
 	color: #2e86de;
 }
@@ -3091,7 +3091,7 @@ input[readonly].cmn--form--control:focus {
 .post__quote {
 	font-size: 24px;
 	line-height: 1.5;
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 	color: #fff;
 	font-style: italic;
 	text-align: center;
@@ -3304,7 +3304,7 @@ input[readonly].cmn--form--control:focus {
 	align-items: center;
 	background: transparent;
 	text-decoration: none;
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 }
 
 .cmn--outline--btn:hover {
@@ -3350,7 +3350,7 @@ input[readonly].cmn--form--control:focus {
 	display: inline-flex;
 	align-items: center;
 	text-decoration: none;
-	font-family: "Rajdhani", sans-serif;
+	/* font-family: "Rajdhani", sans-serif; */
 }
 
 .cmn--btn::before,

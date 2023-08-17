@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ config('app.locale') }}" itemscope itemtype="http://schema.org/WebPage">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,31 +8,39 @@
     @include('partials.seo')
     <link href="{{ asset('assets/global/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/all.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('assets/global/css/line-awesome.min.css')}}" />
-    
-    <link rel="stylesheet" href="{{asset($activeTemplateTrue .'css/owl.min.css')}}">
-    <link rel="stylesheet" href="{{asset($activeTemplateTrue .'css/main.css')}}">
-    <link rel="stylesheet" href="{{asset($activeTemplateTrue.'css/custom.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/global/css/line-awesome.min.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset($activeTemplateTrue . 'css/owl.min.css') }}">
+    <link rel="stylesheet" href="{{ asset($activeTemplateTrue . 'css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset($activeTemplateTrue . 'css/custom.css') }}">
     @stack('style-lib')
     @stack('style')
     <link href="{{ asset($activeTemplateTrue . 'css/color.php') }}?color=97a2c0" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz@10..48&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
     @stack('fbComment')
     <a href="javascript:void(0)" class="scrollToTop"><i class="las la-angle-up"></i></a>
-    
+
 
     @yield('panel')
 
-    <script src="{{asset('assets/global/js/jquery-3.6.0.min.js')}}"></script>
-    <script src="{{asset('assets/global/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ asset('assets/global/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/global/js/bootstrap.bundle.min.js') }}"></script>
 
-    <script src="{{asset($activeTemplateTrue . 'js/lightbox.min.js')}}"></script>
-    <script src="{{asset($activeTemplateTrue . 'js/raf-scroll.js')}}"></script>
-    <script src="{{asset($activeTemplateTrue . 'js/rafcounter.min.js')}}"></script>
-    <script src="{{asset($activeTemplateTrue . 'js/owl.min.js')}}"></script>
-    <script src="{{asset($activeTemplateTrue . 'js/main.js')}}"></script>
+    <script src="{{ asset($activeTemplateTrue . 'js/lightbox.min.js') }}"></script>
+    <script src="{{ asset($activeTemplateTrue . 'js/raf-scroll.js') }}"></script>
+    <script src="{{ asset($activeTemplateTrue . 'js/rafcounter.min.js') }}"></script>
+    <script src="{{ asset($activeTemplateTrue . 'js/owl.min.js') }}"></script>
+    <script src="{{ asset($activeTemplateTrue . 'js/main.js') }}"></script>
 
     @stack('script-lib')
     @stack('script')
@@ -39,10 +48,10 @@
     @include('partials.notify')
 
     <script>
-        (function ($) {
+        (function($) {
             "use strict";
-            $(".langSel").on("change", function () {
-                window.location.href = "{{route('home')}}/change/" + $(this).val();
+            $(".langSel").on("change", function() {
+                window.location.href = "{{ route('home') }}/change/" + $(this).val();
             });
 
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
@@ -66,30 +75,30 @@
             }
 
             var inputElements = $('input,select');
-            $.each(inputElements, function (index, element) {
+            $.each(inputElements, function(index, element) {
                 element = $(element);
                 element.closest('.form-group').find('label').attr('for', element.attr('name'));
                 element.attr('id', element.attr('name'))
             });
 
-            $('.policy').on('click', function () {
-                $.get('{{route('cookie.accept')}}', function (response) {
+            $('.policy').on('click', function() {
+                $.get('{{ route('cookie.accept') }}', function(response) {
                     $('.cookies-card').addClass('d-none');
                 });
             });
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $('.cookies-card').removeClass('hide')
             }, 2000);
 
             var inputElements = $('[type=text],select,textarea');
-            $.each(inputElements, function (index, element) {
+            $.each(inputElements, function(index, element) {
                 element = $(element);
                 element.closest('.form-group').find('label').attr('for', element.attr('name'));
                 element.attr('id', element.attr('name'))
             });
 
-            $.each($('input, select, textarea'), function (i, element) {
+            $.each($('input, select, textarea'), function(i, element) {
                 var elementType = $(element);
                 if (elementType.attr('type') != 'checkbox') {
                     if (element.hasAttribute('required')) {
@@ -100,4 +109,5 @@
         })(jQuery);
     </script>
 </body>
+
 </html>

@@ -16,6 +16,14 @@
     @stack('style-lib')
     @stack('style')
     <link href="{{ asset($activeTemplateTrue . 'css/color.php') }}?color=97a2c0" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz@10..48&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -100,7 +108,7 @@
                 }
             });
         })(jQuery);
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
