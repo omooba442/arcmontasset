@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\EarnSetting;
 use Illuminate\Http\Request;
 use App\Models\CryptoCurrency;
 use App\Http\Controllers\Controller;
+use App\Models\LockupSetting;
 use App\Rules\FileTypeValidate;
+use Illuminate\Support\Facades\DB;
 
 class CryptoCurrencyController extends Controller
 {
@@ -29,9 +32,27 @@ class CryptoCurrencyController extends Controller
         if ($id) {
             $crypto  = CryptoCurrency::findOrFail($id);
             $message = "Crypto currency updated successfully";
+            if($crypto->symbol != strtoupper($request->symbol)){
+                DB::table('earn_settings')
+                ->update([
+                    'profit' => DB::raw("JSON_SET(profit, '$." . strtoupper($request->symbol) . "', '2.5')")
+                ]);
+            DB::table('lockup_settings')
+                ->update([
+                    'profit' => DB::raw("JSON_SET(profit, '$." . strtoupper($request->symbol) . "', '2.5')")
+                ]);
+            }
         } else {
             $crypto  = new CryptoCurrency();
             $message = "Crypto currency added successfully";
+            DB::table('earn_settings')
+                ->update([
+                    'profit' => DB::raw("JSON_SET(profit, '$." . strtoupper($request->symbol) . "', '2.5')")
+                ]);
+            DB::table('lockup_settings')
+                ->update([
+                    'profit' => DB::raw("JSON_SET(profit, '$." . strtoupper($request->symbol) . "', '2.5')")
+                ]);
         }
 
         $crypto->name   = $request->name;
