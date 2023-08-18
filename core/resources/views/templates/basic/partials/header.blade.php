@@ -14,8 +14,11 @@
                         <li><a class="{{ menuActive('pages', null, $data->slug) }}"
                                 href="{{ route('pages', [$data->slug]) }}">{{ __($data->name) }}</a></li>
                     @endforeach
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('blog') }}" class="{{ menuActive('blog') }}">@lang('Blog')</a>
+                    </li> --}}
+                    <li>
+                        <a href="{{ route('services') }}" class="{{ menuActive('services') }}">@lang('Services')</a>
                     </li>
                     <li>
                         <a href="{{ route('contact') }}" class="{{ menuActive('contact') }}">@lang('Contact')</a>

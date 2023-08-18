@@ -1,6 +1,6 @@
 @php
 $content  = getContent('predict.content', true);
-$elements = getContent('predict.element',limit:6);
+$elements = getContent('predict.element',limit:6)->reverse();
 @endphp
 <section class="predict-type-section pb-120 pt-120 bg--section">
     <div class="container">
@@ -36,7 +36,7 @@ $elements = getContent('predict.element',limit:6);
                 <div class="predict-type-content">
                     <p class="text-white description"></p>
                     <div class="pt-2 d-flex flex-wrap couple--buttons">
-                        <a href="{{route('user.register')}}" class="cmn--btn btn-name">{{__(@$value->data_values->button_name)}}</a>
+                        <a href="{{@route($value->data_values->button_url ?? 'user.register')}}" class="cmn--btn btn-name">{{__(@$value->data_values->button_name)}}</a>
                         <a href="{{route('user.register')}}" class="cmn--outline--btn">@lang('Sign Up Now')</a>
                     </div>
                 </div>

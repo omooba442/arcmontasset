@@ -1,6 +1,6 @@
 @extends($activeTemplate.'layouts.frontend')
 @section('content')
-<div class="contact-section pt-120 pb-80 move--top">
+<div class="contact-section pt-120 pb-80">
     <div class="container">
         <div class="account-wrapper mw-100 bg--glass">
             <form class="verify-gcaptcha row" method="post" action="">

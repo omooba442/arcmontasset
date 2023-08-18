@@ -38,6 +38,14 @@ class SiteController extends Controller
     }
 
 
+    public function services()
+    {
+        $page      = Page::where('tempname', $this->activeTemplate)->where('slug', 'services')->firstOrFail();
+        $pageTitle = $page->name;
+        $sections  = $page->secs;
+        return view($this->activeTemplate . 'pages', compact('pageTitle', 'sections'));
+    }
+
     public function contact()
     {
         $pageTitle = "Contact Us";

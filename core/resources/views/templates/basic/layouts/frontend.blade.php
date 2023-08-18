@@ -3,9 +3,9 @@
 
 @include($activeTemplate . 'partials.header')
 
-@if (!request()->routeIs('home'))
+{{-- @if (!request()->routeIs('home'))
 @include($activeTemplate . 'partials.breadcrumb')
-@endif
+@endif --}}
 
 @yield('content')
 
@@ -13,7 +13,7 @@
 $content = getContent('get_started.content', true);
 @endphp
 @if(@$content)
-<div class="call-to-action bg--base pt-50 pb-50">
+{{-- <div class="call-to-action bg--base pt-50 pb-50">
     <div class="container">
         <div class="call-to-wrapper p-0">
             <h4 class="title text--dark">{{__(@$content->data_values->heading)}}</h4>
@@ -24,7 +24,7 @@ $content = getContent('get_started.content', true);
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endif
 @include($activeTemplate . 'partials.footer')
 @endsection

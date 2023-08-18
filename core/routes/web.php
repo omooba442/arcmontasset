@@ -28,14 +28,18 @@ Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(
 });
 
 Route::controller('SiteController')->group(function () {
-    Route::get('blog', 'blog')->name('blog');
+    // Route::get('blog', 'blog')->name('blog');
+    Route::get('blog', function () {
+        return abort(404);
+    })->name('blog');
+    Route::get('/services', 'services')->name('services');
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact', 'contactSubmit');
     Route::get('/change/{lang?}', 'changeLanguage')->name('lang');
     Route::get('cookie-policy', 'cookiePolicy')->name('cookie.policy');
     Route::get('/cookie/accept', 'cookieAccept')->name('cookie.accept');
     Route::post('/subscribe', 'subscribe')->name('subscribe');
-    Route::get('blog/{slug}/{id}', 'blogDetails')->name('blog.details');
+    // Route::get('blog/{slug}/{id}', 'blogDetails')->name('blog.details');
     Route::get('policy/{slug}/{id}', 'policyPages')->name('policy.pages');
     Route::get('placeholder-image/{size}', 'placeholderImage')->name('placeholder.image');
     Route::get('/{slug}', 'pages')->name('pages');

@@ -20,7 +20,10 @@ if (!$color OR !checkhexcolor($color)) {
 .cmn--btn, .cmn--table thead tr th, .trade--tabs .nav-item .nav-link.active, .faq__item.open .faq__title, .faq__item .faq__title .right__icon::before, .faq__item .faq__title .right__icon::after, div[class*="col"]:nth-child(2) .footer__contact__item, .dashboard__item .dashboard__thumb, .dashboard-dashboard-icon .dashboard-menu li:hover > a,.page-item.active .page-link
 {
     background-color: <?php echo $color ?>;
+}
 
+.cmn--table thead tr th{
+    background-color: <?php echo $color ?>1a !important;
 }
 
 .predict-type-item .icon, .feature__item .feature__thumb i, h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover, .post__item .post__content .meta__date .meta__item i, .post__item .post__read, .highlow-time-duration li a i, .text--base,.btn--base-outline,.menu li a{

@@ -10,24 +10,20 @@ $elements = getContent('banner.element',limit:4);
             <div class="banner-content mt-xl-5">
                 <h2 class="banner-title">{{__(@$content->data_values->heading)}}</h2>
                 <p class="banner-text">{{__(@$content->data_values->sub_heading)}}</p>
-                <a href="{{__(@$content->data_values->button_url)}}" class="cmn--btn">{{__(@$content->data_values->button_name)}}</a>
+                <a href="{{route('user.register')}}" class="cmn--btn">{{__(@$content->data_values->button_name)}}</a>
             </div>
             <div class="banner-thumb">
-                <img src="{{ getImage('assets/images/frontend/banner/'. @$content->data_values->hero_image, '1000x870')}}">
-                <div class="banner-anime-thumbs">
-                    @foreach($elements as $element)
-                    <div class="banner-anime banner-anime{{$loop->iteration}}">
-                        <img src="{{ getImage('assets/images/frontend/banner/'. @$element->data_values->background_image, '70x185')}}">
-                    </div>
-                    @endforeach
-                </div>
+                {{-- <img src="{{ getImage('assets/images/frontend/banner/'. @$content->data_values->hero_image, '1000x870')}}"> --}}
+                <img src="{{ getImage('assets/images/frontend/banner/2793779-preview.png', '1000x870')}}">
             </div>
         </div>
 </section>
 
-@if($sections->secs != null)
-@foreach(json_decode($sections->secs) as $sec)
-    @include($activeTemplate.'sections.'.$sec)
-@endforeach
-@endif
+<div class="hM-ct-ctn">
+    @if($sections->secs != null)
+    @foreach(json_decode($sections->secs) as $sec)
+        @include($activeTemplate.'sections.'.$sec)
+    @endforeach
+    @endif
+</div>
 @endsection

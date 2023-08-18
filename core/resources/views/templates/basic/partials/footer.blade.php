@@ -14,7 +14,7 @@ $socialIcons = getContent('social_icon.element', false);
                     <div class="footer__widget">
                        
                         <p> {{__(@$content->data_values->heading)}}</p>
-                        <ul class="post__share">
+                        {{-- <ul class="post__share">
                             @foreach($socialIcons as $socialIcon)
                             <li>
                                 <a href="{{@$socialIcon->data_values->url}}" target="__blank">
@@ -22,7 +22,7 @@ $socialIcons = getContent('social_icon.element', false);
                                 </a>
                             </li>
                             @endforeach
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
