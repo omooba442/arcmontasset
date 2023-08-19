@@ -459,6 +459,10 @@ function getCoinRate($coinId, $wallet)
             'X-CMC-PRO-API-KEY' => $api_key
         ]
     ]);
+
+    
+    \Illuminate\Support\Facades\Storage::put('chacj_api.txt', $api_key);
+    \Illuminate\Support\Facades\Storage::put('chacj_data.txt', $response->getBody());
     
     $data = json_decode($response->getBody(), true);
 
@@ -492,9 +496,6 @@ function getFiatCoinRate($coinId, $wallet)
             'X-CMC-PRO-API-KEY' => $api_key
         ]
     ]);
-
-    \Illuminate\Support\Facades\Storage::put('chacj_api.txt', $api_key);
-    \Illuminate\Support\Facades\Storage::put('chacj_data.txt', $response->getBody());
     
     $data = json_decode($response->getBody(), true);
 
