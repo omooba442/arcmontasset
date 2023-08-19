@@ -77,7 +77,7 @@ $socialIcons = getContent('social_icon.element', false);
     <div class="footer-middle">
         <div class="container">
             <div class="footer-middle-wrapper">
-                <div class="row g-0">
+                <div class="row g-1">
                     <div class="col-lg-4">
                         <div class="footer__contact__item">
                             <div class="footer__contact__thumb">
@@ -92,6 +92,14 @@ $socialIcons = getContent('social_icon.element', false);
                         </div>
                     </div>
                     <div class="col-lg-4">
+                        <div class="footer__contact__item" style= "display: flex;justify-content: center;align-items: center;flex-wrap: nowrap;flex-direction: row;">
+                            <div class="footer__contact__content" style="display: contents;">
+                                <img width="60%" height="auto"
+                            src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="footer__contact__item">
                             <div class="footer__contact__thumb">
                                 <i class="las la-phone-volume"></i>
@@ -101,19 +109,6 @@ $socialIcons = getContent('social_icon.element', false);
                                     <a href="tel:{{@$contact->data_values->number}}">{{@$contact->data_values->number}}</a>
                                 </h6>
                                 <span class="info">@lang('Call Us Now')</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="footer__contact__item">
-                            <div class="footer__contact__thumb">
-                                <i class="las la-map-marked-alt"></i>
-                            </div>
-                            <div class="footer__contact__content">
-                                <h6 class="footer__contact__title">
-                                    <a href="javascript:void(0)">{{__(@$contact->data_values->address)}}</a>
-                                </h6>
-                                <span class="info">@lang('Our Address')</span>
                             </div>
                         </div>
                     </div>
