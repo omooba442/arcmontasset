@@ -591,7 +591,7 @@
                     </div>
                 </li>
 
-                <li class="sidebar__menu-header">@lang('Frontend Manager')</li>
+                {{-- <li class="sidebar__menu-header">@lang('Frontend Manager')</li>
 
                 <li class="sidebar-menu-item {{menuActive('admin.frontend.templates')}}">
                     <a href="{{route('admin.frontend.templates')}}" class="nav-link ">
@@ -629,7 +629,7 @@
                             @endforeach
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="sidebar__menu-header">@lang('Extra')</li>
 
