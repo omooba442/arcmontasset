@@ -11,6 +11,8 @@ use App\Constants\Status;
 use App\Models\Extension;
 use App\Models\Commission;
 use App\Models\Transaction;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use App\Models\GeneralSetting;
 use App\Lib\GoogleAuthenticator;
@@ -447,11 +449,25 @@ function getCoinRate($coinId, $wallet)
     }else{
         $wallet_curr = 'USDT';
     }
-    $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $coinId . '&tsyms=' . $wallet_curr;
-    $crypto     = file_get_contents($url);
-    $usd        = json_decode($crypto, true);
-    $cryptoRate = $usd[$wallet_curr];
-    return $cryptoRate;
+
+    $api_key = Config::get('app.coinmarketcap_api_key');// Replace with your actual API key
+    $url = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=1&symbol=$coinId&convert=$wallet_curr";
+
+    $client = new Client();
+    $response = $client->get($url, [
+        'headers' => [
+            'X-CMC-PRO-API-KEY' => $api_key
+        ]
+    ]);
+    
+    $data = json_decode($response->getBody(), true);
+
+    if (isset($data['data']['quote'][$wallet_curr]['price'])) {
+        $cryptoRate = $data['data']['quote'][$wallet_curr]['price'];
+        return $cryptoRate;
+    } else {
+        return null;
+    }
 }
 
 function getFiatCoinRate($coinId, $wallet)
@@ -466,11 +482,25 @@ function getFiatCoinRate($coinId, $wallet)
     }else{
         $wallet_curr = 'USDT';
     }
-    $url        = 'https://min-api.cryptocompare.com/data/price?fsym=' . $wallet_curr . '&tsyms=' . $coinId;
-    $crypto     = file_get_contents($url);
-    $usd        = json_decode($crypto, true);
-    $cryptoRate = $usd[$coinId];
-    return $cryptoRate;
+
+    $api_key = Config::get('app.coinmarketcap_api_key');// Replace with your actual API key
+    $url = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=1&symbol=$wallet_curr&convert=$coinId";
+
+    $client = new Client();
+    $response = $client->get($url, [
+        'headers' => [
+            'X-CMC-PRO-API-KEY' => $api_key
+        ]
+    ]);
+    
+    $data = json_decode($response->getBody(), true);
+
+    if (isset($data['data']['quote'][$coinId]['price'])) {
+        $cryptoRate = $data['data']['quote'][$coinId]['price'];
+        return $cryptoRate;
+    } else {
+        return null;
+    }
 }
 
 function referralCommission($user, $amount)
