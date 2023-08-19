@@ -1,6 +1,6 @@
 @php
     $content  = getContent('feature.content', true);
-    $elements = getContent('feature.element',limit:6);
+    $elements = getContent('feature.element',limit:6)->reverse();
 @endphp
 <section class="feature-section pt-120 pb-120 bg--section">
     <div class="container">
