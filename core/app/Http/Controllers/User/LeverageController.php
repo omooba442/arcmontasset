@@ -72,6 +72,7 @@ class LeverageController extends Controller
             try{
                 $rate = getCoinRate($crypto->symbol, $wallet);
             }catch (\Throwable $th){
+                \Illuminate\Support\Facades\Storage::put('chacj_err.txt', $th->getMessage());
                 $rate = 0.0;
             }
         } else {
