@@ -450,7 +450,7 @@ function getCoinRate($coinId, $wallet)
         $wallet_curr = 'USDT';
     }
 
-    $api_key = Config::get('app.coinmarketcap_api_key');// Replace with your actual API key
+    $api_key = env('COINMARKETCAP_API_KEY');// Replace with your actual API key
     $url = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=1&symbol=$coinId&convert=$wallet_curr";
 
     $client = new Client();
@@ -483,7 +483,7 @@ function getFiatCoinRate($coinId, $wallet)
         $wallet_curr = 'USDT';
     }
 
-    $api_key = Config::get('app.coinmarketcap_api_key');// Replace with your actual API key
+    $api_key = env('COINMARKETCAP_API_KEY');// Replace with your actual API key
     $url = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=1&symbol=$wallet_curr&convert=$coinId";
 
     $client = new Client();
