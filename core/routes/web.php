@@ -9,7 +9,7 @@ Route::get('/clear', function () {
 });
 
 
-Route::prefix('cron')->name('cron.')->controller("CronController")->group(function () {
+Route::middleware('throttle:2,1')->prefix('cron')->name('cron.')->controller("CronController")->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('practice', 'practiceCron')->name('practice');
     Route::get('crypto/price', 'cryptoPrice')->name('crypto.price');
