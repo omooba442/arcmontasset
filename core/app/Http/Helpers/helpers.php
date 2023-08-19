@@ -452,16 +452,16 @@ function getCoinRate($coinId, $wallet)
 
     $api_key = env('COINMARKETCAP_API_KEY');// Replace with your actual API key
     $url = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=1&symbol=$coinId&convert=$wallet_curr";
-
+    
+    \Illuminate\Support\Facades\Storage::put('chacj_api.txt', $api_key);
     $client = new Client();
     $response = $client->get($url, [
         'headers' => [
-            'X-CMC-PRO-API-KEY' => $api_key
+            'X-CMC_PRO_API_KEY' => $api_key
         ]
     ]);
 
     
-    \Illuminate\Support\Facades\Storage::put('chacj_api.txt', $api_key);
     \Illuminate\Support\Facades\Storage::put('chacj_data.txt', $response->getBody());
     
     $data = json_decode($response->getBody(), true);
