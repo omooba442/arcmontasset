@@ -170,18 +170,18 @@ Route::middleware('admin')->group(function () {
     });
 
 
-    // // Language Manager
-    // Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
-    //     Route::get('/', 'langManage')->name('manage');
-    //     Route::post('/', 'langStore')->name('manage.store');
-    //     Route::post('delete/{id}', 'langDelete')->name('manage.delete');
-    //     Route::post('update/{id}', 'langUpdate')->name('manage.update');
-    //     Route::get('edit/{id}', 'langEdit')->name('key');
-    //     Route::post('import', 'langImport')->name('import.lang');
-    //     Route::post('store/key/{id}', 'storeLanguageJson')->name('store.key');
-    //     Route::post('delete/key/{id}', 'deleteLanguageJson')->name('delete.key');
-    //     Route::post('update/key/{id}', 'updateLanguageJson')->name('update.key');
-    // });
+    // Language Manager
+    Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
+        Route::get('/', 'langManage')->name('manage');
+        Route::post('/', 'langStore')->name('manage.store');
+        Route::post('delete/{id}', 'langDelete')->name('manage.delete');
+        Route::post('update/{id}', 'langUpdate')->name('manage.update');
+        Route::get('edit/{id}', 'langEdit')->name('key');
+        Route::post('import', 'langImport')->name('import.lang');
+        Route::post('store/key/{id}', 'storeLanguageJson')->name('store.key');
+        Route::post('delete/key/{id}', 'deleteLanguageJson')->name('delete.key');
+        Route::post('update/key/{id}', 'updateLanguageJson')->name('update.key');
+    });
 
     Route::controller('GeneralSettingController')->group(function () {
         // General Setting
