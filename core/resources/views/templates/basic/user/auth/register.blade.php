@@ -13,19 +13,19 @@
                     <form action="{{ route('user.register') }}" method="POST" class="verify-gcaptcha account-form">
                         @csrf
                         <div class="row">
-                            @if(session()->get('reference') != null)
+                            {{-- @if(session()->get('reference') != null) --}}
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="referenceBy" class="cmn--label text--white">@lang('Reference by')</label>
+                                    <label for="referenceBy" class="cmn--label text--white">@lang('Referral Code')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">
                                             <i class="las la-user"></i>
                                         </span>
-                                        <input type="text" name="referBy" id="referenceBy" class="form-control cmn--form--control bg--section" value="{{session()->get('reference')}}" readonly>
+                                        <input type="text" name="referBy" id="referenceBy" class="form-control cmn--form--control bg--section" value="{{request()->input('ref') ?? ''}}" @if(request()->input('ref') != null) readonly @endif>
                                     </div>
                                 </div>
                             </div>
-                            @endif
+                            {{-- @endif --}}
                             <div class="cmn--form--group form-group col-md-6">
                                 <label class="cmn--label text--white">@lang('Username')</label>
                                 <div class="input-group">

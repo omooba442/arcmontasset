@@ -123,6 +123,10 @@
                                             class="{{ menuActive('user.profile.*') }} {{ menuActive('user.change.*') }}">@lang('Profile')</a>
                                     </li>
                                     <li>
+                                        <a href="{{ auth()->user()->kv == 0 ? route('user.kyc.form') : route('user.kyc.data') }}"
+                                            class="{{ menuActive('user.kyc.*') }}">@lang(auth()->user()->kv == 0 ? 'KYC Form' : 'KYC Data')</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('user.deposit.index') }}"
                                             class="{{ menuActive('user.deposit.index') }}"">@lang('Deposit')</a>
                                     </li>

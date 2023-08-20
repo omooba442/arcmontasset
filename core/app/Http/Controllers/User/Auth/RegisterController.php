@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
@@ -78,6 +79,7 @@ class RegisterController extends Controller
             'password' => ['required','confirmed',$passwordValidation],
             'username' => 'required|unique:users|min:6',
             'captcha' => 'sometimes|required',
+            'referBy' => 'nullable|exists:users,refCode',
             'mobile_code' => 'required|in:'.$mobileCodes,
             'country_code' => 'required|in:'.$countryCodes,
             'country' => 'required|in:'.$countries,
@@ -119,6 +121,17 @@ class RegisterController extends Controller
             ?: redirect($this->redirectPath());
     }
 
+    /**
+     * Create referral code
+     */
+    public function getRefCode() : String{
+        $code = Str::random(10);
+        if (User::where('refCode', '=', $code)->first() != null){
+            $code = $this->getRefCode();
+        }
+        return $code;
+    }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -130,9 +143,13 @@ class RegisterController extends Controller
     {
         $general = gs();
 
-        $referBy = session()->get('reference');
+        $referBy = $data['referBy'];
         if ($referBy) {
-            $referUser = User::where('username', $referBy)->first();
+            try{
+                $referUser = User::where('refCode', $referBy)->first();
+            }catch(\Throwable $e){
+                $referUser = null;
+            }
         } else {
             $referUser = null;
         }
@@ -141,6 +158,7 @@ class RegisterController extends Controller
         $user->email = strtolower($data['email']);
         $user->password = Hash::make($data['password']);
         $user->username = $data['username'];
+        $user->refCode = $this->getRefCode();
         $user->ref_by = $referUser ? $referUser->id : 0;
         $user->country_code = $data['country_code'];
         $user->mobile = $data['mobile_code'].$data['mobile'];

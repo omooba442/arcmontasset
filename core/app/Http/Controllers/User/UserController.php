@@ -180,8 +180,8 @@ class UserController extends Controller
         $user->profile_complete = 1;
         $user->save();
 
-        $notify[] = ['success', 'Registration process completed successfully'];
-        return to_route('user.home')->withNotify($notify);
+        $notify[] = ['success', 'Registration process completed successfully. Please fill your KYC Data'];
+        return to_route('user.kyc.form')->withNotify($notify);
     }
 
     public function  addPracticeBalance()
