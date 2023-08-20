@@ -11,7 +11,7 @@
                     <label  class="cmn--label text--white">@lang('Username')</label>
                     <div class="input-group">
                         <span class="input-group-text">
-                            <i class="las la-user"></i>
+                            <i class="fas fa-user"></i>
                         </span>
                         <input type="text" class="form-control cmn--form--control" name="username" required value="{{old('username')}}">
                     </div>
@@ -19,7 +19,7 @@
                 <div class="cmn--form--group form-group">
                     <label class="cmn--label text--white">@lang('Password')</label>
                     <div class="input-group">
-                        <span class="input-group-text"> <i class="las la-key"></i> </span>
+                        <span class="input-group-text"> <i class="fas fa-key"></i> </span>
                         <input type="password" class="form-control cmn--form--control" name="password"  required>
                     </div>
                 </div>

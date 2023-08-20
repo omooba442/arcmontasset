@@ -12,6 +12,7 @@
     $hiddenForm = 'm' . Str::random(20);
     $hiddenWalletInput = 'n' . Str::random(20);
     $hiddenQuantityInput = 'o' . Str::random(20);
+    $network = 'p' . Str::random(6);
     $wallet_shortcuts = [
         1 => 'USDT',
         2 => 'BTC',
@@ -54,6 +55,10 @@
                             <p class="m-0" style="font-size: 14px">Minimum Deposit</p>
                             <p class="m-0" style="font-size: 14px" id="{{ $minCH }}">5.00000000 USDT</p>
                         </div>
+                        <div class="form-group d-flex mt-1" style="justify-content: space-between;">
+                            <p class="m-0" style="font-size: 14px">Transaction Network</p>
+                            <p class="m-0" style="font-size: 14px" id="{{ $network }}">USDT TRC20 Network</p>
+                        </div>
                         <div class="asset_item_top mt-2 px-6">
                             <a class="asset_a" style="cursor: pointer;" onclick="{{ $proceed }}()">Submit</a>
                         </div>
@@ -78,6 +83,11 @@
             'BTC',
             'ETH',
         ];
+        const networks = {
+            'USDT': 'USDT TRC20 Network',
+            'BTC': 'BTC BITCOIN Network',
+            'ETH': 'ETH ERC20 Network',
+        };
         const minimums = {
             'USDT': '5.00000000',
             'BTC': '0.00100000',
@@ -97,6 +107,7 @@
                 document.getElementById('wallet_ref2_').innerText = wallets[change - 1];
                 document.getElementById('{{ $minCH }}').innerText = minimums[wallets[change - 1]] + ' ' + wallets[
                     change - 1];
+                document.getElementById('{{ $network }}').innerText = networks[wallets[change - 1]];
                 {{ $currentPWallet }} = change;
             }
         }
