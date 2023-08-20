@@ -24,6 +24,8 @@
             font-family: 'Bricolage Grotesque', sans-serif;
         }
     </style>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript">
+    </script>
 </head>
 
 <body>
@@ -109,5 +111,4 @@
         })(jQuery);
     </script>
 </body>
-
 </html>

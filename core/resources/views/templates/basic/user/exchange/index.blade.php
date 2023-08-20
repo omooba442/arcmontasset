@@ -59,7 +59,7 @@
                             <tbody>
                                 @if ($log->count() < 1)
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="7">
                                             <center>No data, yet.</center>
                                         </td>
                                     </tr>
@@ -147,7 +147,7 @@
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         "use strict";
-        var tv = new TradingView.widget({
+        new TradingView.widget({
             "width": 980,
             "height": 610,
             "symbol": "USDTBTC",
@@ -165,12 +165,6 @@
                 },
             },
             "container_id": "expert_chart"
-        });
-        tv.onChartReady(function() {
-            const symbolSearchInput = document.querySelector(".symbol-edit");
-            if (symbolSearchInput) {
-                symbolSearchInput.setAttribute("disabled", "true");
-            }
         });
     </script>
     <script>
@@ -232,7 +226,7 @@
                     notify('error', 'You can\'t exchange a coin with itself.');
                     return;
                 }
-                tv = new TradingView.widget({
+                new TradingView.widget({
                     "width": 980,
                     "height": 610,
                     "symbol": wallets[change - 1] + wallets[{{ $currentToWallet }} - 1],
@@ -257,12 +251,6 @@
                 document.getElementById('from_wallt_balance_tx').innerText = balances[change - 1] + ' ' + wallets[
                     change - 1];
                 {{ $currentFromWallet }} = change;
-                tv.onChartReady(function() {
-                    const symbolSearchInput = document.querySelector(".symbol-edit");
-                    if (symbolSearchInput) {
-                        symbolSearchInput.setAttribute("disabled", "true");
-                    }
-                });
             }
         }
 
@@ -272,7 +260,7 @@
                     notify('error', 'You can\'t exchange a coin with itself.');
                     return;
                 }
-                tv = new TradingView.widget({
+                new TradingView.widget({
                     "width": 980,
                     "height": 610,
                     "symbol": wallets[{{ $currentFromWallet }} - 1] + wallets[change - 1],
@@ -296,12 +284,6 @@
                 document.getElementById('to_wallt_balance_tx').innerText = balances[change - 1] + ' ' + wallets[
                     change - 1];
                 {{ $currentToWallet }} = change;
-                tv.onChartReady(function() {
-                    const symbolSearchInput = document.querySelector(".symbol-edit");
-                    if (symbolSearchInput) {
-                        symbolSearchInput.setAttribute("disabled", "true");
-                    }
-                });
             }
         }
     </script>

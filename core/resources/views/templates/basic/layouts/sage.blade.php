@@ -112,6 +112,24 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script>
+    <script>
+        function googleTranslateElementInit() {
+            if(window.innerWidth > 991){
+                new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        includedLanguages: '@foreach ($language as $item){{ $item->code }},@endforeach',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+            }else{
+                new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        includedLanguages: '@foreach ($language as $item){{ $item->code }},@endforeach',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_mobile_element');
+            }
+    }
+    </script>
 </body>
 
 </html>

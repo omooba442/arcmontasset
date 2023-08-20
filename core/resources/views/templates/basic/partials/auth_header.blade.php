@@ -93,7 +93,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     @if (!$general->multi_language)
                                         <div class="select-bar">
                                             <i class="fa fa-solid fa-globe"></i>
@@ -105,7 +105,8 @@
                                             </select>
                                         </div>
                                     @endif
-                                </li>
+                                </li> --}}
+                                <div id="google_translate_mobile_element"></div>
                             </ul>
                         @endauth
                     </ul>
@@ -162,7 +163,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 @if (!$general->multi_language)
                                     <div class="select-bar">
                                         <i class="fa fa-solid fa-globe"></i>
@@ -174,7 +175,8 @@
                                         </select>
                                     </div>
                                 @endif
-                            </li>
+                            </li> --}}
+                            <div id="google_translate_element"></div>
                         </ul>
                     @endauth
                 </div>

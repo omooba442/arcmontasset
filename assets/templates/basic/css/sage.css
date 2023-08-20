@@ -387,6 +387,57 @@ menu li a:hover {
 	}
 }
 
+/* Hide Google Translate elements except select bar */
+.goog-te-gadget {
+    display: none;
+}
+
+div.skiptranslate iframe{
+	display: none !important;
+}
+
+#google_translate_element div.goog-te-gadget.skiptranslate, #google_translate_mobile_element div.goog-te-gadget.skiptranslate{
+    display: block !important;
+}
+
+#google_translate_element div.skiptranslate, #google_translate_mobile_element div.skiptranslate{
+    display: block !important;
+}
+
+#google_translate_element div.skiptranslate iframe, #google_translate_mobile_element div.skiptranslate iframe{
+    display: block !important;
+}
+
+div.goog-te-gadget.simple, div.goog-te-gadget-simple{
+	background-color: #1a253b;
+	color: white !important;
+	border: 0;
+	display: flex;
+}
+
+div.goog-te-gadget.simple span, div.goog-te-gadget-simple span{
+	color: white !important;
+	font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+span.text{
+	font-family: 'Bricolage Grotesque', sans-serif !important;
+}
+
+div.goog-te-gadget.simple img, div.goog-te-gadget-simple img.goog-te-gadget-icon{
+	background-image: url("https://api.furures.dtest/assets/images/world.png") !important;
+	content: "<i class='fas fa-globe'></i>";
+	background-size: cover !important;
+    background-position: center !important;
+	width: 19px;
+	height: 19px;
+}
+
+span.indicator{
+
+}
+
+
 .select-bar {
 	height: 35px !important;
 	display: flex;
@@ -397,7 +448,7 @@ menu li a:hover {
 	align-items: center;
 	border-radius: 5px;
 	border: 0px;
-	width: 90px;
+	/* width: max(auto 90px); */
 }
 
 .select-bar select {

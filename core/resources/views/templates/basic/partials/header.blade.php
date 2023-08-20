@@ -40,17 +40,6 @@
                     @endguest
                 </ul>
                 <li>
-                    @if ($general->multi_language)
-                        <div class="select-bar">
-                            <i class="fa fa-solid fa-globe"></i>
-                            <select class="langSel">
-                                @foreach ($language as $item)
-                                    <option value="{{ $item->code }}" @selected(session('lang') == $item->code)>
-                                        {{ __($item->name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endif
                 </li>
                 <div class="header-bar m-0" style="margin-left: 5px !important;">
                     <span></span>
