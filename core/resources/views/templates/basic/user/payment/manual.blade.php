@@ -19,8 +19,12 @@
                                         </b> @lang('for successful deposit')
                                     </p>
                                     <div class="my-4 px-5 qrc text-center">@php echo  $data->gateway->description @endphp</div>
-                                    <p class="text-center mt-2 m-0 mb-2 py-2" style="font-size: 16px; font-wight: 800; background-color: #0000001a;">{{$gateway->address}}</p>
-                                    <p class="text-center mt-2 m-0 mb-2 py-2" style="font-size: 16px; font-wight: 800; background-color: #0000001a;">Network: {{$gateway->network}}</p>
+                                    <p class="text-center mt-2 m-0 mb-2 py-2"
+                                        style="font-size: 16px; font-wight: 800; background-color: #0000001a;">
+                                        {{ $gateway->address }} <i class="fas fa-copy" onclick="copyWalletAddress();" style="cursor: pointer;"></i> </p>
+                                    <p class="text-center mt-2 m-0 mb-2 py-2"
+                                        style="font-size: 16px; font-wight: 800; background-color: #0000001a;">Network:
+                                        {{ $gateway->network }}</p>
                                 </div>
                                 <x-viser-form identifier="id" identifierValue="{{ $gateway->form_id }}" />
                                 <div class="col-md-12">
@@ -43,6 +47,17 @@
         (function($) {
             $('.form-control').addClass('cmn--form--control')
         })(jQuery);
+    </script>
+    <script>
+        function copyWalletAddress() {
+            const text = "{{ $gateway->address }}";
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Address copied successfuly.');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+                alert('We encountered an error copying the address.');
+            });
+        }
     </script>
 @endpush
 
