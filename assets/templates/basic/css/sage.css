@@ -425,7 +425,7 @@ span.text{
 }
 
 div.goog-te-gadget.simple img, div.goog-te-gadget-simple img.goog-te-gadget-icon{
-	background-image: url("https://api.furures.dtest/assets/images/world.png") !important;
+	background-image: url("https://furures.com/assets/images/world.png") !important;
 	content: "<i class='fas fa-globe'></i>";
 	background-size: cover !important;
     background-position: center !important;
