@@ -31,8 +31,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::namespace($this->namespace)->middleware(VugiChugi::mdNm())->group(function(){
-                Route::middleware(['web','maintenance'])
+            Route::namespace($this->namespace)->middleware(VugiChugi::mdNm())->group(function () {
+                Route::middleware(['web', 'maintenance'])
                     ->namespace('Gateway')
                     ->prefix('ipn')
                     ->name('ipn.')
@@ -40,22 +40,32 @@ class RouteServiceProvider extends ServiceProvider
 
                 Route::middleware(['web'])
                     ->namespace('Admin')
-                    ->prefix('admin')
+                    ->domain(env('APP_ADMIN_URL', 'https://www.rzectmokvfydhzwuqyreamponrdlqmcfvxv.furures.com'))
                     ->name('admin.')
                     ->group(base_path('routes/admin.php'));
 
-                Route::middleware(['web','maintenance'])
+                Route::middleware(['web'])
+                    ->namespace('Admin')
+                    ->domain(env('APP_ADMIN_URL', 'https://rzectmokvfydhzwuqyreamponrdlqmcfvxv.furures.com'))
+                    ->name('admin.')
+                    ->group(base_path('routes/admin.php'));
+
+                // Route::middleware(['web'])
+                //     ->namespace('Admin')
+                //     ->prefix('admin')
+                //     ->name('admin.')
+                //     ->group(base_path('routes/admin.php'));
+
+                Route::middleware(['web', 'maintenance'])
                     ->prefix('user')
                     ->group(base_path('routes/user.php'));
 
-                Route::middleware(['web','maintenance'])
+                Route::middleware(['web', 'maintenance'])
                     ->group(base_path('routes/web.php'));
-
             });
-
         });
 
-        Route::get('maintenance-mode','App\Http\Controllers\SiteController@maintenance')->name('maintenance');
+        Route::get('maintenance-mode', 'App\Http\Controllers\SiteController@maintenance')->name('maintenance');
     }
 
     /**
