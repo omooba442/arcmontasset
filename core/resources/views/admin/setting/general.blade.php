@@ -7,7 +7,7 @@
                     <form action="" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-4 col-sm-6">
+                            {{-- <div class="col-md-4 col-sm-6">
                                 <div class="form-group ">
                                     <label> @lang('Site Title')</label>
                                     <input class="form-control" type="text" name="site_name" required value="{{$general->site_name}}">
@@ -24,7 +24,7 @@
                                     <label>@lang('Currency Symbol')</label>
                                     <input class="form-control" type="text" name="cur_sym" required value="{{$general->cur_sym}}">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-4 col-sm-6">
                                 <label> @lang('Timezone')</label>
                                 <select class="select2-basic" name="timezone">
@@ -33,7 +33,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-4 col-sm-6">
+                            {{-- <div class="form-group col-md-4 col-sm-6">
                                 <label> @lang('Site Base Color')</label>
                                 <div class="input-group">
                                     <span class="input-group-text p-0 border-0">
@@ -48,7 +48,7 @@
                                     <input type="number" step="any" class="form-control" name="practice_balance" value="{{ $general->practice_balance }}"/>
                                     <span class="input-group-text">{{ __($general->cur_text) }} </span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-4 col-sm-6">
                                 <label>@lang('Referral Bonus')</label>
                                 <div class="input-group">
@@ -56,7 +56,7 @@
                                     <span class="input-group-text">%</span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4 col-sm-6">
+                            {{-- <div class="form-group col-md-4 col-sm-6">
                                 <label>@lang('Trade Profit')</label>
                                 <div class="input-group">
                                     <input type="number" step="any" class="form-control" name="trade_profit" value="{{ getAmount($general->trade_profit) }}"/>
@@ -67,7 +67,7 @@
                                 <label class="form-control-label font-weight-bold">@lang('Coinmarketcap Api Key') </label>
                                 <input class="form-control form-control-lg" type="text" name="coinmarketcap_api_key" value="{{$general->coinmarketcap_api_key}}">
                                 <a href="https://cryptocompare.com/" target="__blank"><small>https://coinmarketcap.com/api/</small></a>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>

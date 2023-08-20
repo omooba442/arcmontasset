@@ -32,13 +32,13 @@ class GeneralSettingController extends Controller
         ]);
 
         $general                        = gs();
-        $general->site_name             = $request->site_name;
-        $general->cur_text              = $request->cur_text;
-        $general->cur_sym               = $request->cur_sym;
-        $general->base_color            = $request->base_color;
-        $general->practice_balance      = $request->practice_balance;
-        $general->coinmarketcap_api_key = $request->coinmarketcap_api_key;
-        $general->trade_profit          = $request->trade_profit;
+        // $general->site_name             = $request->site_name;
+        // $general->cur_text              = $request->cur_text;
+        // $general->cur_sym               = $request->cur_sym;
+        // $general->base_color            = $request->base_color;
+        // $general->practice_balance      = $request->practice_balance;
+        // $general->coinmarketcap_api_key = $request->coinmarketcap_api_key;
+        // $general->trade_profit          = $request->trade_profit;
         $general->referral_bonus        = $request->referral_bonus;
         $general->save();
 
