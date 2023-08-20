@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    public $redirectTo = 'admin';
+    public $redirectTo = 'dashboard';
 
     /**
      * Create a new controller instance.
@@ -106,6 +106,6 @@ class LoginController extends Controller
     {
         $this->guard('admin')->logout();
         $request->session()->invalidate();
-        return $this->loggedOut($request) ?: redirect('/admin');
+        return $this->loggedOut($request) ?: redirect('/dashboard');
     }
 }
