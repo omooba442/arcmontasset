@@ -426,6 +426,12 @@ span.text{
 
 div:has(svg:last-child) {
     display: none;
+	width: 0 !important;
+}
+
+font{
+	background-color: inherit !important;
+	box-shadow: none !important;
 }
 
 div.goog-te-gadget.simple img, div.goog-te-gadget-simple img.goog-te-gadget-icon{
