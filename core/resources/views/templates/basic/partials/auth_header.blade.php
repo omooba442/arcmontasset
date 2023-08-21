@@ -78,6 +78,10 @@
                                                 class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
                                         </li>
                                         <li>
+                                            <a href="{{ route('user.transactions') }}"
+                                                class="{{ menuActive('user.transactions') }}">@lang('Transactions Log')</a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('user.referral.log') }}"
                                                 class="{{ menuActive('user.referral.log') }}">@lang('Referral Log')</a>
                                         </li>
@@ -106,7 +110,7 @@
                                         </div>
                                     @endif
                                 </li> --}}
-                                <div id="google_translate_mobile_element"></div>
+                                <div id="google_translate_element"></div>
                             </ul>
                         @endauth
                     </ul>
@@ -146,6 +150,10 @@
                                     <li>
                                         <a href="{{ route('user.withdraw.history') }}"
                                             class="{{ menuActive('user.withdraw.history') }}">@lang('Withdraw Log')</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('user.transactions') }}"
+                                            class="{{ menuActive('user.transactions') }}">@lang('Transactions Log')</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('user.referral.log') }}"

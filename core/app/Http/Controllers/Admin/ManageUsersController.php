@@ -262,6 +262,7 @@ class ManageUsersController extends Controller
         $transaction->amount = $amount;
         $transaction->post_balance = $balance;
         $transaction->charge = 0;
+        $transaction->wallet = $request->wallet;
         $transaction->trx =  $trx;
         $transaction->details = $request->remark;
         $transaction->save();

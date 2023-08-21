@@ -1,7 +1,7 @@
-@extends($activeTemplate.'layouts.master')
+@extends($activeTemplate.'layouts.sage')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center gy-4">
+<div class="container" style="height: calc(100vh - 35px);">
+    <div class="row justify-content-center gy-4 vertical-center">
         <div class="col-12">
             <div class="show-filter text-end">
                 <button type="button" class="cmn--btn btn-block showFilterBtn btn-sm">
@@ -20,8 +20,8 @@
                                 <label>@lang('Type')</label>
                                 <select name="trx_type" class="form-control cmn--form--control">
                                     <option value="">@lang('All')</option>
-                                    <option value="+" @selected(request()->trx_type == '+')>@lang('Plus')</option>
-                                    <option value="-" @selected(request()->trx_type == '-')>@lang('Minus')</option>
+                                    <option value="+" @selected(request()->trx_type == '+')>@lang('Credit')</option>
+                                    <option value="-" @selected(request()->trx_type == '-')>@lang('Debit')</option>
                                 </select>
                             </div>
                             <div class="flex-grow-1">
@@ -33,8 +33,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="flex-grow-1 align-self-end">
-                                <button class="cmn--btn btn-block h-100"><i class="las la-filter"></i>
+                            <div class="align-self-end">
+                                <button class="cmn--btn btn-block h-100" style="border-radius: 8px; color: white;border: 0;padding: 7px 12px;"><i class="las la-filter"></i>
                                     @lang('Filter')
                                 </button>
                             </div>
@@ -62,10 +62,10 @@
                             <td> {{ showDateTime($trx->created_at) }}<br>{{ diffForHumans($trx->created_at) }}</td>
                             <td class="budget">
                                 <span class="fw-bold @if($trx->trx_type == '+')text--success @else text--danger @endif">
-                                    {{ $trx->trx_type }} {{showAmount($trx->amount)}} {{ $general->cur_text }}
+                                    {{ $trx->trx_type }} {{showAmount($trx->amount)}} {{ $trx->wallet }}
                                 </span>
                             </td>
-                            <td class="budget"> {{ showAmount($trx->post_balance) }} {{ __($general->cur_text) }} </td>
+                            <td class="budget"> {{ showAmount($trx->post_balance) }} {{ __($trx->wallet) }} </td>
                             <td>{{ __($trx->details) }}</td>
                         </tr>
                         @empty
