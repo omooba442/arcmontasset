@@ -28,7 +28,7 @@
     </script>
 </head>
 
-<body>
+<body id="body">
     @stack('fbComment')
     <a href="javascript:void(0)" class="scrollToTop"><i class="las la-angle-up"></i></a>
 

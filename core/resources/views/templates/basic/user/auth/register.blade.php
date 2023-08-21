@@ -5,7 +5,9 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="account-wrapper bg--section mw-100">
+                    <div class="account-wrapper bg--section mw-100" id="particles-js-ctn">
+                        <div id="particles-js">
+                        </div>
                         <div class="account-logo">
 
                         </div>
@@ -100,7 +102,7 @@
                                             <i class="fas fa-at"></i>
                                         </span>
                                         <input type="text" name="referBy" id="referenceBy"
-                                            class="form-control cmn--form--control bg--section"
+                                            class="form-control cmn--form--control"
                                             value="{{ request()->input('ref') ?? '' }}"
                                             @if (request()->input('ref') != null) readonly @endif>
                                     </div>
@@ -218,4 +220,39 @@
             });
         })(jQuery);
     </script>
+@endpush
+
+
+@push('script-lib')
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+@endpush
+
+@push('script')
+    <script>
+        particlesJS.load('particles-js', '{{ asset('assets/json/particles.json') }}');
+    </script>
+@endpush
+
+@push('style')
+    <style>
+        .account-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        .bg--section {
+            background: url('{{ asset('assets/images/authbg.jpeg') }}') !important;
+            background-size: contain !important;
+        }
+
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
 @endpush
