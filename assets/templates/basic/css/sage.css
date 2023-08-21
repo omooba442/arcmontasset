@@ -424,6 +424,10 @@ span.text{
 	font-family: 'Bricolage Grotesque', sans-serif !important;
 }
 
+div:has(svg:last-child) {
+    display: none;
+}
+
 div.goog-te-gadget.simple img, div.goog-te-gadget-simple img.goog-te-gadget-icon{
 	background-image: url("https://furures.com/assets/images/world.png") !important;
 	content: "<i class='fas fa-globe'></i>";
