@@ -26,7 +26,7 @@ class Trade
     protected $modelName       = TradeLog::class;
     protected $columnName      = 'balance';
 
-    public function __construct($isFiat = false, $isEarn = false, $isLeverage = false, $isLockup = true, $isPractice = false)
+    public function __construct($isFiat = false, $isEarn = false, $isLeverage = false, $isLockup = false, $isPractice = false)
     {
         if ($isFiat) {
             $this->isFiatTrade = true;
