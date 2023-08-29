@@ -315,15 +315,15 @@
             "timezone": "Etc/UTC",
             "theme": "dark",
             "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "allow_symbol_change": false,
-            "overrides": {
-                "paneProperties": {
-                    "background": "#FF0000",
-                },
-            },
+              "locale": "en",
+  "enable_publishing": false,
+  "hide_side_toolbar": false,
+  "allow_symbol_change": true,
+  "details": true,
+  "show_popup_button": true,
+  "popup_width": "1000",
+  "popup_height": "650",
+            
             "container_id": "expert_chart"
         });
     </script>
@@ -433,15 +433,14 @@
                     "timezone": "Etc/UTC",
                     "theme": "dark",
                     "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "allow_symbol_change": false,
-                    "overrides": {
-                        "paneProperties": {
-                            "background": "#FF0000",
-                        },
-                    },
+                      "locale": "en",
+  "enable_publishing": false,
+  "hide_side_toolbar": false,
+  "allow_symbol_change": true,
+  "details": true,
+  "show_popup_button": true,
+  "popup_width": "1000",
+  "popup_height": "650",
                     "container_id": "expert_chart"
                 });
                 document.getElementById('wallt_ref_' + wallets[{{ $currentPWallet }} - 1]).classList.remove('active');
