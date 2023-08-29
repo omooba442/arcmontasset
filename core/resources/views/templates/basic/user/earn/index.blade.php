@@ -222,7 +222,7 @@
 @endpush
 @push('script')
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/assets/templates/basic/js/tv.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
         var {{ $durations_var }} = new Map([
             @foreach ($cryptos as $crypto)

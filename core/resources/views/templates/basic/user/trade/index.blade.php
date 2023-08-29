@@ -280,7 +280,7 @@
 
 @push('script')
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/assets/templates/basic/js/tv.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script src="/assets/templates/basic/js/easytimer.min.js"></script>
     <script>
         "use strict";
@@ -295,7 +295,7 @@
             "locale": "en",
             "toolbar_bg": "#f1f3f6",
             "enable_publishing": false,
-            "allow_symbol_change": true,
+            "allow_symbol_change": false,
             "overrides": {
                 "paneProperties": {
                     "background": "#FF0000",
@@ -411,7 +411,7 @@
                     "locale": "en",
                     "toolbar_bg": "#f1f3f6",
                     "enable_publishing": false,
-                    "allow_symbol_change": true,
+                    "allow_symbol_change": false,
                     "overrides": {
                         "paneProperties": {
                             "background": "#FF0000",
@@ -442,7 +442,7 @@
                 "locale": "en",
                 "toolbar_bg": "#f1f3f6",
                 "enable_publishing": false,
-                "allow_symbol_change": true,
+                "allow_symbol_change": false,
                 "overrides": {
                     "paneProperties": {
                         "background": "#FF0000",

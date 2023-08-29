@@ -16,7 +16,7 @@ class ExchangeController extends Controller
     {
         $pageTitle = "Exchange";
         $balances  = json_decode(auth()->user()->balance, true);
-        $log           = Exchange::paginate(20);
+        $log           = Exchange::where('user_id', auth()->id())->paginate(20);
         return view($this->activeTemplate . 'user.exchange.index', compact('pageTitle', 'balances', 'log'));
     }
 
