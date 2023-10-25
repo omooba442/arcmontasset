@@ -527,3 +527,135 @@ Stack trace:
 #2 /home/basecrch/furures.com/core/API/index.php(10): include('/home/basecrch/...')
 #3 {main}
   thrown in /home/basecrch/furures.com/core/API/dbconn.php on line 7
+[08-Aug-2023 03:22:32 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[13-Aug-2023 00:21:39 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[19-Aug-2023 07:33:17 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[19-Aug-2023 09:08:11 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[19-Aug-2023 09:08:18 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[20-Aug-2023 00:52:50 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[21-Aug-2023 04:31:26 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[28-Aug-2023 11:43:00 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[28-Aug-2023 11:54:52 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[29-Aug-2023 14:24:03 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[30-Aug-2023 00:10:51 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[30-Aug-2023 04:52:36 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[30-Aug-2023 10:03:06 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[07-Sep-2023 04:12:47 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[07-Sep-2023 09:39:52 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[07-Sep-2023 10:23:37 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[07-Sep-2023 10:35:20 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[07-Sep-2023 12:33:50 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[08-Sep-2023 07:18:31 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[09-Sep-2023 12:56:49 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[09-Sep-2023 13:00:06 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
+[15-Sep-2023 14:28:58 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/basecrch/furures/core/API/dbconn.php:7
+Stack trace:
+#0 /home/basecrch/furures/core/API/dbconn.php(7): mysqli_connect()
+#1 /home/basecrch/furures/core/API/handleSession.php(4): require('/home/basecrch/...')
+#2 {main}
+  thrown in /home/basecrch/furures/core/API/dbconn.php on line 7
